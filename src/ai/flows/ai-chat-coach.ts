@@ -35,10 +35,11 @@ const aiChatCoachPromptDefinition = ai.definePrompt({
   output: {schema: AiChatCoachOutputSchema},
   prompt: `You are a 24/7 AI fitness coach providing guidance and support to users.
   Respond to the user's message based on the chat history, providing helpful and motivational advice.
+  The chat history is a list of turns, where each turn is formatted as 'user: [message]' or 'assistant: [message]'.
 
   Chat History:
   {{#each chatHistory}}
-  {{#if (eq role "user")}}User: {{content}}{{else}}AI Coach: {{content}}{{/if}}
+  {{this.role}}: {{this.content}}
   {{/each}}
 
   User Message: {{{message}}}
@@ -84,7 +85,7 @@ const aiChatCoachFlow = ai.defineFlow(
       console.error('Critical error during aiChatCoachFlow execution:', flowExecutionError);
       if (flowExecutionError instanceof Error) {
         // Avoid double-prepending "AI Chat Coach flow failed: " if it's already specific.
-        if (flowExecutionError.message.startsWith('AI coach') || flowExecutionError.message.startsWith('LLM')) {
+        if (flowExecutionError.message.startsWith('AI coach') || flowExecutionError.message.startsWith('LLM') || flowExecutionError.message.includes('helper')) { // Added check for helper error
              throw flowExecutionError;
         }
         throw new Error(`AI Chat Coach flow encountered an error: ${flowExecutionError.message}`);
@@ -93,3 +94,4 @@ const aiChatCoachFlow = ai.defineFlow(
     }
   }
 );
+
