@@ -30,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body 
+        suppressHydrationWarning // Added this line
         className={cn(
           "min-h-screen bg-background font-sans antialiased flex flex-col",
           geistSans.variable, 
