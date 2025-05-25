@@ -102,7 +102,7 @@ export default function ChatCoach() {
                     "max-w-[70%] rounded-lg p-3 text-sm shadow",
                     message.role === 'user'
                       ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-primary" // Changed text-muted-foreground to text-primary
+                      : "bg-muted text-foreground" // Changed text-primary to text-foreground
                   )}
                 >
                   {message.content}
