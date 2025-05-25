@@ -17,7 +17,7 @@ const ScrollArea = React.forwardRef<
   >
     <ScrollAreaPrimitive.Viewport
       className="h-full w-full rounded-[inherit]"
-      style={{ overflow: 'auto' }} // Ensure viewport can scroll
+      // Removed style={{ overflow: 'auto' }}
     >
       {children}
     </ScrollAreaPrimitive.Viewport>
@@ -50,3 +50,4 @@ const ScrollBar = React.forwardRef<
 ScrollBar.displayName = ScrollAreaPrimitive.ScrollAreaScrollbar.displayName
 
 export { ScrollArea, ScrollBar }
+
