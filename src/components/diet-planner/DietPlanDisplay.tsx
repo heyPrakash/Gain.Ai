@@ -1,4 +1,6 @@
 
+"use client";
+
 import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -83,7 +85,13 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
   const sections = dietPlan.split(/\n(?=Day\s\d+:|Meal\s\d+:|Breakfast:|Lunch:|Dinner:|Snack:|Important Notes and Adjustments:|Important Considerations:|Sample Meal Plan:)/i);
 
   const handleSaveAsPdf = () => {
-    window.print();
+    console.log("Save as PDF button clicked. Attempting to trigger print dialog...");
+    try {
+      window.print();
+      console.log("window.print() called successfully.");
+    } catch (error) {
+      console.error("Error calling window.print():", error);
+    }
   };
 
   return (
