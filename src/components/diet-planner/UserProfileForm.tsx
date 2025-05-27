@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Dispatch, SetStateAction } from 'react';
@@ -80,7 +81,7 @@ export default function UserProfileForm({ onPlanGenerated, setIsLoading, setErro
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto shadow-xl">
+    <Card id="user-profile-form-card" className="w-full max-w-2xl mx-auto shadow-xl"> {/* Added id */}
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-2xl">
           <Leaf className="text-primary" />

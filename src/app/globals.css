@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -112,5 +113,92 @@ body {
   }
   main {
     flex-grow: 1;
+  }
+}
+
+@media print {
+  /* Hide elements that are definitely not part of the diet plan print */
+  body > header,
+  body > footer,
+  #how-it-works,
+  #ai-chat-coach,
+  main > div > .separator, /* Page separators */
+  .ToastViewport,
+  .ToastProvider,
+  .print-hide-button /* The button itself */
+  {
+    display: none !important;
+  }
+
+  /* Within the diet planner section (#diet-planner is ID of UserProfileSection), hide the form part and messages */
+  #diet-planner > .text-center, /* Title like "Personalized AI Diet Planner" */
+  #user-profile-form-card, /* The UserProfileForm Card */
+  #diet-planner > .flex.justify-center.items-center.space-x-2, /* Loading indicator */
+  #diet-planner > .alert /* Error alert */
+  {
+    display: none !important;
+  }
+
+  /* Reset body and main for printing the card content */
+  body, main, #diet-planner {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important; /* Ensure clean background for print */
+    color: black !important; /* Ensure readable text for print */
+  }
+  
+  /* Style the diet plan card for printing */
+  #dietPlanCardPrintable {
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 0 !important;
+    margin: 0 !important; /* Reset margin */
+    padding: 0 !important; /* Reset padding */
+    position: static !important; /* Allow normal flow in print */
+    background: white !important;
+    color: black !important;
+  }
+
+  #dietPlanCardPrintable .CardHeader, 
+  #dietPlanCardPrintable .CardContent, 
+  #dietPlanCardPrintable .CardFooter {
+      padding: 10px !important; /* Minimal padding for print content */
+  }
+  #dietPlanCardPrintable .CardHeader *,
+  #dietPlanCardPrintable .CardContent *,
+  #dietPlanCardPrintable .CardFooter * {
+      color: black !important; /* Ensure all text within is black for print */
+  }
+   #dietPlanCardPrintable .text-primary {
+      color: black !important; /* Override primary color to black for print if needed */
+   }
+   #dietPlanCardPrintable .text-secondary-foreground {
+      color: black !important; 
+   }
+   #dietPlanCardPrintable .text-muted-foreground {
+      color: #333 !important; /* Darker grey for muted text on print */
+   }
+
+
+  /* Ensure the scrollable content within the diet plan is fully expanded */
+  #dietPlanCardPrintable .print-expandable-scroll-area {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border: none !important; /* Remove border from ScrollArea component itself */
+    background: white !important;
+  }
+   /* Remove border and padding from the viewport's child div */
+  #dietPlanCardPrintable .print-expandable-scroll-area > div[data-radix-scroll-area-viewport] > div {
+    border: none !important;
+    padding: 0 !important; 
+    background: white !important;
+  }
+  /* Also ensure viewport itself has no border and clean background */
+   #dietPlanCardPrintable .print-expandable-scroll-area > div[data-radix-scroll-area-viewport] {
+    border: none !important;
+    background: white !important;
   }
 }
