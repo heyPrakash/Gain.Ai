@@ -1,7 +1,9 @@
+
 import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { UtensilsCrossed } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { UtensilsCrossed, Download } from 'lucide-react';
 
 interface DietPlanDisplayProps {
   dietPlanOutput: GenerateDietPlanOutput;
@@ -96,6 +98,18 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
   // Heuristic to split plan into major sections
   const sections = dietPlan.split(/\n(?=Day\s\d+:|Meal\s\d+:|Breakfast:|Lunch:|Dinner:|Snack:|Important Notes and Adjustments:|Important Considerations:|Sample Meal Plan:)/i);
 
+  const handleDownload = () => {
+    const blob = new Blob([dietPlan], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'cortex-fit-diet-plan.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <Card className="mt-8 w-full max-w-3xl mx-auto shadow-xl">
       <CardHeader>
@@ -144,6 +158,12 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
           })}
         </ScrollArea>
       </CardContent>
+      <CardFooter className="justify-end">
+        <Button onClick={handleDownload} variant="outline">
+          <Download className="mr-2 h-4 w-4" />
+          Download Plan (.txt)
+        </Button>
+      </CardFooter>
     </Card>
   );
 }
