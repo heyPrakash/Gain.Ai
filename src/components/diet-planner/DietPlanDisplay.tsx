@@ -5,7 +5,7 @@ import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { UtensilsCrossed, FileDown } from 'lucide-react';
+import { UtensilsCrossed, FileDown, Loader2 } from 'lucide-react';
 // html2pdf.js is dynamically imported below
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
@@ -97,6 +97,7 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
         description: "Could not find diet plan content to generate PDF.",
         variant: "destructive",
       });
+      console.error("PDF Generation Error: 'dietPlanCardPrintable' element not found.");
       return;
     }
 
@@ -105,44 +106,51 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
       title: "Generating PDF...",
       description: "Your diet plan PDF is being created. This may take a moment.",
     });
+    console.log("Attempting to generate PDF for element:", element);
 
     try {
       // Dynamically import html2pdf.js
       const html2pdfModule = await import('html2pdf.js/dist/html2pdf.bundle.min.js');
       const html2pdf = html2pdfModule.default || html2pdfModule; // Handles if it's default export or not
+      console.log("html2pdf.js module loaded:", html2pdf);
 
       const opt = {
         margin: 0.5, // inches
         filename: 'cortex-fit-diet-plan.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
+        image: { type: 'jpeg', quality: 0.98 }, // For images within the HTML
         html2canvas: { 
-          scale: 2, 
-          useCORS: true, 
-          logging: false,
-          scrollX: 0, // Try to prevent horizontal scroll issues
-          scrollY: -window.scrollY, // Capture from top of element
-          windowWidth: element.scrollWidth, // Match canvas width to content width
-          windowHeight: element.scrollHeight // Match canvas height to content height
+          scale: 2, // Higher scale for better quality
+          useCORS: true, // Important if your card includes external images (like placeholders)
+          logging: true, // << ENABLED html2canvas LOGGING
+          // Removing potentially problematic scroll/window options:
+          // scrollX: 0, 
+          // scrollY: -window.scrollY, 
+          // windowWidth: element.scrollWidth, 
+          // windowHeight: element.scrollHeight 
         },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // Try to avoid breaking elements
       };
+      console.log("html2pdf options:", opt);
 
       await html2pdf().from(element).set(opt).save();
+      console.log("PDF generation process .save() called and awaited.");
+
       toast({
         title: "PDF Generated!",
         description: "Your diet plan has been saved as a PDF.",
         variant: "default"
       });
     } catch (error) {
-      console.error("Error generating PDF:", error);
+      console.error("Error generating PDF with html2pdf.js:", error);
       toast({
         title: "PDF Generation Failed",
-        description: "An error occurred while generating the PDF. Please try again.",
+        description: `An error occurred: ${error instanceof Error ? error.message : String(error)}`,
         variant: "destructive",
       });
     } finally {
       setIsGeneratingPdf(false);
+      console.log("PDF generation process finished (or errored).");
     }
   };
 
@@ -201,10 +209,15 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
           disabled={isGeneratingPdf}
           className="print-hide-button w-full md:w-auto" // Responsive width
         >
-          <FileDown className="mr-2 h-4 w-4" />
+          {isGeneratingPdf ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <FileDown className="mr-2 h-4 w-4" />
+          )}
           {isGeneratingPdf ? "Generating..." : "Save as PDF"}
         </Button>
       </CardFooter>
     </Card>
   );
 }
+
