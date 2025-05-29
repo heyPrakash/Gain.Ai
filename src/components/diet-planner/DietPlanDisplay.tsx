@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { UtensilsCrossed, FileDown } from 'lucide-react';
-import html2pdf from 'html2pdf.js/dist/html2pdf.bundle.min.js';
+// Removed static import: import html2pdf from 'html2pdf.js/dist/html2pdf.bundle.min.js';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -106,20 +106,24 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
       description: "Your diet plan PDF is being created. This may take a moment.",
     });
 
-    const opt = {
-      margin: 0.5, // inches
-      filename: 'cortex-fit-diet-plan.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { 
-        scale: 2, 
-        useCORS: true, // Important for external images like placeholders
-        logging: false, // Reduce console noise
-      },
-      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // Helps with page breaking
-    };
-
     try {
+      // Dynamically import html2pdf.js
+      const html2pdfModule = await import('html2pdf.js/dist/html2pdf.bundle.min.js');
+      const html2pdf = html2pdfModule.default || html2pdfModule; // Handles if it's default export or not
+
+      const opt = {
+        margin: 0.5, // inches
+        filename: 'cortex-fit-diet-plan.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+          scale: 2, 
+          useCORS: true, // Important for external images like placeholders
+          logging: false, // Reduce console noise
+        },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // Helps with page breaking
+      };
+
       await html2pdf().from(element).set(opt).save();
       toast({
         title: "PDF Generated!",
@@ -191,6 +195,7 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
           variant="outline" 
           onClick={handleSaveAsPdf}
           disabled={isGeneratingPdf}
+          className="print-hide-button"
         >
           <FileDown className="mr-2 h-4 w-4" />
           {isGeneratingPdf ? "Generating..." : "Save as PDF"}
@@ -199,3 +204,4 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
     </Card>
   );
 }
+
