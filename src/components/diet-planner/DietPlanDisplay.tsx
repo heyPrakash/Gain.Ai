@@ -5,8 +5,8 @@ import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { UtensilsCrossed, FileDown, Printer } from 'lucide-react'; // Added Printer
-// Removed static import: import html2pdf from 'html2pdf.js/dist/html2pdf.bundle.min.js';
+import { UtensilsCrossed, FileDown } from 'lucide-react';
+// html2pdf.js is dynamically imported below
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -117,11 +117,15 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { 
           scale: 2, 
-          useCORS: true, // Important for external images like placeholders
-          logging: false, // Reduce console noise
+          useCORS: true, 
+          logging: false,
+          scrollX: 0, // Try to prevent horizontal scroll issues
+          scrollY: -window.scrollY, // Capture from top of element
+          windowWidth: element.scrollWidth, // Match canvas width to content width
+          windowHeight: element.scrollHeight // Match canvas height to content height
         },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // Helps with page breaking
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
       };
 
       await html2pdf().from(element).set(opt).save();
@@ -154,7 +158,7 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-[500px] w-full p-4 border rounded-md bg-card print-expandable-scroll-area"> {/* Added print-expandable-scroll-area */}
+        <ScrollArea className="h-[500px] w-full p-4 border rounded-md bg-card print-expandable-scroll-area">
           {sections.map((sectionText, sectionIndex) => {
             const trimmedSectionText = sectionText.trim();
             if (!trimmedSectionText) return null;
@@ -195,7 +199,7 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
           variant="outline" 
           onClick={handleSaveAsPdf}
           disabled={isGeneratingPdf}
-          className="print-hide-button w-full md:w-auto"
+          className="print-hide-button w-full md:w-auto" // Responsive width
         >
           <FileDown className="mr-2 h-4 w-4" />
           {isGeneratingPdf ? "Generating..." : "Save as PDF"}
@@ -204,4 +208,3 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
     </Card>
   );
 }
-
