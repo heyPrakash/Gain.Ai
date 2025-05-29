@@ -4,7 +4,11 @@
 import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { UtensilsCrossed } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { UtensilsCrossed, FileDown } from 'lucide-react';
+import html2pdf from 'html2pdf.js/dist/html2pdf.bundle.min.js';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 interface DietPlanDisplayProps {
   dietPlanOutput: GenerateDietPlanOutput;
@@ -80,8 +84,59 @@ const renderDietPlanContent = (content: string): (JSX.Element | null)[] => {
 
 export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps) {
   const { dietPlan } = dietPlanOutput;
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const { toast } = useToast();
 
   const sections = dietPlan.split(/\n(?=Day\s\d+:|Meal\s\d+:|Breakfast:|Lunch:|Dinner:|Snack:|Important Notes and Adjustments:|Important Considerations:|Sample Meal Plan:)/i);
+
+  const handleSaveAsPdf = async () => {
+    const element = document.getElementById('dietPlanCardPrintable');
+    if (!element) {
+      toast({
+        title: "Error",
+        description: "Could not find diet plan content to generate PDF.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsGeneratingPdf(true);
+    toast({
+      title: "Generating PDF...",
+      description: "Your diet plan PDF is being created. This may take a moment.",
+    });
+
+    const opt = {
+      margin: 0.5, // inches
+      filename: 'cortex-fit-diet-plan.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { 
+        scale: 2, 
+        useCORS: true, // Important for external images like placeholders
+        logging: false, // Reduce console noise
+      },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // Helps with page breaking
+    };
+
+    try {
+      await html2pdf().from(element).set(opt).save();
+      toast({
+        title: "PDF Generated!",
+        description: "Your diet plan has been saved as a PDF.",
+        variant: "default"
+      });
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast({
+        title: "PDF Generation Failed",
+        description: "An error occurred while generating the PDF. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGeneratingPdf(false);
+    }
+  };
 
   return (
     <Card id="dietPlanCardPrintable" className="mt-8 w-full max-w-3xl mx-auto shadow-xl">
@@ -132,7 +187,14 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
         </ScrollArea>
       </CardContent>
       <CardFooter className="justify-end">
-        {/* Button removed */}
+        <Button 
+          variant="outline" 
+          onClick={handleSaveAsPdf}
+          disabled={isGeneratingPdf}
+        >
+          <FileDown className="mr-2 h-4 w-4" />
+          {isGeneratingPdf ? "Generating..." : "Save as PDF"}
+        </Button>
       </CardFooter>
     </Card>
   );
