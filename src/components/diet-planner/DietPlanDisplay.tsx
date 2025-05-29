@@ -5,7 +5,7 @@ import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { UtensilsCrossed, FileDown } from 'lucide-react';
+import { UtensilsCrossed, FileDown, Printer } from 'lucide-react'; // Added Printer
 // Removed static import: import html2pdf from 'html2pdf.js/dist/html2pdf.bundle.min.js';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
@@ -195,7 +195,7 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
           variant="outline" 
           onClick={handleSaveAsPdf}
           disabled={isGeneratingPdf}
-          className="print-hide-button"
+          className="print-hide-button w-full md:w-auto"
         >
           <FileDown className="mr-2 h-4 w-4" />
           {isGeneratingPdf ? "Generating..." : "Save as PDF"}
