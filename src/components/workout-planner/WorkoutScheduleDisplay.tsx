@@ -5,9 +5,8 @@ import type { GenerateWorkoutScheduleOutput } from '@/ai/flows/generate-workout-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ClipboardList, Zap } from 'lucide-react';
-// Removed FileDown, Loader2, Button, useState, useToast as they were for the PDF button
-// Removed Alert, AlertDescription, AlertTitle as they were for the disclaimer
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ClipboardList, Zap, Info } from 'lucide-react';
 
 
 interface WorkoutScheduleDisplayProps {
@@ -16,9 +15,6 @@ interface WorkoutScheduleDisplayProps {
 
 export default function WorkoutScheduleDisplay({ scheduleOutput }: WorkoutScheduleDisplayProps) {
   const { scheduleTitle, weeklySchedule, recoveryTips } = scheduleOutput;
-  // Removed isGeneratingPdf state and useToast hook
-
-  // Removed handleSaveAsPdf function
 
   return (
     <Card id="workoutScheduleCardPrintable" className="mt-8 w-full max-w-3xl mx-auto shadow-xl">
@@ -68,12 +64,18 @@ export default function WorkoutScheduleDisplay({ scheduleOutput }: WorkoutSchedu
           )}
           
         </ScrollArea>
+        <Alert variant="default" className="mt-6">
+          <Info className="h-4 w-4" />
+          <AlertTitle>Pro Tip!</AlertTitle>
+          <AlertDescription>
+            We recommend writing down your schedule or making notes for easy reference at the gym. This can help you stay on track!
+          </AlertDescription>
+        </Alert>
          
       </CardContent>
       <CardFooter className="justify-end">
-         {/* Removed the "Save as PDF" Button */}
+         
       </CardFooter>
     </Card>
   );
 }
-
