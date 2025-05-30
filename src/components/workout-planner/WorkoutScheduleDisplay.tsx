@@ -5,9 +5,9 @@ import type { GenerateWorkoutScheduleOutput } from '@/ai/flows/generate-workout-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ClipboardList, Zap, Info } from 'lucide-react';
+import { ClipboardList, Zap } from 'lucide-react';
 // Removed FileDown, Loader2, Button, useState, useToast as they were for the PDF button
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+// Removed Alert, AlertDescription, AlertTitle as they were for the disclaimer
 
 
 interface WorkoutScheduleDisplayProps {
@@ -15,7 +15,7 @@ interface WorkoutScheduleDisplayProps {
 }
 
 export default function WorkoutScheduleDisplay({ scheduleOutput }: WorkoutScheduleDisplayProps) {
-  const { scheduleTitle, weeklySchedule, recoveryTips, disclaimer } = scheduleOutput;
+  const { scheduleTitle, weeklySchedule, recoveryTips } = scheduleOutput;
   // Removed isGeneratingPdf state and useToast hook
 
   // Removed handleSaveAsPdf function
@@ -68,15 +68,7 @@ export default function WorkoutScheduleDisplay({ scheduleOutput }: WorkoutSchedu
           )}
           
         </ScrollArea>
-         {disclaimer && (
-            <Alert variant="default" className="mt-6 bg-amber-50 border-amber-300 text-amber-800 print-expandable-scroll-area">
-              <Info className="h-5 w-5 text-amber-600" />
-              <AlertTitle className="font-semibold text-amber-700">Important Disclaimer</AlertTitle>
-              <AlertDescription className="text-xs">
-                {disclaimer}
-              </AlertDescription>
-            </Alert>
-          )}
+         
       </CardContent>
       <CardFooter className="justify-end">
          {/* Removed the "Save as PDF" Button */}
@@ -84,3 +76,4 @@ export default function WorkoutScheduleDisplay({ scheduleOutput }: WorkoutSchedu
     </Card>
   );
 }
+
