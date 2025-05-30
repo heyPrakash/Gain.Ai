@@ -4,26 +4,16 @@
  * @fileOverview An AI chat coach for fitness guidance and support.
  *
  * - aiChatCoach - A function that provides a 24/7 AI chat interface for fitness-related questions and guidance.
- * - AiChatCoachInput - The input type for the aiChatCoach function.
- * - AiChatCoachOutput - The return type for the aiChatCoach function.
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import {
+  AiChatCoachInputSchema,
+  AiChatCoachOutputSchema,
+  type AiChatCoachInput,
+  type AiChatCoachOutput
+} from './ai-chat-coach-types';
 
-const AiChatCoachInputSchema = z.object({
-  message: z.string().describe('The user message to the AI coach.'),
-  chatHistory: z.array(z.object({
-    role: z.enum(['user', 'assistant']),
-    content: z.string(),
-  })).optional().describe('The chat history between the user and the AI coach.'),
-});
-export type AiChatCoachInput = z.infer<typeof AiChatCoachInputSchema>;
-
-const AiChatCoachOutputSchema = z.object({
-  response: z.string().describe('The AI coach response to the user message.'),
-});
-export type AiChatCoachOutput = z.infer<typeof AiChatCoachOutputSchema>;
 
 export async function aiChatCoach(input: AiChatCoachInput): Promise<AiChatCoachOutput> {
   return aiChatCoachFlow(input);
@@ -85,7 +75,7 @@ const aiChatCoachFlow = ai.defineFlow(
       console.error('Critical error during aiChatCoachFlow execution:', flowExecutionError);
       if (flowExecutionError instanceof Error) {
         // Avoid double-prepending "AI Chat Coach flow failed: " if it's already specific.
-        if (flowExecutionError.message.startsWith('AI coach') || flowExecutionError.message.startsWith('LLM') || flowExecutionError.message.includes('helper')) { // Added check for helper error
+        if (flowExecutionError.message.startsWith('AI coach') || flowExecutionError.message.startsWith('LLM') || flowExecutionError.message.includes('helper')) { 
              throw flowExecutionError;
         }
         throw new Error(`AI Chat Coach flow encountered an error: ${flowExecutionError.message}`);
@@ -94,4 +84,3 @@ const aiChatCoachFlow = ai.defineFlow(
     }
   }
 );
-

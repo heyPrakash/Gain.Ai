@@ -122,6 +122,8 @@ body {
   body > footer,
   #how-it-works,
   #ai-chat-coach,
+  #workout-planner > .text-center, /* Workout planner title */
+  #workout-schedule-form-card, /* Workout schedule form */
   main > div > .separator, /* Page separators */
   .ToastViewport,
   .ToastProvider,
@@ -138,9 +140,9 @@ body {
   {
     display: none !important;
   }
-
+  
   /* Reset body and main for printing the card content */
-  body, main, #diet-planner {
+  body, main, #diet-planner, #workout-planner {
     margin: 0 !important;
     padding: 0 !important;
     background: white !important; /* Ensure clean background for print */
@@ -148,7 +150,7 @@ body {
   }
   
   /* Style the diet plan card for printing */
-  #dietPlanCardPrintable {
+  #dietPlanCardPrintable, #workoutScheduleCardPrintable {
     box-shadow: none !important;
     border: none !important;
     width: 100% !important;
@@ -163,27 +165,38 @@ body {
 
   #dietPlanCardPrintable .CardHeader, 
   #dietPlanCardPrintable .CardContent, 
-  #dietPlanCardPrintable .CardFooter {
+  #dietPlanCardPrintable .CardFooter,
+  #workoutScheduleCardPrintable .CardHeader,
+  #workoutScheduleCardPrintable .CardContent,
+  #workoutScheduleCardPrintable .CardFooter {
       padding: 10px !important; /* Minimal padding for print content */
   }
+
   #dietPlanCardPrintable .CardHeader *,
   #dietPlanCardPrintable .CardContent *,
-  #dietPlanCardPrintable .CardFooter * {
+  #dietPlanCardPrintable .CardFooter *,
+  #workoutScheduleCardPrintable .CardHeader *,
+  #workoutScheduleCardPrintable .CardContent *,
+  #workoutScheduleCardPrintable .CardFooter * {
       color: black !important; /* Ensure all text within is black for print */
   }
-   #dietPlanCardPrintable .text-primary {
+   #dietPlanCardPrintable .text-primary,
+   #workoutScheduleCardPrintable .text-primary {
       color: black !important; /* Override primary color to black for print if needed */
    }
-   #dietPlanCardPrintable .text-secondary-foreground {
+   #dietPlanCardPrintable .text-secondary-foreground,
+   #workoutScheduleCardPrintable .text-secondary-foreground {
       color: black !important; 
    }
-   #dietPlanCardPrintable .text-muted-foreground {
+   #dietPlanCardPrintable .text-muted-foreground,
+   #workoutScheduleCardPrintable .text-muted-foreground {
       color: #333 !important; /* Darker grey for muted text on print */
    }
 
 
   /* Ensure the scrollable content within the diet plan is fully expanded */
-  #dietPlanCardPrintable .print-expandable-scroll-area {
+  #dietPlanCardPrintable .print-expandable-scroll-area,
+  #workoutScheduleCardPrintable .print-expandable-scroll-area {
     height: auto !important;
     max-height: none !important;
     overflow: visible !important;
@@ -191,14 +204,35 @@ body {
     background: white !important;
   }
    /* Remove border and padding from the viewport's child div */
-  #dietPlanCardPrintable .print-expandable-scroll-area > div[data-radix-scroll-area-viewport] > div {
+  #dietPlanCardPrintable .print-expandable-scroll-area > div[data-radix-scroll-area-viewport] > div,
+  #workoutScheduleCardPrintable .print-expandable-scroll-area > div[data-radix-scroll-area-viewport] > div {
     border: none !important;
     padding: 0 !important; 
     background: white !important;
   }
   /* Also ensure viewport itself has no border and clean background */
-   #dietPlanCardPrintable .print-expandable-scroll-area > div[data-radix-scroll-area-viewport] {
+   #dietPlanCardPrintable .print-expandable-scroll-area > div[data-radix-scroll-area-viewport],
+   #workoutScheduleCardPrintable .print-expandable-scroll-area > div[data-radix-scroll-area-viewport] {
     border: none !important;
     background: white !important;
   }
+
+  /* For workout schedule accordion, ensure it's expanded */
+  #workoutScheduleCardPrintable .AccordionItem[data-state="closed"] .AccordionContent,
+  #workoutScheduleCardPrintable .AccordionItem[data-state="closed"] > div[data-state="closed"] {
+    display: block !important; /* Force content to be visible */
+    height: auto !important;
+    overflow: visible !important;
+    animation: none !important; /* No animation for print */
+  }
+  #workoutScheduleCardPrintable .AccordionTrigger > svg {
+    display: none !important; /* Hide chevron */
+  }
+  #workoutScheduleCardPrintable .AccordionItem {
+    border-bottom: 1px solid #eee !important; /* Light border for separation */
+  }
+  #workoutScheduleCardPrintable .AccordionItem:last-child {
+    border-bottom: none !important;
+  }
 }
+

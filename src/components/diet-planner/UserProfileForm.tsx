@@ -1,4 +1,3 @@
-
 "use client";
 
 import type { Dispatch, SetStateAction } from 'react';
@@ -7,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2, Leaf } from 'lucide-react';
 
-import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan';
+import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan-types';
 import { userProfileSchema, type UserProfileFormValues, activityLevels } from './schemas';
 import { handleGenerateDietPlanAction } from '@/lib/actions';
 import { Button } from '@/components/ui/button';
@@ -81,7 +80,7 @@ export default function UserProfileForm({ onPlanGenerated, setIsLoading, setErro
   }
 
   return (
-    <Card id="user-profile-form-card" className="w-full max-w-2xl mx-auto shadow-xl"> {/* Added id */}
+    <Card id="user-profile-form-card" className="w-full max-w-2xl mx-auto shadow-xl">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-2xl">
           <Leaf className="text-primary" />

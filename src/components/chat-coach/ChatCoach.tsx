@@ -1,4 +1,3 @@
-
 "use client";
 
 import type { FormEvent } from 'react';
@@ -7,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Send, User, Sparkles, Loader2, MessageSquareHeart } from 'lucide-react';
 
 import { handleAiChatCoachAction } from '@/lib/actions';
-import type { AiChatCoachInput } from '@/ai/flows/ai-chat-coach';
+import type { AiChatCoachInput } from '@/ai/flows/ai-chat-coach-types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -102,7 +101,7 @@ export default function ChatCoach() {
                     "max-w-[70%] rounded-lg p-3 text-sm shadow",
                     message.role === 'user'
                       ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-foreground" // Changed text-primary to text-foreground
+                      : "bg-muted text-foreground" 
                   )}
                 >
                   {message.content}

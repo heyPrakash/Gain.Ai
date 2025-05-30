@@ -1,7 +1,6 @@
-
 "use client";
 
-import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan';
+import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan-types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -111,25 +110,20 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
     try {
       // Dynamically import html2pdf.js
       const html2pdfModule = await import('html2pdf.js/dist/html2pdf.bundle.min.js');
-      const html2pdf = html2pdfModule.default || html2pdfModule; // Handles if it's default export or not
+      const html2pdf = html2pdfModule.default || html2pdfModule; 
       console.log("html2pdf.js module loaded:", html2pdf);
 
       const opt = {
         margin: 0.5, // inches
         filename: 'cortex-fit-diet-plan.pdf',
-        image: { type: 'jpeg', quality: 0.98 }, // For images within the HTML
+        image: { type: 'jpeg', quality: 0.98 }, 
         html2canvas: { 
-          scale: 2, // Higher scale for better quality
-          useCORS: true, // Important if your card includes external images (like placeholders)
-          logging: true, // << ENABLED html2canvas LOGGING
-          // Removing potentially problematic scroll/window options:
-          // scrollX: 0, 
-          // scrollY: -window.scrollY, 
-          // windowWidth: element.scrollWidth, 
-          // windowHeight: element.scrollHeight 
+          scale: 2, 
+          useCORS: true, 
+          logging: true, 
         },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // Try to avoid breaking elements
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } 
       };
       console.log("html2pdf options:", opt);
 
@@ -207,7 +201,7 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
           variant="outline" 
           onClick={handleSaveAsPdf}
           disabled={isGeneratingPdf}
-          className="print-hide-button w-full md:w-auto" // Responsive width
+          className="print-hide-button w-full md:w-auto" 
         >
           {isGeneratingPdf ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -220,4 +214,3 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
     </Card>
   );
 }
-
