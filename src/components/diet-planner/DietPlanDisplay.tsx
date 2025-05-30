@@ -1,13 +1,11 @@
+
 "use client";
 
 import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan-types';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Button } from '@/components/ui/button';
-import { UtensilsCrossed, FileDown, Loader2 } from 'lucide-react';
-// html2pdf.js is dynamically imported below
-import { useState } from 'react';
-import { useToast } from '@/hooks/use-toast';
+import { UtensilsCrossed, Info } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface DietPlanDisplayProps {
   dietPlanOutput: GenerateDietPlanOutput;
@@ -83,70 +81,8 @@ const renderDietPlanContent = (content: string): (JSX.Element | null)[] => {
 
 export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps) {
   const { dietPlan } = dietPlanOutput;
-  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
-  const { toast } = useToast();
 
   const sections = dietPlan.split(/\n(?=Day\s\d+:|Meal\s\d+:|Breakfast:|Lunch:|Dinner:|Snack:|Important Notes and Adjustments:|Important Considerations:|Sample Meal Plan:)/i);
-
-  const handleSaveAsPdf = async () => {
-    const element = document.getElementById('dietPlanCardPrintable');
-    if (!element) {
-      toast({
-        title: "Error",
-        description: "Could not find diet plan content to generate PDF.",
-        variant: "destructive",
-      });
-      console.error("PDF Generation Error: 'dietPlanCardPrintable' element not found.");
-      return;
-    }
-
-    setIsGeneratingPdf(true);
-    toast({
-      title: "Generating PDF...",
-      description: "Your diet plan PDF is being created. This may take a moment.",
-    });
-    console.log("Attempting to generate PDF for element:", element);
-
-    try {
-      // Dynamically import html2pdf.js
-      const html2pdfModule = await import('html2pdf.js/dist/html2pdf.bundle.min.js');
-      const html2pdf = html2pdfModule.default || html2pdfModule; 
-      console.log("html2pdf.js module loaded:", html2pdf);
-
-      const opt = {
-        margin: 0.5, // inches
-        filename: 'cortex-fit-diet-plan.pdf',
-        image: { type: 'jpeg', quality: 0.98 }, 
-        html2canvas: { 
-          scale: 2, 
-          useCORS: true, 
-          logging: true, 
-        },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } 
-      };
-      console.log("html2pdf options:", opt);
-
-      await html2pdf().from(element).set(opt).save();
-      console.log("PDF generation process .save() called and awaited.");
-
-      toast({
-        title: "PDF Generated!",
-        description: "Your diet plan has been saved as a PDF.",
-        variant: "default"
-      });
-    } catch (error) {
-      console.error("Error generating PDF with html2pdf.js:", error);
-      toast({
-        title: "PDF Generation Failed",
-        description: `An error occurred: ${error instanceof Error ? error.message : String(error)}`,
-        variant: "destructive",
-      });
-    } finally {
-      setIsGeneratingPdf(false);
-      console.log("PDF generation process finished (or errored).");
-    }
-  };
 
   return (
     <Card id="dietPlanCardPrintable" className="mt-8 w-full max-w-3xl mx-auto shadow-xl">
@@ -195,22 +131,14 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
             );
           })}
         </ScrollArea>
+        <Alert variant="default" className="mt-6 bg-primary/10 border-primary/30 text-primary">
+          <Info className="h-4 w-4 text-primary" />
+          <AlertTitle>Pro Tip!</AlertTitle>
+          <AlertDescription className="text-primary/90">
+            We recommend writing down your diet plan or making notes for easy reference. This can help you stay on track with your meals and goals!
+          </AlertDescription>
+        </Alert>
       </CardContent>
-      <CardFooter className="justify-end">
-        <Button 
-          variant="outline" 
-          onClick={handleSaveAsPdf}
-          disabled={isGeneratingPdf}
-          className="print-hide-button w-full md:w-auto" 
-        >
-          {isGeneratingPdf ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <FileDown className="mr-2 h-4 w-4" />
-          )}
-          {isGeneratingPdf ? "Generating..." : "Save as PDF"}
-        </Button>
-      </CardFooter>
     </Card>
   );
 }
