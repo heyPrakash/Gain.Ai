@@ -64,8 +64,8 @@ export default function WorkoutScheduleDisplay({ scheduleOutput }: WorkoutSchedu
           )}
           
         </ScrollArea>
-        <Alert variant="default" className="mt-6">
-          <Info className="h-4 w-4" />
+        <Alert variant="default" className="mt-6 bg-primary/10 border-primary/30 text-primary">
+          <Info className="h-4 w-4 text-primary" />
           <AlertTitle>Pro Tip!</AlertTitle>
           <AlertDescription>
             We recommend writing down your schedule or making notes for easy reference at the gym. This can help you stay on track!
@@ -79,3 +79,4 @@ export default function WorkoutScheduleDisplay({ scheduleOutput }: WorkoutSchedu
     </Card>
   );
 }
+
