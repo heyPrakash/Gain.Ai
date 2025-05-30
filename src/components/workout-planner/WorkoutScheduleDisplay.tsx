@@ -1,13 +1,12 @@
+
 "use client";
 
 import type { GenerateWorkoutScheduleOutput } from '@/ai/flows/generate-workout-schedule-types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Button } from '@/components/ui/button';
-import { ClipboardList, FileDown, Loader2, Zap, Info } from 'lucide-react';
-import { useState } from 'react';
-import { useToast } from '@/hooks/use-toast';
+import { ClipboardList, Zap, Info } from 'lucide-react';
+// Removed FileDown, Loader2, Button, useState, useToast as they were for the PDF button
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 
@@ -17,56 +16,9 @@ interface WorkoutScheduleDisplayProps {
 
 export default function WorkoutScheduleDisplay({ scheduleOutput }: WorkoutScheduleDisplayProps) {
   const { scheduleTitle, weeklySchedule, recoveryTips, disclaimer } = scheduleOutput;
-  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
-  const { toast } = useToast();
+  // Removed isGeneratingPdf state and useToast hook
 
-  const handleSaveAsPdf = async () => {
-    const element = document.getElementById('workoutScheduleCardPrintable');
-    if (!element) {
-      toast({
-        title: "Error",
-        description: "Could not find workout schedule content to generate PDF.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsGeneratingPdf(true);
-    toast({
-      title: "Generating PDF...",
-      description: "Your workout schedule PDF is being created.",
-    });
-
-    try {
-      const html2pdfModule = await import('html2pdf.js/dist/html2pdf.bundle.min.js');
-      const html2pdf = html2pdfModule.default || html2pdfModule;
-      
-      const opt = {
-        margin: 0.5,
-        filename: 'cortex-fit-workout-schedule.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, logging: false }, 
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-      };
-      
-      await html2pdf().from(element).set(opt).save();
-      toast({
-        title: "PDF Generated!",
-        description: "Your workout schedule has been saved as a PDF.",
-      });
-    } catch (error) {
-      console.error("Error generating PDF for workout schedule:", error);
-      toast({
-        title: "PDF Generation Failed",
-        description: `An error occurred: ${error instanceof Error ? error.message : String(error)}`,
-        variant: "destructive",
-      });
-    } finally {
-      setIsGeneratingPdf(false);
-    }
-  };
-
+  // Removed handleSaveAsPdf function
 
   return (
     <Card id="workoutScheduleCardPrintable" className="mt-8 w-full max-w-3xl mx-auto shadow-xl">
@@ -127,19 +79,7 @@ export default function WorkoutScheduleDisplay({ scheduleOutput }: WorkoutSchedu
           )}
       </CardContent>
       <CardFooter className="justify-end">
-         <Button 
-          variant="outline" 
-          onClick={handleSaveAsPdf}
-          disabled={isGeneratingPdf}
-          className="print-hide-button w-full md:w-auto"
-        >
-          {isGeneratingPdf ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <FileDown className="mr-2 h-4 w-4" />
-          )}
-          {isGeneratingPdf ? "Generating..." : "Save as PDF"}
-        </Button>
+         {/* Removed the "Save as PDF" Button */}
       </CardFooter>
     </Card>
   );
