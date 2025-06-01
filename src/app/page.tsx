@@ -1,13 +1,18 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { HeartPulse, Dumbbell, MessageSquareHeart } from 'lucide-react';
+import { HeartPulse, Dumbbell, MessageSquareHeart, BrainCircuit, Info, UserCircle } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 export default function HomePage() {
   return (
-    <div className="container mx-auto px-2 sm:px-4">
+    <div className="container mx-auto px-2 sm:px-4 py-8">
       <Card className="max-w-3xl mx-auto shadow-lg">
         <CardHeader className="text-center">
+          <div className="inline-flex items-center justify-center mb-4">
+            <BrainCircuit className="h-12 w-12 text-primary" />
+          </div>
           <CardTitle className="text-3xl md:text-4xl font-bold text-primary">Welcome to Cortex Fit!</CardTitle>
           <CardDescription className="text-lg md:text-xl text-muted-foreground pt-2">
             Your personalized AI fitness companion.
@@ -37,7 +42,37 @@ export default function HomePage() {
               </Link>
             </Button>
           </div>
-           <p className="text-sm text-muted-foreground pt-4">
+
+          <Separator className="my-8" />
+
+          <div className="text-left space-y-4 px-2 md:px-6">
+            <h3 className="text-2xl font-semibold text-primary flex items-center gap-2">
+              <Info className="w-6 h-6" />
+              About Cortex Fit
+            </h3>
+            <p className="text-md text-foreground leading-relaxed">
+              Cortex Fit is an innovative AI-powered fitness application designed to be your personal health and wellness partner. Our mission is to provide you with intelligent, tailored guidance to help you achieve your fitness goals. Whether you're looking to create a personalized diet plan, generate an effective workout schedule, or get instant advice from an AI fitness coach, Cortex Fit leverages cutting-edge artificial intelligence to support your journey.
+            </p>
+            <p className="text-md text-foreground leading-relaxed">
+              We believe that personalized support is key to sustainable fitness. Cortex Fit aims to make expert-level fitness advice accessible and adaptable to your unique needs, preferences, and lifestyle.
+            </p>
+          </div>
+
+          <Separator className="my-8" />
+
+          <div className="text-left space-y-3 px-2 md:px-6">
+            <h3 className="text-2xl font-semibold text-primary flex items-center gap-2">
+              <UserCircle className="w-6 h-6" />
+              Developed By
+            </h3>
+            <p className="text-md text-foreground">
+              Cortex Fit is proudly developed by <strong className="text-primary">Prakash Jadhav</strong>.
+            </p>
+            <p className="text-md text-foreground">
+              Prakash is the CEO and Founder of <strong className="text-primary">DecoAI</strong>, a company passionate about harnessing the power of artificial intelligence to create impactful and user-centric solutions.
+            </p>
+          </div>
+           <p className="text-sm text-muted-foreground pt-8">
             Let Cortex Fit guide you on your journey to a healthier, stronger you.
           </p>
         </CardContent>
