@@ -14,7 +14,7 @@ export default function WorkoutPlannerSection() {
   const [scheduleError, setScheduleError] = useState<string | null>(null);
 
   return (
-    <section id="workout-planner" className="space-y-8 py-8 md:py-12">
+    <section id="workout-planner" className="space-y-8">
       <div className="text-center space-y-2">
         <h2 className="text-3xl md:text-4xl font-bold text-primary flex items-center justify-center gap-2">
           <Dumbbell className="w-8 h-8 md:w-10 md:h-10" />

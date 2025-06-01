@@ -1,16 +1,15 @@
-import { BrainCircuit } from 'lucide-react';
-import Link from 'next/link';
+import { SidebarTrigger } from '@/components/ui/sidebar';
 
 export default function Header() {
   return (
-    <header className="py-4 px-6 shadow-md bg-card">
-      <div className="container mx-auto flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 text-2xl font-bold text-primary hover:opacity-80 transition-opacity">
-          <BrainCircuit className="h-8 w-8" />
-          <span>Cortex Fit</span>
-        </Link>
-        {/* Future navigation links can go here */}
+    <header className="sticky top-0 z-40 flex h-14 items-center gap-4 border-b bg-background px-4 sm:h-16 sm:px-6">
+      <div className="md:hidden"> {/* SidebarTrigger for mobile */}
+        <SidebarTrigger />
       </div>
+      <div className="flex-1">
+        {/* Future elements like page title or breadcrumbs can go here */}
+      </div>
+      {/* User/settings dropdown could go here */}
     </header>
   );
 }

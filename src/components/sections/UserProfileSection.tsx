@@ -13,7 +13,7 @@ export default function UserProfileSection() {
   const [dietPlanError, setDietPlanError] = useState<string | null>(null);
 
   return (
-    <section id="diet-planner" className="space-y-8 py-8 md:py-12">
+    <section id="diet-planner" className="space-y-8">
       <div className="text-center space-y-2">
         <h2 className="text-3xl md:text-4xl font-bold text-primary flex items-center justify-center gap-2">
           <HeartPulse className="w-8 h-8 md:w-10 md:h-10" />

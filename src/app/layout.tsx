@@ -6,6 +6,18 @@ import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { cn } from '@/lib/utils';
+import {
+  SidebarProvider,
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarInset,
+} from '@/components/ui/sidebar';
+import { Home, HeartPulse, Dumbbell, MessageSquareHeart, BrainCircuit } from 'lucide-react';
+import Link from 'next/link';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -18,8 +30,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Cortex Fit - AI Powered Fitness',
-  description: 'Personalized AI diet plans and 24/7 fitness coaching by Cortex Fit.',
+  title: 'Cortex Fit - AI Powered Fitness Dashboard',
+  description: 'Personalized AI diet plans, workout schedules, and 24/7 fitness coaching by Cortex Fit.',
 };
 
 export default function RootLayout({
@@ -29,20 +41,57 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body 
-        suppressHydrationWarning // Added this line
+      <body
+        suppressHydrationWarning
         className={cn(
-          "min-h-screen bg-background font-sans antialiased flex flex-col",
-          geistSans.variable, 
+          "min-h-screen bg-background font-sans antialiased",
+          geistSans.variable,
           geistMono.variable
         )}
       >
         <QueryProvider>
-          <Header />
-          <main className="flex-grow">
-            {children}
-          </main>
-          <Footer />
+          <SidebarProvider defaultOpen>
+            <Sidebar collapsible="icon" className="border-r border-sidebar-border">
+              <SidebarHeader className="p-4">
+                <Link href="/" className="flex items-center gap-2 text-xl font-bold text-sidebar-primary hover:opacity-80 transition-opacity">
+                  <BrainCircuit className="h-7 w-7" />
+                  <span className="group-data-[collapsible=icon]:hidden">Cortex Fit</span>
+                </Link>
+              </SidebarHeader>
+              <SidebarContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild tooltip={{content: "Home", side: "right", align: "center"}}>
+                      <Link href="/"><Home /> <span className="group-data-[collapsible=icon]:hidden">Home</span></Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild tooltip={{content: "Diet Planner", side: "right", align: "center"}}>
+                      <Link href="/diet-planner"><HeartPulse /> <span className="group-data-[collapsible=icon]:hidden">Diet Planner</span></Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild tooltip={{content: "Workout Planner", side: "right", align: "center"}}>
+                      <Link href="/workout-planner"><Dumbbell /> <span className="group-data-[collapsible=icon]:hidden">Workout Planner</span></Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild tooltip={{content: "AI Coach", side: "right", align: "center"}}>
+                      <Link href="/ai-coach"><MessageSquareHeart /> <span className="group-data-[collapsible=icon]:hidden">AI Coach</span></Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarContent>
+            </Sidebar>
+
+            <SidebarInset className="flex flex-col min-h-screen">
+              <Header />
+              <main className="flex-grow p-4 sm:p-6">
+                {children}
+              </main>
+              <Footer />
+            </SidebarInset>
+          </SidebarProvider>
           <Toaster />
         </QueryProvider>
       </body>
