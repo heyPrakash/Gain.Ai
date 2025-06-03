@@ -51,7 +51,7 @@ export default function HomePage() {
               About Cortex Fit
             </h3>
             <p className="text-md text-foreground leading-relaxed">
-              Cortex Fit is an innovative AI-powered fitness application designed to be your personal health and wellness partner. Our mission is to provide you with intelligent, tailored guidance to help you achieve your fitness goals. Whether you're looking to create a personalized diet plan, generate an effective workout schedule, or get instant advice from an AI fitness coach, Cortex Fit leverages cutting-edge artificial intelligence to support your journey.
+              CortexFit is the first version of our vision at Cortex — a foundational web app that leverages AI to assist users in achieving their goals more efficiently. Whether it's for health tracking, task management, or smart recommendations, CortexFit showcases the capabilities of Cortex’s AI-driven platform and marks the beginning of a series of intelligent tools built for the modern user.
             </p>
             <p className="text-md text-foreground leading-relaxed">
               We believe that personalized support is key to sustainable fitness. Cortex Fit aims to make expert-level fitness advice accessible and adaptable to your unique needs, preferences, and lifestyle.
