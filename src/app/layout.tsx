@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
@@ -16,7 +17,8 @@ import {
   SidebarMenuButton,
   SidebarInset,
 } from '@/components/ui/sidebar';
-import { Home, HeartPulse, Dumbbell, MessageSquareHeart, BrainCircuit } from 'lucide-react';
+import { Home, HeartPulse, Dumbbell, MessageSquareHeart } from 'lucide-react';
+import { CortexAppIcon } from '@/components/icons/CortexAppIcon'; // Import the new icon
 import Link from 'next/link';
 
 const geistSans = Geist({
@@ -54,7 +56,7 @@ export default function RootLayout({
             <Sidebar collapsible="icon" className="border-r border-sidebar-border">
               <SidebarHeader className="p-4">
                 <Link href="/" className="flex items-center gap-2 text-xl font-bold text-sidebar-primary hover:opacity-80 transition-opacity">
-                  <BrainCircuit className="h-7 w-7" />
+                  <CortexAppIcon className="h-7 w-7" /> {/* Use the new icon here */}
                   <span className="group-data-[collapsible=icon]:hidden">Cortex Fit</span>
                 </Link>
               </SidebarHeader>
