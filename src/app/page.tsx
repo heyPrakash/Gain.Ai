@@ -69,7 +69,7 @@ export default function HomePage() {
               Cortex Fit is proudly developed by <strong className="text-primary">Prakash Jadhav</strong>.
             </p>
             <p className="text-md text-foreground">
-              Prakash is the CEO and Founder of <strong className="text-primary">DecoAI</strong>, a company passionate about harnessing the power of artificial intelligence to create impactful and user-centric solutions.
+              Prakash is the developer of <strong className="text-primary">CortexFit</strong>, a company passionate about harnessing the power of artificial intelligence to create impactful and user-centric solutions.
             </p>
           </div>
            <p className="text-sm text-muted-foreground pt-8">
