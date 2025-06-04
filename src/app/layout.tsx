@@ -88,7 +88,7 @@ export default function RootLayout({
 
             <SidebarInset className="flex flex-col min-h-screen">
               <Header />
-              <main className="flex-grow p-4 sm:p-6">
+              <main className="flex-grow">
                 {children}
               </main>
               <Footer />
