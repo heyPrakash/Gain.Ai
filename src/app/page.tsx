@@ -7,8 +7,8 @@ import { Separator } from '@/components/ui/separator';
 
 export default function HomePage() {
   return (
-    <div className="container mx-auto px-2 sm:px-4 py-8">
-      <Card className="max-w-3xl mx-auto shadow-lg">
+    <div className="px-2 sm:px-4 py-8">
+      <Card className="shadow-lg">
         <CardHeader className="text-center">
           <div className="inline-flex items-center justify-center mb-4">
             <BrainCircuit className="h-12 w-12 text-primary" />
