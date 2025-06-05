@@ -1,5 +1,5 @@
-# Firebase Studio
+# Carb
 
-This is a NextJS starter in Firebase Studio.
+This is a NextJS starter for Carb, an AI-powered fitness application.
 
 To get started, take a look at src/app/page.tsx.
