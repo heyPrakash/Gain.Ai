@@ -51,7 +51,7 @@ export default function HomePage() {
               About Cortex Fit
             </h3>
             <p className="text-md text-foreground leading-relaxed">
-              cortexfit is a first verson of anthos.
+              CortexFit is the first innovative release under Anthos, a digital health initiative by Cortex, a software company committed to building intelligent web applications and AI assistants that empower users. CortexFit is an all-in-one AI-powered fitness companion designed to help you achieve your health and wellness goals smarter and faster. Whether you're a beginner or a seasoned gym enthusiast, CortexFit offers personalized diet plans, workout routines, and 24/7 virtual coaching tailored to your body type, fitness level, and goals.
             </p>
             <p className="text-md text-foreground leading-relaxed">
               We believe that personalized support is key to sustainable fitness. Cortex Fit aims to make expert-level fitness advice accessible and adaptable to your unique needs, preferences, and lifestyle.
