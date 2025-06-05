@@ -51,7 +51,7 @@ export default function HomePage() {
               About Cortex Fit
             </h3>
             <p className="text-md text-foreground leading-relaxed">
-              CortexFit is the first version of our vision at Cortex — a foundational web app that leverages AI to assist users in achieving their goals more efficiently. Whether it's for health tracking, task management, or smart recommendations, CortexFit showcases the capabilities of Cortex’s AI-driven platform and marks the beginning of a series of intelligent tools built for the modern user.
+              cortexfit is a first verson of anthos.
             </p>
             <p className="text-md text-foreground leading-relaxed">
               We believe that personalized support is key to sustainable fitness. Cortex Fit aims to make expert-level fitness advice accessible and adaptable to your unique needs, preferences, and lifestyle.
