@@ -18,7 +18,7 @@ import {
   SidebarInset,
 } from '@/components/ui/sidebar';
 import { Home, HeartPulse, Dumbbell, MessageSquareHeart } from 'lucide-react';
-import { GetFitAppIcon } from '@/components/icons/GetFitAppIcon'; // Import the new icon
+import { GainAppIcon } from '@/components/icons/GainAppIcon'; // Import the new icon
 import Link from 'next/link';
 
 const geistSans = Geist({
@@ -32,8 +32,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'GetFit - AI Powered Fitness Dashboard',
-  description: 'Personalized AI diet plans, workout schedules, and 24/7 fitness coaching by GetFit.',
+  title: 'Gain - AI Powered Fitness Dashboard',
+  description: 'Personalized AI diet plans, workout schedules, and 24/7 fitness coaching by Gain.',
 };
 
 export default function RootLayout({
@@ -56,8 +56,8 @@ export default function RootLayout({
             <Sidebar collapsible="icon" className="border-r border-sidebar-border">
               <SidebarHeader className="p-4">
                 <Link href="/" className="flex items-center gap-2 text-xl font-bold text-sidebar-primary hover:opacity-80 transition-opacity">
-                  <GetFitAppIcon className="h-7 w-7" /> {/* Use the new icon here */}
-                  <span className="group-data-[collapsible=icon]:hidden">GetFit</span>
+                  <GainAppIcon className="h-7 w-7" /> {/* Use the new icon here */}
+                  <span className="group-data-[collapsible=icon]:hidden">Gain</span>
                 </Link>
               </SidebarHeader>
               <SidebarContent>
