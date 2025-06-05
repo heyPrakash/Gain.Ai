@@ -53,9 +53,6 @@ export default function HomePage() {
             <p className="text-md text-foreground leading-relaxed">
               CortexFit is the first AI-powered product developed by Anthos, an AI startup founded by Prakash Jadhav. Designed to transform how people approach fitness and nutrition, CortexFit is your intelligent fitness partner — available 24/7, fully personalized, and always evolving.  With the help of artificial intelligence, CortexFit delivers customized diet plans, workout routines, and virtual coaching based on your body type, fitness goals, and preferences. Whether you're aiming to lose weight, gain muscle, or simply maintain a healthier lifestyle, CortexFit adapts to your needs — making your fitness journey smarter, simpler, and more effective.
             </p>
-            <p className="text-md text-foreground leading-relaxed">
-              We believe that personalized support is key to sustainable fitness. Cortex Fit aims to make expert-level fitness advice accessible and adaptable to your unique needs, preferences, and lifestyle.
-            </p>
           </div>
 
           <Separator className="my-8" />
