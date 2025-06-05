@@ -23,7 +23,7 @@ export default function HowItWorks() {
   return (
     <Card className="w-full max-w-4xl mx-auto shadow-xl">
       <CardHeader className="text-center">
-        <CardTitle className="text-3xl font-bold text-primary">How Carb Works</CardTitle>
+        <CardTitle className="text-3xl font-bold text-primary">How Carbo Works</CardTitle>
         <CardDescription className="text-lg">
           Achieve your fitness goals with a plan designed just for you in three simple steps.
         </CardDescription>
@@ -44,3 +44,4 @@ export default function HowItWorks() {
     </Card>
   );
 }
+
