@@ -51,7 +51,7 @@ export default function HomePage() {
               About Cortex Fit
             </h3>
             <p className="text-md text-foreground leading-relaxed">
-              CortexFit is the first innovative release under Anthos, a digital health initiative by Cortex, a software company committed to building intelligent web applications and AI assistants that empower users.  CortexFit is an all-in-one AI-powered fitness companion designed to help you achieve your health and wellness goals smarter and faster. Whether you're a beginner or a seasoned gym enthusiast, CortexFit offers personalized diet plans, workout routines, and 24/7 virtual coaching tailored to your body type, fitness level, and goals.
+              CortexFit is the first AI-powered product developed by Anthos, an AI startup founded by Prakash Jadhav. Designed to transform how people approach fitness and nutrition, CortexFit is your intelligent fitness partner — available 24/7, fully personalized, and always evolving.  With the help of artificial intelligence, CortexFit delivers customized diet plans, workout routines, and virtual coaching based on your body type, fitness goals, and preferences. Whether you're aiming to lose weight, gain muscle, or simply maintain a healthier lifestyle, CortexFit adapts to your needs — making your fitness journey smarter, simpler, and more effective.
             </p>
             <p className="text-md text-foreground leading-relaxed">
               We believe that personalized support is key to sustainable fitness. Cortex Fit aims to make expert-level fitness advice accessible and adaptable to your unique needs, preferences, and lifestyle.
