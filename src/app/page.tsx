@@ -51,7 +51,7 @@ export default function HomePage() {
               About Cortex Fit
             </h3>
             <p className="text-md text-foreground leading-relaxed">
-              CortexFit is the first innovative release under Anthos, a digital health initiative by Cortex, a software company committed to building intelligent web applications and AI assistants that empower users. CortexFit is an all-in-one AI-powered fitness companion designed to help you achieve your health and wellness goals smarter and faster. Whether you're a beginner or a seasoned gym enthusiast, CortexFit offers personalized diet plans, workout routines, and 24/7 virtual coaching tailored to your body type, fitness level, and goals.
+              CortexFit is the first innovative release under Anthos, a digital health initiative by Cortex, a software company committed to building intelligent web applications and AI assistants that empower users.  CortexFit is an all-in-one AI-powered fitness companion designed to help you achieve your health and wellness goals smarter and faster. Whether you're a beginner or a seasoned gym enthusiast, CortexFit offers personalized diet plans, workout routines, and 24/7 virtual coaching tailored to your body type, fitness level, and goals.
             </p>
             <p className="text-md text-foreground leading-relaxed">
               We believe that personalized support is key to sustainable fitness. Cortex Fit aims to make expert-level fitness advice accessible and adaptable to your unique needs, preferences, and lifestyle.
@@ -69,7 +69,7 @@ export default function HomePage() {
               Cortex Fit is proudly developed by <strong className="text-primary">Prakash Jadhav</strong>.
             </p>
             <p className="text-md text-foreground">
-              Prakash is the developer of <strong className="text-primary">Anthos</strong>, a company passionate about harnessing the power of artificial intelligence to create impactful and user-centric solutions.
+              Prakash Jadhav is the founder of Anthos, an AI startup on a mission to simplify and enhance everyday life through intelligent software. With a strong passion for technology, fitness, and problem-solving, Prakash built CortexFit as the first product under the Anthos brand — combining the power of artificial intelligence with real-world health and wellness needs.
             </p>
           </div>
            <p className="text-sm text-muted-foreground pt-8">
