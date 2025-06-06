@@ -31,7 +31,17 @@ const renderDietPlanContent = (content: string): (JSX.Element | null)[] => {
 
     if (trimmedLine.startsWith('**') && (trimmedLine.endsWith('**') || trimmedLine.endsWith('**:'))) {
       const headingText = trimmedLine.replace(/\*\*/g, '').replace(/:$/, '');
-      elements.push(<h4 key={`h4-${i}-${headingText}`} className="text-md font-semibold mt-3 mb-1.5 text-primary">{headingText}</h4>);
+      let titleFontWeight = "font-semibold"; // Default font weight
+      const lowerHeadingText = headingText.toLowerCase();
+      if (
+        lowerHeadingText.includes("breakfast") ||
+        lowerHeadingText.includes("lunch") ||
+        lowerHeadingText.includes("dinner") ||
+        lowerHeadingText.includes("snack") // Catches "Mid-Morning Snack", "Afternoon Snack" etc.
+      ) {
+        titleFontWeight = "font-bold"; // Make specific meal titles bolder
+      }
+      elements.push(<h4 key={`h4-${i}-${headingText}`} className={`text-md ${titleFontWeight} mt-3 mb-1.5 text-primary`}>{headingText}</h4>);
       continue;
     }
     
