@@ -79,10 +79,7 @@ export default function WorkoutScheduleDisplay({ scheduleOutput }: WorkoutSchedu
          
       </CardContent>
       <CardFooter className="justify-end pt-4">
-        <Button onClick={handlePrint} variant="outline" className="print-hide-button">
-          <Printer className="mr-2 h-4 w-4" />
-          Print / Save as PDF
-        </Button>
+        {/* Button removed as per user request */}
       </CardFooter>
     </Card>
   );
