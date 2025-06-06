@@ -2,10 +2,11 @@
 "use client";
 
 import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan-types';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { UtensilsCrossed, Info } from 'lucide-react';
+import { UtensilsCrossed, Info, Printer } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from '@/components/ui/button';
 
 interface DietPlanDisplayProps {
   dietPlanOutput: GenerateDietPlanOutput;
@@ -84,6 +85,10 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
 
   const sections = dietPlan.split(/\n(?=Day\s\d+:|Meal\s\d+:|Breakfast:|Lunch:|Dinner:|Snack:|Important Notes and Adjustments:|Important Considerations:|Sample Meal Plan:)/i);
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <Card id="dietPlanCardPrintable" className="mt-8 w-full max-w-3xl mx-auto shadow-xl">
       <CardHeader>
@@ -139,6 +144,12 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
           </AlertDescription>
         </Alert>
       </CardContent>
+      <CardFooter className="justify-end pt-4">
+        <Button onClick={handlePrint} variant="outline" className="print-hide-button">
+          <Printer className="mr-2 h-4 w-4" />
+          Print / Save as PDF
+        </Button>
+      </CardFooter>
     </Card>
   );
 }

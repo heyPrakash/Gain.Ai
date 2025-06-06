@@ -6,7 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ClipboardList, Zap, Info } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ClipboardList, Zap, Info, Printer } from 'lucide-react';
 
 
 interface WorkoutScheduleDisplayProps {
@@ -15,6 +16,10 @@ interface WorkoutScheduleDisplayProps {
 
 export default function WorkoutScheduleDisplay({ scheduleOutput }: WorkoutScheduleDisplayProps) {
   const { scheduleTitle, weeklySchedule, recoveryTips } = scheduleOutput;
+
+  const handlePrint = () => {
+    window.print();
+  };
 
   return (
     <Card id="workoutScheduleCardPrintable" className="mt-8 w-full max-w-3xl mx-auto shadow-xl">
@@ -73,10 +78,12 @@ export default function WorkoutScheduleDisplay({ scheduleOutput }: WorkoutSchedu
         </Alert>
          
       </CardContent>
-      <CardFooter className="justify-end">
-         
+      <CardFooter className="justify-end pt-4">
+        <Button onClick={handlePrint} variant="outline" className="print-hide-button">
+          <Printer className="mr-2 h-4 w-4" />
+          Print / Save as PDF
+        </Button>
       </CardFooter>
     </Card>
   );
 }
-
