@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview An AI agent for generating weekly workout schedules.
@@ -57,25 +58,44 @@ const generateWorkoutScheduleFlow = ai.defineFlow(
   },
   async (input: GenerateWorkoutScheduleInput): Promise<GenerateWorkoutScheduleOutput> => {
     try {
-      const {output} = await prompt(input);
+      const response = await prompt(input);
+      const output = response.output;
+      const usage = response.usage;
+
       if (!output) {
-        throw new Error('AI did not return a workout schedule.');
+        let errorMessage = 'AI model failed to generate a workout schedule or the response was invalid.';
+        if (usage) {
+          console.error('Workout Schedule Flow: LLM returned no output. Usage details:', JSON.stringify(usage, null, 2));
+           if (usage.finishReason && !['stop', 'length', 'unknown', 'unspecified'].includes(usage.finishReason.toLowerCase())) {
+            errorMessage = `Workout schedule generation failed. Reason: ${usage.finishReason}.`;
+            if (usage.finishMessage) {
+              errorMessage += ` Message: ${usage.finishMessage}.`;
+            }
+            if (usage.finishReason.toLowerCase() === 'safety') {
+                 errorMessage += ' This may be due to safety filters. Please review your input or adjust safety settings if possible.';
+            }
+          } else if (usage.finishMessage) {
+             errorMessage = `Workout schedule generation issue: ${usage.finishMessage}.`;
+          }
+        } else {
+            console.error('Workout Schedule Flow: LLM returned no output, and no usage details were available.');
+        }
+        throw new Error(errorMessage);
       }
-      // Ensure the number of workout days in the schedule matches daysAvailable
+
       if (output.weeklySchedule.length !== input.daysAvailable) {
-        // This is a fallback, ideally the prompt guides the AI correctly.
-        // For simplicity in this example, we'll log a warning but still return the output.
-        // In a production app, you might want to retry the prompt or refine it.
         console.warn(`AI generated ${output.weeklySchedule.length} workout days, but user requested ${input.daysAvailable}.`);
-        // Potentially, try to trim or pad the schedule, or re-prompt. For now, we pass it through.
       }
       return output;
-    } catch (error) {
-        console.error("Error in generateWorkoutScheduleFlow:", error);
-        if (error instanceof Error) {
-            throw new Error(`Failed to generate workout schedule: ${error.message}`);
+    } catch (flowError) {
+        console.error("Critical error during generateWorkoutScheduleFlow execution:", flowError);
+        if (flowError instanceof Error) {
+            if (flowError.message.startsWith('Workout schedule generation') || flowError.message.startsWith('AI model') || flowError.message.includes('helper')) {
+                throw flowError;
+            }
+            throw new Error(`Workout Schedule flow encountered an error: ${flowError.message}`);
         }
-        throw new Error("An unknown error occurred while generating the workout schedule.");
+        throw new Error(`An unexpected error occurred in the workout schedule flow: ${String(flowError)}`);
     }
   }
 );

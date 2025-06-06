@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview A diet plan generation AI agent.
@@ -47,7 +48,41 @@ const generateDietPlanFlow = ai.defineFlow(
     outputSchema: GenerateDietPlanOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    return output!;
+    try {
+      const response = await prompt(input);
+      const output = response.output;
+      const usage = response.usage;
+
+      if (!output) {
+        let errorMessage = 'AI model failed to generate a diet plan or the response was invalid.';
+        if (usage) {
+          console.error('Diet Plan Flow: LLM returned no output. Usage details:', JSON.stringify(usage, null, 2));
+          if (usage.finishReason && !['stop', 'length', 'unknown', 'unspecified'].includes(usage.finishReason.toLowerCase())) {
+            errorMessage = `Diet plan generation failed. Reason: ${usage.finishReason}.`;
+            if (usage.finishMessage) {
+              errorMessage += ` Message: ${usage.finishMessage}.`;
+            }
+            if (usage.finishReason.toLowerCase() === 'safety') {
+                 errorMessage += ' This may be due to safety filters. Please review your input or adjust safety settings if possible.';
+            }
+          } else if (usage.finishMessage) {
+             errorMessage = `Diet plan generation issue: ${usage.finishMessage}.`;
+          }
+        } else {
+            console.error('Diet Plan Flow: LLM returned no output, and no usage details were available.');
+        }
+        throw new Error(errorMessage);
+      }
+      return output;
+    } catch (flowError) {
+        console.error('Critical error during generateDietPlanFlow execution:', flowError);
+        if (flowError instanceof Error) {
+            if (flowError.message.startsWith('Diet plan generation') || flowError.message.startsWith('AI model') || flowError.message.includes('helper')) {
+                throw flowError;
+            }
+            throw new Error(`Diet Plan flow encountered an error: ${flowError.message}`);
+        }
+        throw new Error(`An unexpected error occurred in the diet plan flow: ${String(flowError)}`);
+    }
   }
 );
