@@ -30,7 +30,7 @@ const renderDietPlanContent = (content: string): (JSX.Element | null)[] => {
 
     if (trimmedLine.startsWith('**') && (trimmedLine.endsWith('**') || trimmedLine.endsWith('**:'))) {
       const headingText = trimmedLine.replace(/\*\*/g, '').replace(/:$/, '');
-      elements.push(<h4 key={`h4-${i}-${headingText}`} className="text-md font-semibold mt-3 mb-1.5 text-secondary-foreground">{headingText}</h4>);
+      elements.push(<h4 key={`h4-${i}-${headingText}`} className="text-md font-semibold mt-3 mb-1.5 text-primary">{headingText}</h4>);
       continue;
     }
     
@@ -56,7 +56,7 @@ const renderDietPlanContent = (content: string): (JSX.Element | null)[] => {
           <div key={`li-bold-${i}-${title}`} style={{ marginLeft }} className="flex text-sm my-1">
              <span className="text-primary mr-2 mt-1 shrink-0">&#8226;</span>
             <div>
-                <span className="font-semibold text-foreground">{title}:</span>
+                <span className="font-semibold text-primary">{title}:</span>
                 <span> {description}</span>
             </div>
           </div>
