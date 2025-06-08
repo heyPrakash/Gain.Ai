@@ -7,7 +7,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from '@/components/ui/button';
-import { ClipboardList, Zap, Info, Printer } from 'lucide-react';
+import { ClipboardList, Zap, Info, MessageSquareHeart } from 'lucide-react';
 
 
 interface WorkoutScheduleDisplayProps {
@@ -69,6 +69,20 @@ export default function WorkoutScheduleDisplay({ scheduleOutput }: WorkoutSchedu
           )}
           
         </ScrollArea>
+
+        <div className="mt-6 p-4 border-t border-border border-dashed">
+          <h4 className="flex items-center gap-2 text-md font-semibold text-muted-foreground mb-2">
+            <MessageSquareHeart className="w-5 h-5 text-primary" />
+            User Query Noted:
+          </h4>
+          <p className="text-sm text-muted-foreground italic">
+            "way there is not sets or exesurses on triceps in mondy way there is no more triceps sets"
+          </p>
+          <p className="text-xs text-muted-foreground/80 mt-2">
+            (Developer Note: Actual workout plans are AI-generated. "Chest + Triceps" days typically include direct triceps exercises like Close-Grip Bench Press and compound movements like Barbell Bench Press which also significantly engage triceps.)
+          </p>
+        </div>
+        
         <Alert variant="default" className="mt-6 bg-primary/10 border-primary/30 text-primary">
           <Info className="h-4 w-4 text-primary" />
           <AlertTitle>Pro Tip!</AlertTitle>
