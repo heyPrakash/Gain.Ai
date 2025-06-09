@@ -36,8 +36,29 @@ const prompt = ai.definePrompt({
   Fitness Goals: {{{fitnessGoals}}}
   Dietary Preferences: {{{dietaryPreferences}}}
   Activity Level: {{{activityLevel}}}
+  Requested Plan Detail: {{{planDetailLevel}}}
 
-  The diet plan should include meal suggestions, nutritional information, and recommended serving sizes.
+  The user has requested a "{{{planDetailLevel}}}" diet plan.
+
+  If the user requested a "summary" plan:
+  Provide a CONCISE SUMMARY diet plan. Focus on:
+  - General meal structure (e.g., breakfast, lunch, dinner, snacks).
+  - Key food group recommendations for each meal type.
+  - 1-2 brief example meal ideas per meal type, without extensive options or detailed calorie breakdowns for individual food items.
+  - Overall daily calorie target, if applicable based on goals.
+  - Critical general advice (e.g., hydration, portion control).
+  Keep the entire plan brief and to the point. Do not include a shopping list for summary plans.
+
+  If the user requested a "detailed" plan:
+  Provide a DETAILED diet plan. The diet plan should include:
+  - Meal suggestions for breakfast, lunch, dinner, and snacks.
+  - Specific food items and portion sizes for each meal suggestion.
+  - Approximate nutritional information (calories, protein, carbs, fats) for meal options or for the day.
+  - Recommended serving sizes.
+  - A sample shopping list.
+  - Important considerations and advice regarding hydration, adjustments, variety, cooking methods, processed foods, listening to the body, exercise, and consultation with professionals.
+
+  Ensure the plan is tailored to the user's inputs.
   `,
 });
 

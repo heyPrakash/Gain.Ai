@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Dispatch, SetStateAction } from 'react';
@@ -7,7 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Loader2, Leaf } from 'lucide-react';
 
 import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan-types';
-import { userProfileSchema, type UserProfileFormValues, activityLevels } from './schemas';
+import { userProfileSchema, type UserProfileFormValues, activityLevels, planDetailLevels } from './schemas';
 import { handleGenerateDietPlanAction } from '@/lib/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -44,6 +45,7 @@ export default function UserProfileForm({ onPlanGenerated, setIsLoading, setErro
       fitnessGoals: "",
       dietaryPreferences: "",
       activityLevel: undefined,
+      planDetailLevel: "detailed",
     },
   });
 
@@ -226,6 +228,39 @@ export default function UserProfileForm({ onPlanGenerated, setIsLoading, setErro
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="planDetailLevel"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>Plan Detail Level</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-1 pt-2 sm:flex-row sm:space-x-4 sm:space-y-0"
+                    >
+                      {planDetailLevels.map(level => (
+                         <FormItem key={level} className="flex items-center space-x-2 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value={level} />
+                          </FormControl>
+                          <FormLabel className="font-normal capitalize">
+                            {level.charAt(0).toUpperCase() + level.slice(1)}
+                          </FormLabel>
+                        </FormItem>
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                   <FormDescription>
+                    Choose "Summary" for a brief overview, or "Detailed" for a comprehensive plan.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
 
             <Button type="submit" disabled={mutation.isPending} className="w-full md:w-auto">
               {mutation.isPending ? (

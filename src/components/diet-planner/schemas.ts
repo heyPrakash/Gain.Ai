@@ -1,3 +1,4 @@
+
 import { z } from 'zod';
 
 export const activityLevels = [
@@ -8,6 +9,8 @@ export const activityLevels = [
   "extra active", // very hard exercise/sports & physical job
 ] as const;
 
+export const planDetailLevels = ["summary", "detailed"] as const;
+
 export const userProfileSchema = z.object({
   weightKg: z.coerce.number({invalid_type_error: "Weight must be a number."}).min(20, "Weight must be at least 20kg.").max(300, "Weight must be at most 300kg."),
   heightCm: z.coerce.number({invalid_type_error: "Height must be a number."}).min(100, "Height must be at least 100cm.").max(250, "Height must be at most 250cm."),
@@ -16,6 +19,8 @@ export const userProfileSchema = z.object({
   fitnessGoals: z.string().min(10, "Please describe your fitness goals (min 10 characters).").max(500, "Fitness goals too long (max 500 characters)."),
   dietaryPreferences: z.string().min(10, "Please describe dietary preferences (min 10 characters).").max(500, "Dietary preferences too long (max 500 characters)."),
   activityLevel: z.enum(activityLevels, { required_error: "Activity level is required." }),
+  planDetailLevel: z.enum(planDetailLevels, { required_error: "Please select the desired plan detail level." }).default("detailed"),
 });
 
 export type UserProfileFormValues = z.infer<typeof userProfileSchema>;
+
