@@ -171,6 +171,35 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
             
             <FormField
               control={form.control}
+              name="gender"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>Gender</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-row space-x-4 pt-2"
+                    >
+                      {genders.map(gender => (
+                        <FormItem key={gender} className="flex items-center space-x-2 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value={gender} />
+                          </FormControl>
+                          <FormLabel className="font-normal capitalize">
+                            {gender}
+                          </FormLabel>
+                        </FormItem>
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="daysAvailable"
               render={({ field }) => (
                 <FormItem>
@@ -194,35 +223,6 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="gender"
-              render={({ field }) => (
-                <FormItem className="space-y-3">
-                  <FormLabel>Gender</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex flex-col space-y-1" 
-                    >
-                      {genders.map(gender => (
-                        <FormItem key={gender} className="flex items-center space-x-2 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value={gender} />
-                          </FormControl>
-                          <FormLabel className="font-normal capitalize">
-                            {gender}
-                          </FormLabel>
-                        </FormItem>
-                      ))}
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <Button type="submit" disabled={mutation.isPending} className="w-full md:w-auto">
               {mutation.isPending ? (
                 <>
@@ -239,4 +239,3 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
     </Card>
   );
 }
-
