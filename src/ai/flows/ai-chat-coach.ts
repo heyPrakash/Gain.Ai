@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -72,15 +73,25 @@ const aiChatCoachFlow = ai.defineFlow(
       }
       return output;
     } catch (flowExecutionError) {
-      console.error('Critical error during aiChatCoachFlow execution:', flowExecutionError);
+      // Log the original error object for detailed server-side debugging
+      console.error('[aiChatCoachFlow] Critical error during execution:', flowExecutionError);
+      
       if (flowExecutionError instanceof Error) {
-        // Avoid double-prepending "AI Chat Coach flow failed: " if it's already specific.
-        if (flowExecutionError.message.startsWith('AI coach') || flowExecutionError.message.startsWith('LLM') || flowExecutionError.message.includes('helper')) { 
-             throw flowExecutionError;
+        // Avoid double-prepending "AI Chat Coach flow failed: " if it's already specific enough
+        if (flowExecutionError.message.startsWith('AI coach') || 
+            flowExecutionError.message.startsWith('LLM') || 
+            flowExecutionError.message.includes('helper') ||
+            flowExecutionError.message.includes('API key')) { // Check for API key messages
+             throw flowExecutionError; // Re-throw the original error if it's specific enough
         }
+        // Wrap with a more generic flow error message
         throw new Error(`AI Chat Coach flow encountered an error: ${flowExecutionError.message}`);
       }
-      throw new Error(`An unexpected error occurred in the AI coach flow: ${String(flowExecutionError)}`);
+      // Handle cases where the thrown object might not be an Error instance
+      const errorString = String(flowExecutionError);
+      console.error(`[aiChatCoachFlow] Caught a non-Error throwable: type=${typeof flowExecutionError}, value=${errorString}`);
+      throw new Error(`An unexpected error (type: ${typeof flowExecutionError}) occurred in the AI coach flow: ${errorString}`);
     }
   }
 );
+
