@@ -114,7 +114,7 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
                 </FormItem>
               )}
             />
-
+            
             <FormField
               control={form.control}
               name="workoutLocation"
@@ -125,7 +125,7 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
                     <RadioGroup
                       onValueChange={field.onChange}
                       defaultValue={field.value}
-                      className="flex flex-col space-y-1 md:flex-row md:space-x-4 md:space-y-0"
+                      className="flex flex-col space-y-1" // Changed here: removed md:flex-row md:space-x-4 md:space-y-0
                     >
                       {workoutLocations.map(location => (
                         <FormItem key={location} className="flex items-center space-x-2 space-y-0">
@@ -204,7 +204,7 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
                     <RadioGroup
                       onValueChange={field.onChange}
                       defaultValue={field.value}
-                      className="flex flex-col space-y-1 md:flex-row md:space-x-4 md:space-y-0"
+                      className="flex flex-col space-y-1" // Also ensuring gender is vertical if desired
                     >
                       {genders.map(gender => (
                         <FormItem key={gender} className="flex items-center space-x-2 space-y-0">
@@ -239,3 +239,4 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
     </Card>
   );
 }
+
