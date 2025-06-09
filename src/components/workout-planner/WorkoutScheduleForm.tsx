@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Dispatch, SetStateAction } from 'react';
@@ -7,10 +8,11 @@ import { useMutation } from '@tanstack/react-query';
 import { Loader2, Dumbbell } from 'lucide-react';
 
 import type { GenerateWorkoutScheduleOutput } from '@/ai/flows/generate-workout-schedule-types';
-import { workoutScheduleFormSchema, type WorkoutScheduleFormValues, fitnessGoals, experienceLevels, daysAvailableOptions } from './schemas';
+import { workoutScheduleFormSchema, type WorkoutScheduleFormValues, fitnessGoals, experienceLevels, daysAvailableOptions, workoutLocations, genders } from './schemas';
 import { handleGenerateWorkoutScheduleAction } from '@/lib/actions';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Form,
   FormControl,
@@ -37,6 +39,8 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
       fitnessGoal: undefined,
       experienceLevel: undefined,
       daysAvailable: undefined,
+      workoutLocation: undefined,
+      gender: undefined,
     },
   });
 
@@ -156,6 +160,64 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="workoutLocation"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>Workout Location</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-1 md:flex-row md:space-x-4 md:space-y-0"
+                    >
+                      {workoutLocations.map(location => (
+                        <FormItem key={location} className="flex items-center space-x-2 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value={location} />
+                          </FormControl>
+                          <FormLabel className="font-normal capitalize">
+                            {location}
+                          </FormLabel>
+                        </FormItem>
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="gender"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>Gender</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-1 md:flex-row md:space-x-4 md:space-y-0"
+                    >
+                      {genders.map(gender => (
+                        <FormItem key={gender} className="flex items-center space-x-2 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value={gender} />
+                          </FormControl>
+                          <FormLabel className="font-normal capitalize">
+                            {gender}
+                          </FormLabel>
+                        </FormItem>
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

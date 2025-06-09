@@ -26,27 +26,31 @@ const prompt = ai.definePrompt({
   input: {schema: GenerateWorkoutScheduleInputSchema},
   output: {schema: GenerateWorkoutScheduleOutputSchema},
   prompt: `You are an expert fitness coach and personal trainer.
-  Create a weekly workout schedule for a gym user based on their fitness goal, experience level, and workout frequency.
+  Create a weekly workout schedule for a gym user based on their fitness goal, experience level, workout frequency, workout location, and gender.
 
   User Details:
   - Fitness Goal: {{{fitnessGoal}}}
   - Experience Level: {{{experienceLevel}}}
   - Days Available for Workout: {{{daysAvailable}}} days per week
+  - Workout Location: {{{workoutLocation}}}
+  - Gender: {{{gender}}}
 
   Output Requirements:
   1.  **Schedule Title:** A catchy and descriptive title for the workout schedule.
   2.  **Weekly Schedule:**
       *   Provide a day-wise workout split (e.g., Monday: Chest + Triceps, Tuesday: Back + Biceps, etc.). The number of workout days MUST match the 'daysAvailable' input.
       *   For each workout day, list 3-5 exercises. For each exercise, provide its name and optionally, recommended sets and repetitions (e.g., "3 sets of 8-12 reps").
+      *   Tailor exercises based on the 'Workout Location'. If 'home', prioritize bodyweight exercises or those using common household items if possible (e.g., sturdy chairs for dips, water bottles for weights if no equipment is available). Clearly state if specific equipment (like resistance bands or dumbbells) is assumed for home workouts. If 'gym', assume access to standard gym equipment.
   3.  **Recovery Tips:** Include tips on rest days, importance of warm-up, cool-down, proper form, and listening to the body.
   4.  **Disclaimer:** Include the provided safety disclaimer verbatim.
 
-  Make sure the plan is well-balanced, aligns with the user's goal and experience level, and is clear and easy to follow.
+  Make sure the plan is well-balanced, aligns with the user's goal, experience level, gender, and location, and is clear and easy to follow.
   For 'beginner' level, focus on fundamental compound movements and proper form.
   For 'intermediate' level, incorporate a mix of compound and isolation exercises with progressive overload principles.
   For 'advanced' level, suggest more complex exercises, varied rep ranges, and potentially advanced training techniques if appropriate for the goal.
   Ensure the split considers adequate rest between working the same muscle groups.
   If daysAvailable is less than 5, ensure all major muscle groups are hit at least once, possibly through full-body or upper/lower splits.
+  While gender can provide context, ensure the plan is primarily driven by fitness goals and experience, avoiding overly stereotypical exercise choices unless specifically beneficial and justified.
   `,
 });
 
@@ -84,7 +88,9 @@ const generateWorkoutScheduleFlow = ai.defineFlow(
       }
 
       if (output.weeklySchedule.length !== input.daysAvailable) {
-        console.warn(`AI generated ${output.weeklySchedule.length} workout days, but user requested ${input.daysAvailable}.`);
+        console.warn(`AI generated ${output.weeklySchedule.length} workout days, but user requested ${input.daysAvailable}. Attempting to use AI-generated day count.`);
+        // Optionally, could throw an error here or try to adjust, but for now, we'll log and proceed with AI's output.
+        // throw new Error(`AI generated ${output.weeklySchedule.length} workout days, but ${input.daysAvailable} were requested.`);
       }
       return output;
     } catch (flowError) {
