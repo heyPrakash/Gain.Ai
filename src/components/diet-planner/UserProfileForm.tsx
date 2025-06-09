@@ -239,7 +239,7 @@ export default function UserProfileForm({ onPlanGenerated, setIsLoading, setErro
                     <RadioGroup
                       onValueChange={field.onChange}
                       defaultValue={field.value}
-                      className="flex flex-col space-y-1 pt-2 sm:flex-row sm:space-x-4 sm:space-y-0"
+                      className="flex flex-row space-x-4 pt-2"
                     >
                       {planDetailLevels.map(level => (
                          <FormItem key={level} className="flex items-center space-x-2 space-y-0">
