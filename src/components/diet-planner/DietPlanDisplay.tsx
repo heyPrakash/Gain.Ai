@@ -4,9 +4,8 @@
 import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan-types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { UtensilsCrossed, Info, Printer } from 'lucide-react';
+import { UtensilsCrossed, Info } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from '@/components/ui/button';
 
 interface DietPlanDisplayProps {
   dietPlanOutput: GenerateDietPlanOutput;
@@ -14,6 +13,7 @@ interface DietPlanDisplayProps {
 
 const renderDietPlanContent = (content: string): (JSX.Element | null)[] => {
   if (!content || content.trim() === '') return [];
+  
   const lines = content.split('\n');
   const elements: (JSX.Element | null)[] = [];
 
@@ -21,89 +21,99 @@ const renderDietPlanContent = (content: string): (JSX.Element | null)[] => {
     const line = lines[i];
     const trimmedLine = line.trim();
 
-    if (line.length === 0 && i > 0 && lines[i-1].length === 0) {
-        // No specific element for a single empty line if paragraphs have margins.
-    }
-
     if (trimmedLine === '') {
-      continue;
+      continue; 
     }
 
+    // Match main headings like "**Breakfast:**", "**Lunch:**", "**Example Meals:**", "**Goal:**"
     if (trimmedLine.startsWith('**') && (trimmedLine.endsWith('**') || trimmedLine.endsWith('**:'))) {
-      const headingText = trimmedLine.replace(/\*\*/g, '').replace(/:$/, '');
-      let titleFontWeight = "font-semibold";
+      const headingText = trimmedLine.replace(/\*\*/g, '').replace(/:$/, '').trim();
+      let titleFontWeight = "font-semibold"; // Default for other headings like "**Goal:**"
       const lowerHeadingText = headingText.toLowerCase();
-      if (
-        lowerHeadingText.includes("breakfast") ||
-        lowerHeadingText.includes("lunch") ||
-        lowerHeadingText.includes("dinner") ||
-        lowerHeadingText.includes("snack")
-      ) {
+
+      // Specific keywords for bold and primary color
+      const boldKeywords = ["breakfast", "lunch", "dinner", "snack", "snacks", "example meals", "meal examples"];
+      if (boldKeywords.some(keyword => lowerHeadingText.includes(keyword))) {
         titleFontWeight = "font-bold";
       }
-      elements.push(<h4 key={`h4-${i}-${headingText}`} className={`text-md ${titleFontWeight} mt-3 mb-1.5 text-primary`}>{headingText}</h4>);
+      if (headingText) {
+        elements.push(<h4 key={`h4-${i}-${headingText.slice(0,10)}`} className={`text-md ${titleFontWeight} mt-3 mb-1.5 text-primary`}>{headingText}</h4>);
+      }
       continue;
     }
     
+    // Match list items: "* Item content" or "* **Title:** Description"
     const listItemMatch = line.match(/^(\s*)(\*\s+)(.*)/);
     if (listItemMatch) {
       const indentSpaces = listItemMatch[1].length;
       let itemContent = listItemMatch[3]; 
-
       const indentLevel = Math.floor(indentSpaces / 2); 
       const marginLeft = `${indentLevel * 1.25}rem`; 
 
-      if (itemContent.startsWith('*') && itemContent.endsWith('*') && itemContent.includes('Approximate Nutritional Information:')) {
-        const nutritionalText = itemContent.substring(1, itemContent.length - 1);
-        elements.push(<p key={`nutri-${i}-${nutritionalText.slice(0,10)}`} style={{ marginLeft }} className="text-xs italic text-muted-foreground my-0.5">{nutritionalText}</p>);
+      // Special handling for "*Approximate Nutritional Information:*"
+      if (itemContent.startsWith('*') && itemContent.endsWith('*') && itemContent.toLowerCase().includes('approximate nutritional information')) {
+        const nutritionalText = itemContent.substring(1, itemContent.length - 1).replace(/\*\*/g, '').trim();
+        if (nutritionalText) {
+            elements.push(<p key={`nutri-${i}-${nutritionalText.slice(0,10)}`} style={{ marginLeft }} className="text-xs italic text-muted-foreground my-0.5">{nutritionalText}</p>);
+        }
         continue;
       }
       
+      // Match list items like "* **Title:** Description"
       const boldPartMatch = itemContent.match(/^\*\*(.*?)\*\*:\s*(.*)/s); 
       if (boldPartMatch) {
-        const title = boldPartMatch[1];
-        const description = boldPartMatch[2];
-        let titleFontWeight = "font-semibold"; // Default for other bold titles in lists
+        const title = boldPartMatch[1].trim(); 
+        const description = boldPartMatch[2].replace(/\*\*/g, '').trim(); 
+        
+        let titleFontWeight = "font-semibold"; 
         const lowerTitle = title.toLowerCase();
-        if (
-            lowerTitle.includes("breakfast") ||
-            lowerTitle.includes("lunch") ||
-            lowerTitle.includes("dinner") ||
-            lowerTitle.includes("snack")
-        ) {
-            titleFontWeight = "font-bold"; // Make specific meal titles bolder
+        const boldListTitleKeywords = ["breakfast", "lunch", "dinner", "snack", "snacks", "example meal", "example meals"];
+        
+        if (boldListTitleKeywords.some(keyword => lowerTitle.includes(keyword))) {
+            titleFontWeight = "font-bold"; 
         }
-        elements.push(
-          <div key={`li-bold-${i}-${title}`} style={{ marginLeft }} className="flex text-sm my-1">
-             <span className="text-primary mr-2 mt-1 shrink-0">&#8226;</span>
-            <div>
-                <span className={`${titleFontWeight} text-primary`}>{title}:</span>
-                <span> {description}</span>
-            </div>
-          </div>
-        );
+
+        if (title) {
+            elements.push(
+              <div key={`li-bold-${i}-${title.slice(0,10)}`} style={{ marginLeft }} className="flex text-sm my-1">
+                 <span className="text-primary mr-2 mt-1 shrink-0">&#8226;</span>
+                <div>
+                    <span className={`${titleFontWeight} text-primary`}>{title}:</span>
+                    {description && <span> {description}</span>}
+                </div>
+              </div>
+            );
+        }
         continue;
       }
 
-      elements.push(
-        <div key={`li-reg-${i}-${itemContent.slice(0,10)}`} style={{ marginLeft }} className="flex items-start text-sm my-1">
-          <span className="text-primary mr-2 mt-1 shrink-0">&#8226;</span>
-          <span className="flex-1">{itemContent}</span>
-        </div>
-      );
+      // Regular list items "* Content"
+      const regularItemText = itemContent.replace(/\*\*/g, '').trim();
+      if (regularItemText) {
+        elements.push(
+          <div key={`li-reg-${i}-${regularItemText.slice(0,10)}`} style={{ marginLeft }} className="flex items-start text-sm my-1">
+            <span className="text-primary mr-2 mt-1 shrink-0">&#8226;</span>
+            <span className="flex-1">{regularItemText}</span>
+          </div>
+        );
+      }
       continue;
     }
     
-    elements.push(<p key={`p-${i}-${line.slice(0,10)}`} className="text-sm my-1.5 leading-relaxed">{line}</p>);
+    // Default: render as a paragraph, removing any **
+    const paragraphText = line.replace(/\*\*/g, '').trim();
+    if (paragraphText) {
+        elements.push(<p key={`p-${i}-${paragraphText.slice(0,10)}`} className="text-sm my-1.5 leading-relaxed">{paragraphText}</p>);
+    }
   }
-  return elements.filter(Boolean); 
+  return elements.filter(el => el !== null); // Filter out any nulls if branches resulted in no element pushed
 };
 
 
 export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps) {
   const { dietPlan } = dietPlanOutput;
 
-  const sections = dietPlan.split(/\n(?=Day\s\d+:|Meal\s\d+:|Breakfast:|Lunch:|Dinner:|Snack:|Important Notes and Adjustments:|Important Considerations:|Sample Meal Plan:)/i);
+  const sections = dietPlan.split(/\n(?=Day\s\d+:|Meal\s\d+:|Breakfast:|Lunch:|Dinner:|Snack:|Important Notes and Adjustments:|Important Considerations:|Sample Meal Plan:|Example Meals:|Meal Examples:)/i);
 
   const handlePrint = () => {
     window.print();
@@ -131,10 +141,10 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
             let contentForRenderer = trimmedSectionText;
 
             const firstLine = sectionLines[0].trim();
-            const majorTitleRegex = /^(Day\s\d+:|Meal\s\d+:|Breakfast:|Lunch:|Dinner:|Snack:|Important Notes and Adjustments:|Important Considerations:|Sample Meal Plan:)/i;
+            const majorTitleRegex = /^(Day\s\d+:|Meal\s\d+:|Breakfast:|Lunch:|Dinner:|Snack:|Important Notes and Adjustments:|Important Considerations:|Sample Meal Plan:|Example Meals:|Meal Examples:)/i;
             
             if (majorTitleRegex.test(firstLine)) {
-              sectionTitle = firstLine;
+              sectionTitle = firstLine.replace(/\*\*/g, '').trim(); // Remove ** from section titles too
               if (sectionLines.length > 1) {
                 contentForRenderer = sectionLines.slice(1).join('\n');
               } else {
@@ -142,6 +152,13 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
               }
             }
             
+            const renderedContent = renderDietPlanContent(contentForRenderer);
+
+            // Only render the section if it has a title or actual content
+            if (!sectionTitle && renderedContent.length === 0) {
+                return null;
+            }
+
             return (
               <div key={`${sectionIndex}-${sectionTitle.slice(0,5)}`} className="mb-5 last:mb-0">
                 {sectionTitle && (
@@ -150,7 +167,7 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
                   </h3>
                 )}
                 <div className="space-y-0.5"> 
-                  {renderDietPlanContent(contentForRenderer)}
+                  {renderedContent}
                 </div>
               </div>
             );
@@ -170,3 +187,4 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
     </Card>
   );
 }
+
