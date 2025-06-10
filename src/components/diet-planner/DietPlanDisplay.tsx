@@ -31,15 +31,15 @@ const renderDietPlanContent = (content: string): (JSX.Element | null)[] => {
 
     if (trimmedLine.startsWith('**') && (trimmedLine.endsWith('**') || trimmedLine.endsWith('**:'))) {
       const headingText = trimmedLine.replace(/\*\*/g, '').replace(/:$/, '');
-      let titleFontWeight = "font-semibold"; // Default font weight
+      let titleFontWeight = "font-semibold";
       const lowerHeadingText = headingText.toLowerCase();
       if (
         lowerHeadingText.includes("breakfast") ||
         lowerHeadingText.includes("lunch") ||
         lowerHeadingText.includes("dinner") ||
-        lowerHeadingText.includes("snack") // Catches "Mid-Morning Snack", "Afternoon Snack" etc.
+        lowerHeadingText.includes("snack")
       ) {
-        titleFontWeight = "font-bold"; // Make specific meal titles bolder
+        titleFontWeight = "font-bold";
       }
       elements.push(<h4 key={`h4-${i}-${headingText}`} className={`text-md ${titleFontWeight} mt-3 mb-1.5 text-primary`}>{headingText}</h4>);
       continue;
@@ -63,11 +63,21 @@ const renderDietPlanContent = (content: string): (JSX.Element | null)[] => {
       if (boldPartMatch) {
         const title = boldPartMatch[1];
         const description = boldPartMatch[2];
+        let titleFontWeight = "font-semibold"; // Default for other bold titles in lists
+        const lowerTitle = title.toLowerCase();
+        if (
+            lowerTitle.includes("breakfast") ||
+            lowerTitle.includes("lunch") ||
+            lowerTitle.includes("dinner") ||
+            lowerTitle.includes("snack")
+        ) {
+            titleFontWeight = "font-bold"; // Make specific meal titles bolder
+        }
         elements.push(
           <div key={`li-bold-${i}-${title}`} style={{ marginLeft }} className="flex text-sm my-1">
              <span className="text-primary mr-2 mt-1 shrink-0">&#8226;</span>
             <div>
-                <span className="font-semibold text-primary">{title}:</span>
+                <span className={`${titleFontWeight} text-primary`}>{title}:</span>
                 <span> {description}</span>
             </div>
           </div>
