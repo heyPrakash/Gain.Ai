@@ -7,7 +7,9 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from '@/components/ui/button';
-import { ClipboardList, Zap, Info } from 'lucide-react';
+import { ClipboardList, Zap, Info, Copy, Check } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 
 interface WorkoutScheduleDisplayProps {
@@ -15,11 +17,63 @@ interface WorkoutScheduleDisplayProps {
 }
 
 export default function WorkoutScheduleDisplay({ scheduleOutput }: WorkoutScheduleDisplayProps) {
-  const { scheduleTitle, weeklySchedule, recoveryTips } = scheduleOutput;
+  const { scheduleTitle, weeklySchedule, recoveryTips, disclaimer } = scheduleOutput;
+  const { toast } = useToast();
+  const [isCopied, setIsCopied] = useState(false);
 
-  const handlePrint = () => {
-    window.print();
+  const formatScheduleForCopy = (): string => {
+    let text = `${scheduleTitle || "Workout Schedule"}\n\n`;
+
+    weeklySchedule.forEach(day => {
+      text += `${day.dayName}: ${day.focus}\n`;
+      day.exercises.forEach(exercise => {
+        text += `  - ${exercise.name}${exercise.setsAndReps ? ` (${exercise.setsAndReps})` : ''}\n`;
+      });
+      text += "\n";
+    });
+
+    if (recoveryTips) {
+      text += "Recovery & General Tips:\n";
+      text += `${recoveryTips}\n\n`;
+    }
+
+    if (disclaimer) {
+      text += "Disclaimer:\n";
+      text += `${disclaimer}\n`;
+    }
+    return text;
   };
+
+  const handleCopyToClipboard = async () => {
+    const planText = formatScheduleForCopy();
+    try {
+      await navigator.clipboard.writeText(planText);
+      toast({
+        title: "Copied to Clipboard!",
+        description: "The workout schedule has been copied.",
+        variant: "default",
+      });
+      setIsCopied(true);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+      toast({
+        title: "Copy Failed",
+        description: "Could not copy the workout schedule to your clipboard.",
+        variant: "destructive",
+      });
+      setIsCopied(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isCopied) {
+      const timer = setTimeout(() => {
+        setIsCopied(false);
+      }, 2500); // Reset after 2.5 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [isCopied]);
+
 
   return (
     <Card id="workoutScheduleCardPrintable" className="mt-8 w-full max-w-3xl mx-auto shadow-xl">
@@ -80,8 +134,12 @@ export default function WorkoutScheduleDisplay({ scheduleOutput }: WorkoutSchedu
          
       </CardContent>
       <CardFooter className="justify-end pt-4">
-        {/* Button removed as per user request */}
+        <Button onClick={handleCopyToClipboard} variant="outline" className="print-hide-button">
+          {isCopied ? <Check className="mr-2 h-4 w-4 text-green-500" /> : <Copy className="mr-2 h-4 w-4" />}
+          {isCopied ? 'Copied!' : 'Copy Plan'}
+        </Button>
       </CardFooter>
     </Card>
   );
 }
+
