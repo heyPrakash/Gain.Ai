@@ -26,11 +26,11 @@ const prompt = ai.definePrompt({
   input: {schema: GenerateWorkoutScheduleInputSchema},
   output: {schema: GenerateWorkoutScheduleOutputSchema},
   prompt: `You are an expert fitness coach and personal trainer.
-  Create a weekly workout schedule for a gym user based on their fitness goal, experience level, workout frequency, workout location, and gender.
+  Create a weekly workout schedule for a gym user based on their fitness goal, strength level, workout frequency, workout location, and gender.
 
   User Details:
   - Fitness Goal: {{{fitnessGoal}}}
-  - Experience Level: {{{experienceLevel}}}
+  - Strength Level: {{{strengthLevel}}}
   - Days Available for Workout: {{{daysAvailable}}} days per week
   - Workout Location: {{{workoutLocation}}}
   - Gender: {{{gender}}}
@@ -44,13 +44,13 @@ const prompt = ai.definePrompt({
   3.  **Recovery Tips:** Include tips on rest days, importance of warm-up, cool-down, proper form, and listening to the body.
   4.  **Disclaimer:** Include the provided safety disclaimer verbatim.
 
-  Make sure the plan is well-balanced, aligns with the user's goal, experience level, gender, and location, and is clear and easy to follow.
-  For 'beginner' level, focus on fundamental compound movements and proper form.
-  For 'intermediate' level, incorporate a mix of compound and isolation exercises with progressive overload principles.
-  For 'advanced' level, suggest more complex exercises, varied rep ranges, and potentially advanced training techniques if appropriate for the goal.
+  Make sure the plan is well-balanced, aligns with the user's goal, strength level, gender, and location, and is clear and easy to follow.
+  For 'beginner' strength level, focus on fundamental compound movements and proper form.
+  For 'intermediate' strength level, incorporate a mix of compound and isolation exercises with progressive overload principles.
+  For 'advanced' strength level, suggest more complex exercises, varied rep ranges, and potentially advanced training techniques if appropriate for the goal.
   Ensure the split considers adequate rest between working the same muscle groups.
   If daysAvailable is less than 5, ensure all major muscle groups are hit at least once, possibly through full-body or upper/lower splits.
-  While gender can provide context, ensure the plan is primarily driven by fitness goals and experience, avoiding overly stereotypical exercise choices unless specifically beneficial and justified.
+  While gender can provide context, ensure the plan is primarily driven by fitness goals and strength level, avoiding overly stereotypical exercise choices unless specifically beneficial and justified.
   `,
 });
 
@@ -105,3 +105,4 @@ const generateWorkoutScheduleFlow = ai.defineFlow(
     }
   }
 );
+

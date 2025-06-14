@@ -8,7 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Loader2, Dumbbell } from 'lucide-react';
 
 import type { GenerateWorkoutScheduleOutput } from '@/ai/flows/generate-workout-schedule-types';
-import { workoutScheduleFormSchema, type WorkoutScheduleFormValues, fitnessGoals, experienceLevels, daysAvailableOptions, workoutLocations, genders } from './schemas';
+import { workoutScheduleFormSchema, type WorkoutScheduleFormValues, fitnessGoals, strengthLevels, daysAvailableOptions, workoutLocations, genders } from './schemas';
 import { handleGenerateWorkoutScheduleAction } from '@/lib/actions';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -37,7 +37,7 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
     resolver: zodResolver(workoutScheduleFormSchema),
     defaultValues: {
       fitnessGoal: undefined,
-      experienceLevel: undefined,
+      strengthLevel: undefined,
       daysAvailable: undefined,
       workoutLocation: undefined,
       gender: undefined,
@@ -146,18 +146,18 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
 
             <FormField
               control={form.control}
-              name="experienceLevel"
+              name="strengthLevel"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Experience Level</FormLabel>
+                  <FormLabel>Strength Level</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select your experience level" />
+                        <SelectValue placeholder="Select your current strength level" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {experienceLevels.map(level => (
+                      {strengthLevels.map(level => (
                         <SelectItem key={level} value={level} className="capitalize">
                            {level.charAt(0).toUpperCase() + level.slice(1)}
                         </SelectItem>
@@ -239,3 +239,4 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
     </Card>
   );
 }
+
