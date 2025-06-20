@@ -15,7 +15,7 @@ export default function HomePage() {
           </div>
           <CardTitle className="text-3xl md:text-4xl font-bold text-primary">Welcome to Gain!</CardTitle>
           <CardDescription className="text-lg md:text-xl text-muted-foreground pt-2">
-            Your personalized AI fitness companion.
+            Unlock your peak fitness with AI-driven diet and workout plans, plus 24/7 coaching.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6 text-center">
