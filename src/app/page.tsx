@@ -19,9 +19,7 @@ export default function HomePage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6 text-center">
-          <p className="text-md text-foreground">
-            Navigate using the sidebar or the quick links below to access our powerful AI-driven tools:
-          </p>
+          
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
             <Button asChild variant="outline" size="lg" className="h-auto py-4 flex flex-col items-center justify-center gap-2 group hover:bg-primary/5 hover:border-primary transition-all duration-200">
               <Link href="/diet-planner" className="flex flex-col items-center gap-2">
