@@ -40,7 +40,7 @@ const prompt = ai.definePrompt({
 
   The user has requested a "{{{planDetailLevel}}}" diet plan.
 
-  Use the following headings for the meal sections: "Morning (Breakfast)", "Mid-Day (Lunch)", "Evening (Dinner)", and "Snacks". Ensure each of these headings is on its own line and formatted as **Heading:**. For example: **Morning (Breakfast):**.
+  Use the following headings for the meal sections: "Morning", "Mid-Morning", "Lunch", "Evening", and "Night Snack". Ensure each of these headings is on its own line and formatted as **Heading:**. For example: **Morning:**.
 
   If the user requested a "summary" plan:
   Provide a CONCISE SUMMARY diet plan. Focus on:

@@ -140,7 +140,7 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
     }
   }, [isCopied]);
 
-  const majorHeadingsRegex = /\n?(?=\*\*(?:Morning \(Breakfast\)|Mid-Day \(Lunch\)|Evening \(Dinner\)|Snacks|Shopping List|Important Considerations)\*\*)/i;
+  const majorHeadingsRegex = /\n?(?=\*\*(?:Morning|Mid-Morning|Lunch|Evening|Night Snack|Snacks|Shopping List|Important Considerations)\*\*)/i;
   const sections = dietPlan.split(majorHeadingsRegex).filter(s => s && s.trim() !== '');
 
   return (
