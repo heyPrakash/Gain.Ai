@@ -38,9 +38,9 @@ export default function UserProfileForm({ onPlanGenerated, setIsLoading, setErro
   const form = useForm<UserProfileFormValues>({
     resolver: zodResolver(userProfileSchema),
     defaultValues: {
-      weightKg: undefined,
-      heightCm: undefined,
-      age: undefined,
+      weightKg: '',
+      heightFt: '',
+      age: '',
       gender: undefined,
       fitnessGoals: "",
       dietaryPreferences: "",
@@ -108,12 +108,12 @@ export default function UserProfileForm({ onPlanGenerated, setIsLoading, setErro
               />
               <FormField
                 control={form.control}
-                name="heightCm"
+                name="heightFt"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Height (cm)</FormLabel>
+                    <FormLabel>Height (ft)</FormLabel>
                     <FormControl>
-                      <Input type="number" placeholder="e.g., 175" {...field} value={field.value ?? ''} />
+                      <Input type="number" placeholder="e.g., 5.8" {...field} value={field.value ?? ''} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -13,7 +13,7 @@ export const planDetailLevels = ["summary", "detailed"] as const;
 
 export const userProfileSchema = z.object({
   weightKg: z.coerce.number({invalid_type_error: "Weight must be a number."}).min(20, "Weight must be at least 20kg.").max(300, "Weight must be at most 300kg."),
-  heightCm: z.coerce.number({invalid_type_error: "Height must be a number."}).min(100, "Height must be at least 100cm.").max(250, "Height must be at most 250cm."),
+  heightFt: z.coerce.number({invalid_type_error: "Height must be a number."}).min(3, "Height must be at least 3ft.").max(8, "Height must be at most 8ft."),
   age: z.coerce.number({invalid_type_error: "Age must be a number."}).min(16, "Age must be at least 16 years.").max(100, "Age must be at most 100 years."),
   gender: z.enum(['male', 'female'], { required_error: "Gender is required." }),
   fitnessGoals: z.string().min(10, "Please describe your fitness goals (min 10 characters).").max(500, "Fitness goals too long (max 500 characters)."),

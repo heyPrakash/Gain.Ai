@@ -30,7 +30,7 @@ const prompt = ai.definePrompt({
   Based on the following information about the user, create a personalized diet plan to help them achieve their fitness goals.
 
   Weight: {{{weightKg}}} kg
-  Height: {{{heightCm}}} cm
+  Height: {{{heightFt}}} ft
   Age: {{{age}}} years
   Gender: {{{gender}}}
   Fitness Goals: {{{fitnessGoals}}}
