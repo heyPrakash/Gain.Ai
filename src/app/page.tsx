@@ -49,7 +49,7 @@ export default function HomePage() {
               About Gain
             </h3>
             <p className="text-md text-foreground leading-relaxed">
-              Gain is the first AI-powered product developed by Anthos, an AI startup founded by Prakash Jadhav. Designed to transform how people approach fitness and nutrition, Gain is your intelligent fitness partner — available 24/7, fully personalized, and always evolving.  With the help of artificial intelligence, Gain delivers customized diet plans, workout routines, and virtual coaching based on your body type, fitness goals, and preferences. Whether you're aiming to lose weight, gain muscle, or simply maintain a healthier lifestyle, Gain adapts to your needs — making your fitness journey smarter, simpler, and more effective.
+              Gain is the first AI-powered product developed by Anthora, an AI startup founded by Prakash Jadhav. Designed to transform how people approach fitness and nutrition, Gain is your intelligent fitness partner — available 24/7, fully personalized, and always evolving.  With the help of artificial intelligence, Gain delivers customized diet plans, workout routines, and virtual coaching based on your body type, fitness goals, and preferences. Whether you're aiming to lose weight, gain muscle, or simply maintain a healthier lifestyle, Gain adapts to your needs — making your fitness journey smarter, simpler, and more effective.
             </p>
           </div>
 
@@ -64,7 +64,7 @@ export default function HomePage() {
               Gain is proudly developed by <strong className="text-primary">Prakash Jadhav</strong>.
             </p>
             <p className="text-md text-foreground">
-              Prakash Jadhav is the founder of Anthos, an AI startup on a mission to simplify and enhance everyday life through intelligent software. With a strong passion for technology, fitness, and problem-solving, Prakash built Gain as the first product under the Anthos brand — combining the power of artificial intelligence with real-world health and wellness needs.
+              Prakash Jadhav is the founder of Anthora, an AI startup on a mission to simplify and enhance everyday life through intelligent software. With a strong passion for technology, fitness, and problem-solving, Prakash built Gain as the first product under the Anthora brand — combining the power of artificial intelligence with real-world health and wellness needs.
             </p>
           </div>
            <p className="text-sm text-muted-foreground pt-8">
