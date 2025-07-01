@@ -21,21 +21,21 @@ export default function HomePage() {
         <CardContent className="space-y-6 text-center">
           
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
-            <Button asChild variant="outline" size="lg" className="h-auto py-4 flex flex-col items-center justify-center gap-2 group hover:bg-primary/5 hover:border-primary transition-all duration-200">
+            <Button asChild variant="outline" size="lg" className="h-auto py-4 flex flex-col items-center justify-center gap-2 group hover:bg-primary/5 hover:border-primary">
               <Link href="/diet-planner" className="flex flex-col items-center gap-2">
-                <HeartPulse className="w-8 h-8 text-primary group-hover:scale-110 transition-transform" />
+                <HeartPulse className="w-8 h-8 text-primary" />
                 <span className="text-md font-medium">Diet Planner</span>
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="h-auto py-4 flex flex-col items-center justify-center gap-2 group hover:bg-primary/5 hover:border-primary transition-all duration-200">
+            <Button asChild variant="outline" size="lg" className="h-auto py-4 flex flex-col items-center justify-center gap-2 group hover:bg-primary/5 hover:border-primary">
               <Link href="/workout-planner" className="flex flex-col items-center gap-2">
-                <Dumbbell className="w-8 h-8 text-primary group-hover:scale-110 transition-transform" />
+                <Dumbbell className="w-8 h-8 text-primary" />
                 <span className="text-md font-medium">Workout Planner</span>
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="h-auto py-4 flex flex-col items-center justify-center gap-2 group hover:bg-primary/5 hover:border-primary transition-all duration-200">
+            <Button asChild variant="outline" size="lg" className="h-auto py-4 flex flex-col items-center justify-center gap-2 group hover:bg-primary/5 hover:border-primary">
               <Link href="/ai-coach" className="flex flex-col items-center gap-2">
-                <MessageSquareHeart className="w-8 h-8 text-primary group-hover:scale-110 transition-transform" />
+                <MessageSquareHeart className="w-8 h-8 text-primary" />
                 <span className="text-md font-medium">AI Coach</span>
               </Link>
             </Button>
