@@ -20,6 +20,7 @@ import {
 import { Home, HeartPulse, Dumbbell, MessageSquareHeart } from 'lucide-react';
 import { GainAppIcon } from '@/components/icons/GainAppIcon'; // Import the new icon
 import Link from 'next/link';
+import ClientOnly from '@/components/layout/ClientOnly';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -52,48 +53,50 @@ export default function RootLayout({
         )}
       >
         <QueryProvider>
-          <SidebarProvider defaultOpen>
-            <Sidebar collapsible="icon" className="border-r border-sidebar-border">
-              <SidebarHeader className="p-4">
-                <Link href="/" className="flex items-center gap-2 text-xl font-bold text-sidebar-primary hover:opacity-80 transition-opacity">
-                  <GainAppIcon className="h-7 w-7" /> {/* Use the new icon here */}
-                  <span className="group-data-[collapsible=icon]:hidden">Gain</span>
-                </Link>
-              </SidebarHeader>
-              <SidebarContent>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild tooltip={{content: "Home", side: "right", align: "center"}}>
-                      <Link href="/"><Home /> <span className="group-data-[collapsible=icon]:hidden">Home</span></Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild tooltip={{content: "Diet Planner", side: "right", align: "center"}}>
-                      <Link href="/diet-planner"><HeartPulse /> <span className="group-data-[collapsible=icon]:hidden">Diet Planner</span></Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild tooltip={{content: "Workout Planner", side: "right", align: "center"}}>
-                      <Link href="/workout-planner"><Dumbbell /> <span className="group-data-[collapsible=icon]:hidden">Workout Planner</span></Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild tooltip={{content: "AI Coach", side: "right", align: "center"}}>
-                      <Link href="/ai-coach"><MessageSquareHeart /> <span className="group-data-[collapsible=icon]:hidden">AI Coach</span></Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarContent>
-            </Sidebar>
+          <ClientOnly>
+            <SidebarProvider defaultOpen>
+              <Sidebar collapsible="icon" className="border-r border-sidebar-border">
+                <SidebarHeader className="p-4">
+                  <Link href="/" className="flex items-center gap-2 text-xl font-bold text-sidebar-primary hover:opacity-80 transition-opacity">
+                    <GainAppIcon className="h-7 w-7" /> {/* Use the new icon here */}
+                    <span className="group-data-[collapsible=icon]:hidden">Gain</span>
+                  </Link>
+                </SidebarHeader>
+                <SidebarContent>
+                  <SidebarMenu>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild tooltip={{content: "Home", side: "right", align: "center"}}>
+                        <Link href="/"><Home /> <span className="group-data-[collapsible=icon]:hidden">Home</span></Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild tooltip={{content: "Diet Planner", side: "right", align: "center"}}>
+                        <Link href="/diet-planner"><HeartPulse /> <span className="group-data-[collapsible=icon]:hidden">Diet Planner</span></Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild tooltip={{content: "Workout Planner", side: "right", align: "center"}}>
+                        <Link href="/workout-planner"><Dumbbell /> <span className="group-data-[collapsible=icon]:hidden">Workout Planner</span></Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild tooltip={{content: "AI Coach", side: "right", align: "center"}}>
+                        <Link href="/ai-coach"><MessageSquareHeart /> <span className="group-data-[collapsible=icon]:hidden">AI Coach</span></Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  </SidebarMenu>
+                </SidebarContent>
+              </Sidebar>
 
-            <SidebarInset className="flex flex-col min-h-screen">
-              <Header />
-              <main className="flex-grow">
-                {children}
-              </main>
-              <Footer />
-            </SidebarInset>
-          </SidebarProvider>
+              <SidebarInset className="flex flex-col min-h-screen">
+                <Header />
+                <main className="flex-grow">
+                  {children}
+                </main>
+                <Footer />
+              </SidebarInset>
+            </SidebarProvider>
+          </ClientOnly>
           <Toaster />
         </QueryProvider>
       </body>
