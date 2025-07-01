@@ -38,9 +38,9 @@ export default function UserProfileForm({ onPlanGenerated, setIsLoading, setErro
   const form = useForm<UserProfileFormValues>({
     resolver: zodResolver(userProfileSchema),
     defaultValues: {
-      weightKg: 70,
-      heightCm: 175,
-      age: 30,
+      weightKg: undefined,
+      heightCm: undefined,
+      age: undefined,
       gender: undefined,
       fitnessGoals: "",
       dietaryPreferences: "",
