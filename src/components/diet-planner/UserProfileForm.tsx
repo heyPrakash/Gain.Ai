@@ -8,7 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Loader2, Leaf } from 'lucide-react';
 
 import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan-types';
-import { userProfileSchema, type UserProfileFormValues, activityLevels, planDetailLevels } from './schemas';
+import { userProfileSchema, type UserProfileFormValues, activityLevels, planDetailLevels, fitnessGoals } from './schemas';
 import { handleGenerateDietPlanAction } from '@/lib/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -42,7 +42,7 @@ export default function UserProfileForm({ onPlanGenerated, setIsLoading, setErro
       heightFt: '',
       age: '',
       gender: undefined,
-      fitnessGoals: "",
+      fitnessGoals: undefined,
       dietaryPreferences: "",
       activityLevel: undefined,
       planDetailLevel: "detailed",
@@ -194,16 +194,21 @@ export default function UserProfileForm({ onPlanGenerated, setIsLoading, setErro
               name="fitnessGoals"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Fitness Goals</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="e.g., Lose 5kg, build muscle, run a 5k"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Briefly describe what you want to achieve.
-                  </FormDescription>
+                  <FormLabel>Fitness Goal</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select your primary fitness goal" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {fitnessGoals.map(goal => (
+                        <SelectItem key={goal} value={goal} className="capitalize">
+                          {goal}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
