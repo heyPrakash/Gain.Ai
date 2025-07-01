@@ -27,7 +27,7 @@ const prompt = ai.definePrompt({
   output: {schema: GenerateDietPlanOutputSchema},
   prompt: `You are a personal nutrition and fitness coach.
 
-  Based on the following information about the user, create a personalized diet plan to help them achieve their fitness goals.
+  Based on the following information about the user, create a personalized diet plan to help them achieve their fitness goals. The plan should be structured from morning to night.
 
   Weight: {{{weightKg}}} kg
   Height: {{{heightFt}}} ft
@@ -40,9 +40,11 @@ const prompt = ai.definePrompt({
 
   The user has requested a "{{{planDetailLevel}}}" diet plan.
 
+  Use the following headings for the meal sections: "Morning (Breakfast)", "Mid-Day (Lunch)", "Evening (Dinner)", and "Snacks". Ensure each of these headings is on its own line and formatted as **Heading:**. For example: **Morning (Breakfast):**.
+
   If the user requested a "summary" plan:
   Provide a CONCISE SUMMARY diet plan. Focus on:
-  - General meal structure (e.g., breakfast, lunch, dinner, snacks).
+  - General meal structure under the requested headings.
   - Key food group recommendations for each meal type.
   - 1-2 brief example meal ideas per meal type, without extensive options or detailed calorie breakdowns for individual food items.
   - Overall daily calorie target, if applicable based on goals.
@@ -51,12 +53,12 @@ const prompt = ai.definePrompt({
 
   If the user requested a "detailed" plan:
   Provide a DETAILED diet plan. The diet plan should include:
-  - Meal suggestions for breakfast, lunch, dinner, and snacks.
+  - Meal suggestions under the requested headings.
   - Specific food items and portion sizes for each meal suggestion.
   - Approximate nutritional information (calories, protein, carbs, fats) for meal options or for the day.
   - Recommended serving sizes.
-  - A sample shopping list.
-  - Important considerations and advice regarding hydration, adjustments, variety, cooking methods, processed foods, listening to the body, exercise, and consultation with professionals.
+  - A sample shopping list under the heading **Shopping List:**.
+  - Important considerations and advice regarding hydration, etc., under the heading **Important Considerations:**.
 
   Ensure the plan is tailored to the user's inputs.
   `,

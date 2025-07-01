@@ -28,39 +28,31 @@ const renderDietPlanContent = (content: string): (JSX.Element | null)[] => {
       continue; 
     }
 
-    // Match main headings like "Breakfast:", "Lunch:", "Example Meals:", "Goal:" (after ** removal)
-    // The regex looks for words followed by a colon, which were originally bolded.
+    // Match sub-headings like "Example Meals:", etc.
     const headingMatch = trimmedLine.match(/^([A-Za-z\s()]+(?: \(\d+-\d+ calories\))?):$/);
-    const commonHeadings = ["breakfast", "lunch", "dinner", "snack", "snacks", "example meal", "example meals", "meal examples", "goal", "calorie target", "general meal structure", "meal examples", "important advice", "important considerations", "sample shopping list", "key recommendations", "shopping list"];
+    const commonHeadings = ["example meal", "example meals", "meal examples", "goal", "calorie target", "general meal structure", "meal examples", "important advice", "important considerations", "sample shopping list", "key recommendations"];
 
     if (headingMatch && commonHeadings.some(keyword => headingMatch[1].toLowerCase().includes(keyword))) {
       const headingText = headingMatch[1].trim();
-      let titleFontWeight = "font-semibold"; 
-      const lowerHeadingText = headingText.toLowerCase();
-
-      // Specific keywords for bold and primary color
-      if (commonHeadings.some(keyword => lowerHeadingText.includes(keyword))) {
-        titleFontWeight = "font-bold";
-      }
       if (headingText) {
-        elements.push(<h4 key={`h4-${i}-${headingText.slice(0,10)}`} className={`text-md ${titleFontWeight} mt-3 mb-1.5 text-primary`}>{headingText}</h4>);
+        elements.push(<h4 key={`h4-${i}-${headingText.slice(0,10)}`} className="text-md font-bold mt-4 mb-2 text-primary">{headingText}</h4>);
       }
-      trimmedLine = trimmedLine.substring(headingMatch[0].length).trim(); // Remove heading part if it was processed
-      if (trimmedLine === '') continue; // If nothing left after heading, continue
+      trimmedLine = trimmedLine.substring(headingMatch[0].length).trim();
+      if (trimmedLine === '') continue;
     }
     
-    // Match list items: "* Item content" or "* Title: Description" (after ** removal)
-    const listItemMatch = trimmedLine.match(/^(\s*)(\*\s+)(.*)/);
+    // Match list items: "* Item content" or "* Title: Description"
+    const listItemMatch = trimmedLine.match(/^(\s*)[*-]\s+(.*)/s);
     if (listItemMatch) {
       const indentSpaces = listItemMatch[1].length;
-      let itemContent = listItemMatch[3].trim(); 
+      let itemContent = listItemMatch[2].trim(); 
       const indentLevel = Math.floor(indentSpaces / 2); 
       const marginLeft = `${indentLevel * 1.25}rem`; 
 
       if (itemContent.startsWith('*') && itemContent.endsWith('*') && itemContent.toLowerCase().includes('approximate nutritional information')) {
         const nutritionalText = itemContent.substring(1, itemContent.length - 1).trim();
         if (nutritionalText) {
-            elements.push(<p key={`nutri-${i}-${nutritionalText.slice(0,10)}`} style={{ marginLeft }} className="text-xs italic text-muted-foreground my-0.5">{nutritionalText}</p>);
+            elements.push(<p key={`nutri-${i}`} style={{ marginLeft }} className="text-xs italic text-muted-foreground my-0.5">{nutritionalText}</p>);
         }
         continue;
       }
@@ -69,20 +61,12 @@ const renderDietPlanContent = (content: string): (JSX.Element | null)[] => {
       if (titleDescMatch) {
         const title = titleDescMatch[1].trim(); 
         const description = titleDescMatch[2].trim(); 
-        
-        let titleFontWeight = "font-semibold"; 
-        const lowerTitle = title.toLowerCase();
-        
-        if (commonHeadings.some(keyword => lowerTitle.includes(keyword))) {
-            titleFontWeight = "font-bold"; 
-        }
-
         if (title) {
             elements.push(
-              <div key={`li-bold-${i}-${title.slice(0,10)}`} style={{ marginLeft }} className="flex text-sm my-1">
+              <div key={`li-bold-${i}`} style={{ marginLeft }} className="flex text-sm my-1.5">
                  <span className="text-primary mr-2 mt-1 shrink-0">&#8226;</span>
                 <div>
-                    <span className={`${titleFontWeight} text-primary`}>{title}:</span>
+                    <span className="font-semibold text-primary">{title}:</span>
                     {description && <span> {description}</span>}
                 </div>
               </div>
@@ -91,11 +75,10 @@ const renderDietPlanContent = (content: string): (JSX.Element | null)[] => {
         continue;
       }
 
-      // Regular list items "* Content"
       const regularItemText = itemContent.trim();
       if (regularItemText) {
         elements.push(
-          <div key={`li-reg-${i}-${regularItemText.slice(0,10)}`} style={{ marginLeft }} className="flex items-start text-sm my-1">
+          <div key={`li-reg-${i}`} style={{ marginLeft }} className="flex items-start text-sm my-1.5">
             <span className="text-primary mr-2 mt-1 shrink-0">&#8226;</span>
             <span className="flex-1">{regularItemText}</span>
           </div>
@@ -106,7 +89,7 @@ const renderDietPlanContent = (content: string): (JSX.Element | null)[] => {
     
     // Default: render as a paragraph
     if (trimmedLine) {
-        elements.push(<p key={`p-${i}-${trimmedLine.slice(0,10)}`} className="text-sm my-1.5 leading-relaxed">{trimmedLine}</p>);
+        elements.push(<p key={`p-${i}`} className="text-sm my-2 leading-relaxed">{trimmedLine}</p>);
     }
   }
   return elements.filter(el => el !== null);
@@ -120,14 +103,10 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
 
   const formatDietPlanForCopy = (rawPlan: string): string => {
     let text = rawPlan;
-    // Remove markdown-like formatting
-    text = text.replace(/\*\*/g, ''); // Remove bold markers
-    text = text.replace(/^#+\s*/gm, ''); // Remove markdown headers (e.g., ## Title)
-    text = text.replace(/^\s*\*\s+/gm, '  - '); // Convert markdown list items
-    text = text.replace(/^\s*-\s+/gm, '  - '); // Convert markdown list items (alternative)
-    // Ensure consistent line breaks
+    text = text.replace(/\*\*/g, '');
+    text = text.replace(/^#+\s*/gm, '');
+    text = text.replace(/^\s*[*-]\s+/gm, '  - ');
     text = text.replace(/\r\n/g, '\n');
-    // Remove excessive blank lines, keeping at most one
     text = text.replace(/\n\s*\n/g, '\n\n');
     return text.trim();
   };
@@ -139,7 +118,6 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
       toast({
         title: "Copied to Clipboard!",
         description: "The diet plan has been copied.",
-        variant: "default",
       });
       setIsCopied(true);
     } catch (err) {
@@ -157,14 +135,13 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
     if (isCopied) {
       const timer = setTimeout(() => {
         setIsCopied(false);
-      }, 2500); // Reset after 2.5 seconds
+      }, 2500);
       return () => clearTimeout(timer);
     }
   }, [isCopied]);
 
-  // Section splitting logic (simplified for clarity, can be enhanced)
-   const sections = dietPlan.split(/\n(?=Day\s\d+:|Meal\s\d+:|Breakfast:|Lunch:|Dinner:|Snack:|Important Notes and Adjustments:|Important Considerations:|Sample Meal Plan:|Example Meals:|Meal Examples:|Shopping List:|Key Recommendations:|Overall Goal:|Goal:|Calorie Target:)/i);
-
+  const majorHeadingsRegex = /\n?(?=\*\*(?:Morning \(Breakfast\)|Mid-Day \(Lunch\)|Evening \(Dinner\)|Snacks|Shopping List|Important Considerations)\*\*)/i;
+  const sections = dietPlan.split(majorHeadingsRegex).filter(s => s && s.trim() !== '');
 
   return (
     <Card id="dietPlanCardPrintable" className="mt-8 w-full max-w-3xl mx-auto shadow-xl">
@@ -174,7 +151,7 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
           Your Personalized Diet Plan
         </CardTitle>
         <CardDescription>
-          Here is the diet plan generated by our AI based on your profile. Remember to consult with a healthcare professional before making significant dietary changes.
+          Here is your AI-generated diet plan from morning to night. Remember to consult with a healthcare professional before making significant dietary changes.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -187,16 +164,11 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
             let sectionTitle = '';
             let contentForRenderer = trimmedSectionText;
 
-            const firstLine = sectionLines[0].trim().replace(/\*\*/g, ''); // Remove ** for title matching
-            const majorTitleRegex = /^(Day\s\d+:|Meal\s\d+:|Breakfast:|Lunch:|Dinner:|Snack:|Important Notes and Adjustments:|Important Considerations:|Sample Meal Plan:|Example Meals:|Meal Examples:|Shopping List:|Key Recommendations:|Overall Goal:|Goal:|Calorie Target:)/i;
-            
-            if (majorTitleRegex.test(firstLine)) {
-              sectionTitle = firstLine;
-              if (sectionLines.length > 1) {
-                contentForRenderer = sectionLines.slice(1).join('\n');
-              } else {
-                contentForRenderer = ''; 
-              }
+            if (sectionLines[0].startsWith('**') && sectionLines[0].endsWith('**')) {
+              sectionTitle = sectionLines[0].replace(/\*\*/g, '').replace(/:$/, '');
+              contentForRenderer = sectionLines.slice(1).join('\n');
+            } else {
+               contentForRenderer = trimmedSectionText;
             }
             
             const renderedContent = renderDietPlanContent(contentForRenderer);
@@ -206,13 +178,13 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
             }
 
             return (
-              <div key={`${sectionIndex}-${sectionTitle.slice(0,10)}`} className="mb-5 last:mb-0">
+              <div key={`${sectionIndex}-${sectionTitle}`} className="mb-6">
                 {sectionTitle && (
-                  <h3 className="font-semibold text-lg md:text-xl text-primary mb-2.5 mt-4 first:mt-0">
+                  <h3 className="font-bold text-xl md:text-2xl text-primary mb-3 border-b-2 border-primary pb-2">
                     {sectionTitle}
                   </h3>
                 )}
-                <div className="space-y-0.5"> 
+                <div className="space-y-1 pl-2"> 
                   {renderedContent}
                 </div>
               </div>
@@ -223,7 +195,7 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
           <Info className="h-4 w-4 text-primary" />
           <AlertTitle>Pro Tip!</AlertTitle>
           <AlertDescription className="text-primary/90">
-            We recommend writing down your diet plan or making notes for easy reference. This can help you stay on track with your meals and goals!
+            Writing down your diet plan can help you stay on track with your meals and goals!
           </AlertDescription>
         </Alert>
       </CardContent>
@@ -236,4 +208,3 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
     </Card>
   );
 }
-
