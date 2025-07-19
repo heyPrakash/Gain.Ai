@@ -24,7 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 
 interface UserProfileFormProps {
@@ -86,8 +86,11 @@ export default function UserProfileForm({ onPlanGenerated, setIsLoading, setErro
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-2xl">
           <Leaf className="text-primary" />
-          Your Profile
+          Tell Us About Yourself
         </CardTitle>
+        <CardDescription>
+          Provide your details so our AI can create a personalized diet plan for you.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -283,3 +286,5 @@ export default function UserProfileForm({ onPlanGenerated, setIsLoading, setErro
     </Card>
   );
 }
+
+    

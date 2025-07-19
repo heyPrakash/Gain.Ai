@@ -240,3 +240,4 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
   );
 }
 
+    

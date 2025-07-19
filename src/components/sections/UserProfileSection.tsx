@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -15,8 +16,8 @@ export default function UserProfileSection() {
   return (
     <section id="diet-planner" className="space-y-8">
       <div className="text-center space-y-2">
-        <h2 className="text-3xl md:text-4xl font-bold text-primary flex items-center justify-center gap-2">
-          <HeartPulse className="w-8 h-8 md:w-10 md:h-10" />
+        <h2 className="text-3xl md:text-4xl font-bold flex items-center justify-center gap-2">
+          <HeartPulse className="w-8 h-8 md:w-10 md:h-10 text-primary" />
           Personalized AI Diet Planner
         </h2>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -50,3 +51,5 @@ export default function UserProfileSection() {
     </section>
   );
 }
+
+    

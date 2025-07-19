@@ -151,7 +151,7 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
           Your Personalized Diet Plan
         </CardTitle>
         <CardDescription>
-          Here is your AI-generated diet plan from morning to night. Remember to consult with a healthcare professional before making significant dietary changes.
+          Here is your AI-generated diet plan. Remember to consult with a healthcare professional before making significant dietary changes.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -164,7 +164,7 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
             let sectionTitle = '';
             let contentForRenderer = trimmedSectionText;
 
-            if (sectionLines[0].startsWith('**') && sectionLines[0].endsWith('**')) {
+            if (sectionLines[0].match(/^\*\*(🌅 Morning \(Breakfast\)|🌞 Midday \(Lunch\)|🌙 Night \(Dinner\)|Snacks|Shopping List|Important Considerations):\*\*/i)) {
               sectionTitle = sectionLines[0].replace(/\*\*/g, '').replace(/:$/, '');
               contentForRenderer = sectionLines.slice(1).join('\n');
             } else {
@@ -191,10 +191,10 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
             );
           })}
         </ScrollArea>
-        <Alert variant="default" className="mt-6 bg-primary/10 border-primary/30 text-primary">
-          <Info className="h-4 w-4 text-primary" />
+        <Alert variant="default" className="mt-6">
+          <Info className="h-4 w-4" />
           <AlertTitle>Pro Tip!</AlertTitle>
-          <AlertDescription className="text-primary/90">
+          <AlertDescription>
             Writing down your diet plan can help you stay on track with your meals and goals!
           </AlertDescription>
         </Alert>
@@ -208,3 +208,5 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
     </Card>
   );
 }
+
+    
