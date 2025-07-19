@@ -6,9 +6,9 @@ export default function Footer() {
   return (
     <footer className="py-6 px-6 mt-auto bg-card border-t">
       <div className="container mx-auto text-center text-muted-foreground text-sm">
-        <p>&copy; {currentYear} Gain. All rights reserved.</p>
+        <p>&copy; {currentYear} Cortex Fit. All rights reserved.</p>
         <div className="flex items-center justify-center gap-2 mt-1">
-          <span>Developed by Prakash Jadhav for</span>
+          <span>Powered by</span>
           <a href="#" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 font-semibold text-foreground hover:text-primary transition-colors">
             <AnthoraLogo className="h-4 w-4" />
             <span>Anthora</span>

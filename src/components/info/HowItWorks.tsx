@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ListChecks, Cpu, UtensilsCrossed, FileText } from 'lucide-react';
+import { ListChecks, Cpu, FileText } from 'lucide-react';
 
 const steps = [
   {
@@ -22,9 +22,9 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <Card className="w-full max-w-4xl mx-auto shadow-xl">
+    <Card className="w-full max-w-4xl mx-auto shadow-xl bg-transparent border-0">
       <CardHeader className="text-center">
-        <CardTitle className="text-3xl font-bold text-primary">How Gain Works</CardTitle>
+        <CardTitle className="text-3xl font-bold text-primary">How It Works</CardTitle>
         <CardDescription className="text-lg">
           Achieve your fitness goals with a plan designed just for you in three simple steps.
         </CardDescription>
@@ -32,7 +32,7 @@ export default function HowItWorks() {
       <CardContent>
         <div className="grid md:grid-cols-3 gap-8 text-center">
           {steps.map((step, index) => (
-            <div key={index} className="flex flex-col items-center p-4 bg-card rounded-lg ">
+            <div key={index} className="flex flex-col items-center p-6 bg-card rounded-lg shadow-md hover:shadow-lg transition-shadow">
               <div className="mb-4 p-3 bg-primary/10 rounded-full">
                 {step.icon}
               </div>
