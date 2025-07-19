@@ -90,7 +90,7 @@ export default function RootLayout({
 
               <SidebarInset className="flex flex-col min-h-screen">
                 <Header />
-                <main className="flex-grow p-4 md:p-6">
+                <main className="flex-grow p-4 md:p-6 lg:p-8">
                   {children}
                 </main>
                 <Footer />
@@ -103,5 +103,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-    
