@@ -33,7 +33,9 @@ const prompt = ai.definePrompt({
   - Age: {{{age}}} years
   - Gender: {{{gender}}}
   - Fitness Goal: {{{fitnessGoals}}}
+  {{#if dietaryPreferences}}
   - Dietary Preferences: {{{dietaryPreferences}}}
+  {{/if}}
   - Activity Level: {{{activityLevel}}}
   - Plan Detail Requested: {{{planDetailLevel}}}
 

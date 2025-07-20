@@ -25,10 +25,9 @@ export const userProfileSchema = z.object({
   age: z.coerce.number({invalid_type_error: "Age must be a number."}).min(16, "Age must be at least 16 years.").max(100, "Age must be at most 100 years."),
   gender: z.enum(['male', 'female'], { required_error: "Gender is required." }),
   fitnessGoals: fitnessGoalEnum,
-  dietaryPreferences: z.string().min(10, "Please describe dietary preferences (min 10 characters).").max(500, "Dietary preferences too long (max 500 characters)."),
+  dietaryPreferences: z.string().max(500, "Dietary preferences are too long (max 500 characters).").optional(),
   activityLevel: z.enum(activityLevels, { required_error: "Activity level is required." }),
   planDetailLevel: z.enum(planDetailLevels, { required_error: "Please select the desired plan detail level." }).default("detailed"),
 });
 
 export type UserProfileFormValues = z.infer<typeof userProfileSchema>;
-
