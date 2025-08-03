@@ -11,7 +11,7 @@ export default function HomePage() {
     <div className="container mx-auto px-4 py-8 space-y-12">
       <section className="text-center">
         <div className="inline-flex items-center justify-center bg-primary/10 p-3 rounded-full mb-4">
-          <BrainCircuit className="h-10 w-10 text-primary" />
+          <Dumbbell className="h-10 w-10 text-primary" />
         </div>
         <h1 className="text-4xl md:text-5xl font-bold">Welcome to Gain!</h1>
         <p className="text-lg md:text-xl text-muted-foreground mt-2 max-w-2xl mx-auto">
@@ -75,5 +75,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    
