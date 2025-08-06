@@ -20,7 +20,7 @@ export default function FoodAnalyzerSection() {
           <Camera className="w-8 h-8 md:w-10 md:h-10 text-primary" />
           AI Food Analyzer
         </h2>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-md md:text-lg text-muted-foreground max-w-2xl mx-auto">
           Upload an image of your meal, and our AI will provide a detailed nutritional breakdown.
         </p>
       </div>
