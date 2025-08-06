@@ -17,7 +17,7 @@ import {
   SidebarMenuButton,
   SidebarInset,
 } from '@/components/ui/sidebar';
-import { Home, HeartPulse, Dumbbell, MessageSquareHeart } from 'lucide-react';
+import { Home, HeartPulse, Dumbbell, MessageSquareHeart, Camera } from 'lucide-react';
 import { GainAppIcon } from '@/components/icons/GainAppIcon';
 import Link from 'next/link';
 import ClientOnly from '@/components/layout/ClientOnly';
@@ -67,6 +67,11 @@ export default function RootLayout({
                     <SidebarMenuItem>
                       <SidebarMenuButton asChild tooltip={{content: "Home", side: "right", align: "center"}}>
                         <Link href="/"><Home /> <span className="group-data-[collapsible=icon]:hidden">Home</span></Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                     <SidebarMenuItem>
+                      <SidebarMenuButton asChild tooltip={{content: "Food Analyzer", side: "right", align: "center"}}>
+                        <Link href="/food-analyzer"><Camera /> <span className="group-data-[collapsible=icon]:hidden">Food Analyzer</span></Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                     <SidebarMenuItem>

@@ -1,3 +1,4 @@
+
 'use server';
 import type { UserProfileFormValues } from '@/components/diet-planner/schemas';
 import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan-types';
@@ -9,6 +10,10 @@ import { aiChatCoach } from '@/ai/flows/ai-chat-coach';
 import type { WorkoutScheduleFormValues } from '@/components/workout-planner/schemas';
 import type { GenerateWorkoutScheduleOutput } from '@/ai/flows/generate-workout-schedule-types';
 import { generateWorkoutSchedule } from '@/ai/flows/generate-workout-schedule';
+
+import type { AnalyzeFoodImageInput, AnalyzeFoodImageOutput } from '@/ai/flows/analyze-food-image-types';
+import { analyzeFoodImage } from '@/ai/flows/analyze-food-image';
+
 
 export async function handleGenerateDietPlanAction(input: UserProfileFormValues): Promise<GenerateDietPlanOutput> {
   try {
@@ -51,4 +56,19 @@ export async function handleGenerateWorkoutScheduleAction(input: WorkoutSchedule
     }
     throw new Error("An unknown error occurred while generating the workout schedule.");
   }
+}
+
+export async function handleAnalyzeFoodImageAction(input: AnalyzeFoodImageInput): Promise<AnalyzeFoodImageOutput> {
+    try {
+        console.log("Analyzing food image...");
+        const result = await analyzeFoodImage(input);
+        console.log("Food image analysis complete:", result);
+        return result;
+    } catch (error) {
+        console.error("Error in handleAnalyzeFoodImageAction:", error);
+        if (error instanceof Error) {
+            throw new Error(`Failed to analyze food image: ${error.message}`);
+        }
+        throw new Error("An unknown error occurred while analyzing the food image.");
+    }
 }
