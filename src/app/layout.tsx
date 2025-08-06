@@ -70,8 +70,8 @@ export default function RootLayout({
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                      <SidebarMenuItem>
-                      <SidebarMenuButton asChild tooltip={{content: "NutriSnap", side: "right", align: "center"}}>
-                        <Link href="/food-analyzer"><Camera /> <span className="group-data-[collapsible=icon]:hidden">NutriSnap</span></Link>
+                      <SidebarMenuButton asChild tooltip={{content: "Nutrition Snap", side: "right", align: "center"}}>
+                        <Link href="/food-analyzer"><Camera /> <span className="group-data-[collapsible=icon]:hidden">Nutrition Snap</span></Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                     <SidebarMenuItem>
