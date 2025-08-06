@@ -30,7 +30,7 @@ export default function HomePage() {
                <Button asChild variant="outline" size="lg" className="h-auto py-4 flex flex-col items-center justify-center gap-2 hover:bg-primary/5 hover:border-primary transition-all duration-300">
                 <Link href="/food-analyzer" className="flex flex-col items-center gap-2">
                   <Camera className="w-8 h-8 text-primary" />
-                  <span className="text-md font-medium">Food Analyzer</span>
+                  <span className="text-md font-medium">NutriSnap</span>
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="h-auto py-4 flex flex-col items-center justify-center gap-2 hover:bg-primary/5 hover:border-primary transition-all duration-300">

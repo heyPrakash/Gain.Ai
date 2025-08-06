@@ -18,10 +18,10 @@ export default function FoodAnalyzerSection() {
       <div className="text-center space-y-2">
         <h2 className="text-3xl md:text-4xl font-bold flex items-center justify-center gap-2">
           <Camera className="w-8 h-8 md:w-10 md:h-10 text-primary" />
-          AI Food Analyzer
+          NutriSnap AI
         </h2>
         <p className="text-md md:text-lg text-muted-foreground max-w-2xl mx-auto">
-          Upload an image of your meal, and our AI will provide a detailed nutritional breakdown.
+          Snap a photo of your meal, and our AI will provide a detailed nutritional breakdown.
         </p>
       </div>
       
