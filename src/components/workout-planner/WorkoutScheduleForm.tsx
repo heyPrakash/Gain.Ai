@@ -115,34 +115,6 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
                   </FormItem>
                 )}
               />
-
-              <FormField
-                control={form.control}
-                name="strengthLevel"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Strength Level</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select your current strength level" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {strengthLevels.map(level => (
-                          <SelectItem key={level} value={level} className="capitalize">
-                            {level}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                <FormField
                   control={form.control}
                   name="location"
@@ -169,6 +141,33 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
                     </FormItem>
                   )}
                 />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+               <FormField
+                control={form.control}
+                name="strengthLevel"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Strength Level</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select your current strength level" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {strengthLevels.map(level => (
+                          <SelectItem key={level} value={level} className="capitalize">
+                            {level}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               
               <FormField
                 control={form.control}
