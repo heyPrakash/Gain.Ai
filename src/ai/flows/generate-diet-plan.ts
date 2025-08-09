@@ -39,7 +39,7 @@ const prompt = ai.definePrompt({
   - Activity Level: {{{activityLevel}}}
   - Plan Detail Requested: {{{planDetailLevel}}}
 
-  Structure the diet plan with these exact headings on their own lines, followed by a colon: **🌅 Morning (Breakfast):**, **🌞 Midday (Lunch):**, **🌙 Night (Dinner):**, and **Snacks:**.
+  Structure the diet plan with these exact headings on their own lines, followed by a colon: **🌅 Morning (Breakfast):**, **🌞 Midday (Lunch):**, **🌙 Night (Dinner):**, and ** snacks:**.
 
   If the user requested a "summary" plan, provide a CONCISE overview with general meal structures and 1-2 examples per meal. Do not include a shopping list.
 

@@ -3,9 +3,9 @@
 
 import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan-types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import { UtensilsCrossed, Info, Copy, Check } from 'lucide-react';
+import { UtensilsCrossed, Info, Copy, Check, Leaf } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
@@ -14,87 +14,52 @@ interface DietPlanDisplayProps {
   dietPlanOutput: GenerateDietPlanOutput;
 }
 
-const renderDietPlanContent = (content: string): (JSX.Element | null)[] => {
+const renderSectionContent = (content: string): (JSX.Element | null)[] => {
   if (!content || content.trim() === '') return [];
   
-  const lines = content.split('\n');
+  // Split by list items, but keep the delimiter for context
+  const lines = content.split(/(\n\s*[-*]\s+)/).filter(line => line.trim() !== '');
+
   const elements: (JSX.Element | null)[] = [];
+  let buffer = '';
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    let trimmedLine = line.trim().replace(/\*\*/g, ''); // Remove all **
-
-    if (trimmedLine === '') {
-      continue; 
-    }
-
-    // Match sub-headings like "Example Meals:", etc.
-    const headingMatch = trimmedLine.match(/^([A-Za-z\s()]+(?: \(\d+-\d+ calories\))?):$/);
-    const commonHeadings = ["example meal", "example meals", "meal examples", "goal", "calorie target", "general meal structure", "meal examples", "important advice", "important considerations", "sample shopping list", "key recommendations"];
-
-    if (headingMatch && commonHeadings.some(keyword => headingMatch[1].toLowerCase().includes(keyword))) {
-      const headingText = headingMatch[1].trim();
-      if (headingText) {
-        elements.push(<h4 key={`h4-${i}-${headingText.slice(0,10)}`} className="text-md font-bold mt-4 mb-2 text-primary">{headingText}</h4>);
+  for (const line of lines) {
+    if (line.match(/^\n\s*[-*]\s+/)) {
+      if (buffer.trim()) {
+        elements.push(<p key={`p-${elements.length}`} className="text-sm my-2 leading-relaxed">{buffer.trim()}</p>);
       }
-      trimmedLine = trimmedLine.substring(headingMatch[0].length).trim();
-      if (trimmedLine === '') continue;
-    }
-    
-    // Match list items: "* Item content" or "* Title: Description"
-    const listItemMatch = trimmedLine.match(/^(\s*)[*-]\s+(.*)/s);
-    if (listItemMatch) {
-      const indentSpaces = listItemMatch[1].length;
-      let itemContent = listItemMatch[2].trim(); 
-      const indentLevel = Math.floor(indentSpaces / 2); 
-      const marginLeft = `${indentLevel * 1.25}rem`; 
-
-      if (itemContent.startsWith('*') && itemContent.endsWith('*') && itemContent.toLowerCase().includes('approximate nutritional information')) {
-        const nutritionalText = itemContent.substring(1, itemContent.length - 1).trim();
-        if (nutritionalText) {
-            elements.push(<p key={`nutri-${i}`} style={{ marginLeft }} className="text-xs italic text-muted-foreground my-0.5">{nutritionalText}</p>);
-        }
-        continue;
-      }
-      
-      const titleDescMatch = itemContent.match(/^([A-Za-z\s()0-9.-]+):\s*(.*)/s); 
-      if (titleDescMatch) {
-        const title = titleDescMatch[1].trim(); 
-        const description = titleDescMatch[2].trim(); 
-        if (title) {
-            elements.push(
-              <div key={`li-bold-${i}`} style={{ marginLeft }} className="flex text-sm my-1.5">
-                 <span className="text-primary mr-2 mt-1 shrink-0">&#8226;</span>
-                <div>
-                    <span className="font-semibold text-primary">{title}:</span>
-                    {description && <span> {description}</span>}
-                </div>
-              </div>
-            );
-        }
-        continue;
-      }
-
-      const regularItemText = itemContent.trim();
-      if (regularItemText) {
-        elements.push(
-          <div key={`li-reg-${i}`} style={{ marginLeft }} className="flex items-start text-sm my-1.5">
-            <span className="text-primary mr-2 mt-1 shrink-0">&#8226;</span>
-            <span className="flex-1">{regularItemText}</span>
-          </div>
-        );
-      }
-      continue;
-    }
-    
-    // Default: render as a paragraph
-    if (trimmedLine) {
-        elements.push(<p key={`p-${i}`} className="text-sm my-2 leading-relaxed">{trimmedLine}</p>);
+      buffer = line;
+    } else {
+      buffer += line;
     }
   }
+  if (buffer.trim()) {
+      if (buffer.match(/^\n\s*[-*]\s+/)) {
+           // It's a list item
+            const itemText = buffer.replace(/^\n\s*[-*]\s+/, '').trim();
+            const titleDescMatch = itemText.match(/^([A-Za-z\s()0-9.-]+):\s*(.*)/s);
+            if (titleDescMatch) {
+                 elements.push(
+                    <div key={`item-${elements.length}`} className="bg-card p-3 rounded-lg shadow-sm">
+                       <p className="font-bold text-md text-primary">{titleDescMatch[1].trim()}</p>
+                       <p className="text-sm text-muted-foreground">{titleDescMatch[2].trim()}</p>
+                    </div>
+                 );
+            } else {
+                 elements.push(
+                    <div key={`item-${elements.length}`} className="bg-card p-3 rounded-lg shadow-sm">
+                       <p className="text-md text-foreground">{itemText}</p>
+                    </div>
+                 );
+            }
+      } else {
+          // It's a paragraph
+          elements.push(<p key={`p-${elements.length}`} className="text-sm my-2 leading-relaxed">{buffer.trim()}</p>);
+      }
+  }
+
   return elements.filter(el => el !== null);
 };
-
 
 export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps) {
   const { dietPlan } = dietPlanOutput;
@@ -140,67 +105,76 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
     }
   }, [isCopied]);
 
-  const majorHeadingsRegex = /\n?(?=\*\*.*(?:Morning|Midday|Night|Snacks|Shopping List|Important Considerations).*\*\*)/i;
+  // Regex to split by the main sections, but keep the delimiter
+  const majorHeadingsRegex = /(\n?(?=\*\*(?:🌅|🌞|🌙|snacks|shopping list|important considerations).*?:\*\*))/i;
   const sections = dietPlan.split(majorHeadingsRegex).filter(s => s && s.trim() !== '');
+  
+  // The first section might be an introduction before any major headings.
+  const introSection = sections.length > 0 && !sections[0].startsWith('**') ? sections.shift() : null;
+
+  const firstMealSection = sections.find(s => s.toLowerCase().includes('breakfast'))?.split('\n')[0] || sections[0]?.split('\n')[0] || 'intro';
 
   return (
-    <Card id="dietPlanCardPrintable" className="mt-8 w-full max-w-3xl mx-auto shadow-xl">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-2xl">
-          <UtensilsCrossed className="text-primary" />
+    <Card id="dietPlanCardPrintable" className="mt-8 w-full max-w-3xl mx-auto shadow-xl border-0 bg-transparent">
+      <CardHeader className="text-center px-2">
+         <div className="inline-flex items-center justify-center bg-primary/10 p-3 rounded-full mb-4 mx-auto w-fit">
+            <UtensilsCrossed className="w-8 h-8 text-primary" />
+        </div>
+        <CardTitle className="text-3xl font-bold">
           Your Personalized Diet Plan
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="text-md max-w-lg mx-auto">
           Here is your AI-generated diet plan. Remember to consult with a healthcare professional before making significant dietary changes.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <ScrollArea className="h-[500px] w-full p-4 border rounded-md bg-card print-expandable-scroll-area">
-          {sections.map((sectionText, sectionIndex) => {
-            const trimmedSectionText = sectionText.trim();
-            if (!trimmedSectionText) return null;
-
-            const sectionLines = trimmedSectionText.split('\n');
-            let sectionTitle = '';
-            let contentForRenderer = trimmedSectionText;
-
-            if (sectionLines[0].match(/^\*\*(🌅 Morning \(Breakfast\)|🌞 Midday \(Lunch\)|🌙 Night \(Dinner\)|Snacks|Shopping List|Important Considerations):\*\*/i)) {
-              sectionTitle = sectionLines[0].replace(/\*\*/g, '').replace(/:$/, '');
-              contentForRenderer = sectionLines.slice(1).join('\n');
-            } else {
-               contentForRenderer = trimmedSectionText;
-            }
-            
-            const renderedContent = renderDietPlanContent(contentForRenderer);
-
-            if (!sectionTitle && renderedContent.length === 0) {
-                return null;
-            }
-
-            return (
-              <div key={`${sectionIndex}-${sectionTitle}`} className="mb-6">
-                {sectionTitle && (
-                  <h3 className="font-bold text-xl md:text-2xl text-primary mb-3 border-b-2 border-primary pb-2">
-                    {sectionTitle}
-                  </h3>
-                )}
-                <div className="space-y-1 pl-2"> 
-                  {renderedContent}
+      <CardContent className="px-2">
+         {introSection && (
+            <div className="bg-card p-4 rounded-lg shadow-sm mb-4">
+                <h3 className="flex items-center gap-2 text-lg font-semibold text-primary mb-2">
+                    <Leaf className="w-5 h-5" />
+                    General Advice
+                </h3>
+                <div className="text-sm whitespace-pre-line leading-relaxed text-muted-foreground">
+                    {renderSectionContent(introSection)}
                 </div>
-              </div>
-            );
-          })}
-        </ScrollArea>
-        <Alert variant="default" className="mt-6">
-          <Info className="h-4 w-4" />
-          <AlertTitle>Pro Tip!</AlertTitle>
-          <AlertDescription>
-            Writing down your diet plan can help you stay on track with your meals and goals!
-          </AlertDescription>
-        </Alert>
+            </div>
+         )}
+
+         <Accordion type="single" collapsible defaultValue={firstMealSection.trim()} className="w-full">
+            {sections.map((sectionText, index) => {
+                 const sectionLines = sectionText.trim().split('\n');
+                 const titleLine = sectionLines.shift()?.replace(/\*\*/g, '').replace(/:$/, '') || '';
+                 const content = sectionLines.join('\n');
+                 const renderedContent = renderSectionContent(content);
+
+                 if (!titleLine) return null;
+
+                 return (
+                    <AccordionItem value={titleLine} key={`${index}-${titleLine}`} className="border-b-0 mb-2">
+                        <AccordionTrigger className="py-3 px-4 rounded-lg bg-card text-foreground shadow-sm hover:no-underline data-[state=open]:bg-primary/10 data-[state=open]:shadow-md">
+                            <div className="flex items-center justify-between w-full">
+                                <h4 className="font-bold text-lg">{titleLine}</h4>
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="pt-2 pb-0">
+                             <div className="space-y-2 pt-2">
+                               {renderedContent}
+                             </div>
+                        </AccordionContent>
+                    </AccordionItem>
+                 );
+            })}
+         </Accordion>
       </CardContent>
-      <CardFooter className="justify-end pt-4">
-         <Button onClick={handleCopyToClipboard} variant="outline" className="print-hide-button">
+      <CardFooter className="flex-col gap-4 pt-4 px-2">
+         <Alert variant="default" className="w-full">
+            <Info className="h-4 w-4" />
+            <AlertTitle>Disclaimer</AlertTitle>
+            <AlertDescription>
+                This diet plan is AI-generated. Always consult with a healthcare professional before making significant dietary changes.
+            </AlertDescription>
+         </Alert>
+         <Button onClick={handleCopyToClipboard} variant="outline" className="w-full print-hide-button">
           {isCopied ? <Check className="mr-2 h-4 w-4 text-green-500" /> : <Copy className="mr-2 h-4 w-4" />}
           {isCopied ? 'Copied!' : 'Copy Plan'}
         </Button>
@@ -208,5 +182,3 @@ export default function DietPlanDisplay({ dietPlanOutput }: DietPlanDisplayProps
     </Card>
   );
 }
-
-    
