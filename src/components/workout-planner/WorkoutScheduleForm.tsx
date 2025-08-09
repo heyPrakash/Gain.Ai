@@ -118,31 +118,6 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
 
               <FormField
                 control={form.control}
-                name="location"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Workout Location</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select your workout location" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {workoutLocations.map(location => (
-                            <SelectItem key={location} value={location} className="capitalize">
-                              {location}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
                 name="strengthLevel"
                 render={({ field }) => (
                   <FormItem>
@@ -165,6 +140,35 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
                   </FormItem>
                 )}
               />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+               <FormField
+                  control={form.control}
+                  name="location"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Workout Location</FormLabel>
+                       <FormControl>
+                         <RadioGroup
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          className="flex space-x-4 pt-2"
+                        >
+                          {workoutLocations.map((location) => (
+                            <FormItem key={location} className="flex items-center space-x-2 space-y-0">
+                              <FormControl>
+                                <RadioGroupItem value={location} />
+                              </FormControl>
+                              <FormLabel className="font-normal capitalize">{location}</FormLabel>
+                            </FormItem>
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               
               <FormField
                 control={form.control}
