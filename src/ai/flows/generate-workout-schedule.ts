@@ -36,7 +36,7 @@ const prompt = ai.definePrompt({
   - Gender: {{{gender}}}
 
   Output Requirements:
-  1.  **Schedule Title:** A catchy and descriptive title for the weekly plan (e.g., "4-Day Muscle Building Split").
+  1.  **Schedule Title:** A catchy and descriptive title for the weekly plan (e.g., "The Shredinator: 6-Day Gym Fat Loss Plan").
   2.  **Weekly Schedule:**
       *   Provide a plan for all 7 days of the week, from Monday to Sunday.
       *   Training days should be distributed logically throughout the week. Days the user cannot train must be 'Rest' days.
@@ -44,7 +44,7 @@ const prompt = ai.definePrompt({
       *   For each training day, list 4-6 exercises. For each exercise, provide the exercise name, sets, and reps. Do not provide rest times.
       *   For 'Rest' days, the 'exercises' array should be empty.
       *   Tailor exercises based on the 'Workout Location'. For 'home', prioritize bodyweight or minimal equipment exercises. For 'gym', assume access to standard gym equipment.
-  3.  **Notes:** Provide brief but important notes on progressive overload, warm-ups, or cool-downs.
+  3.  **Notes:** Provide 2-3 brief but important notes on progressive overload, warm-ups, or cool-downs.
   4.  **Disclaimer:** Include the provided safety disclaimer verbatim.
 
   Adapt the workout split based on the 'Days Available':
