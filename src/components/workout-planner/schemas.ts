@@ -2,26 +2,23 @@
 import { z } from 'zod';
 
 // Define base Zod schemas here, these are the source of truth for input validation
-export const FitnessGoalSchema = z.enum(['muscle gain', 'fat loss', 'strength', 'general fitness']);
-export const StrengthLevelSchema = z.enum(['beginner', 'intermediate', 'advanced']);
-export const DaysAvailableSchema = z.coerce.number().min(3).max(6);
+export const BodyPartSchema = z.enum(['chest', 'legs', 'arms', 'abs', 'back', 'shoulders'], { required_error: "Please select a body part to train."});
+export const TimeAvailableSchema = z.coerce.number().min(10, "Workout must be at least 10 minutes.").max(120, "Workout cannot exceed 120 minutes.");
+export const FitnessLevelSchema = z.enum(['beginner', 'intermediate', 'advanced'], { required_error: "Please select your fitness level."});
 export const WorkoutLocationSchema = z.enum(['gym', 'home'], { required_error: "Workout location is required." });
-export const GenderSchema = z.enum(['male', 'female'], { required_error: "Gender is required." });
+
 
 // Export arrays for dropdown options if needed by the UI
-export const fitnessGoals = FitnessGoalSchema.options;
-export const strengthLevels = StrengthLevelSchema.options;
-export const daysAvailableOptions = [3, 4, 5, 6] as const;
+export const bodyParts = BodyPartSchema.options;
+export const fitnessLevels = FitnessLevelSchema.options;
 export const workoutLocations = WorkoutLocationSchema.options;
-export const genders = GenderSchema.options;
 
 
 export const workoutScheduleFormSchema = z.object({
-  fitnessGoal: FitnessGoalSchema.describe('The primary fitness goal (e.g., muscle gain, fat loss, strength, general fitness).'),
-  strengthLevel: StrengthLevelSchema.describe('The user\'s current strength level (beginner, intermediate, advanced).'),
-  daysAvailable: DaysAvailableSchema.describe('Number of days per week the user can work out (e.g., 3, 4, 5, or 6).'),
+  bodyPart: BodyPartSchema.describe('The body part the user wants to train.'),
+  timeAvailable: TimeAvailableSchema.describe('The time the user has available for the workout in minutes.'),
+  fitnessLevel: FitnessLevelSchema.describe("The user's current fitness level (beginner, intermediate, advanced)."),
   workoutLocation: WorkoutLocationSchema.describe('The preferred location for workouts (gym or home).'),
-  gender: GenderSchema.describe('The gender of the user.'),
 });
 
 export type WorkoutScheduleFormValues = z.infer<typeof workoutScheduleFormSchema>;

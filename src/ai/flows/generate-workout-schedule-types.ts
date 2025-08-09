@@ -11,19 +11,15 @@ export type GenerateWorkoutScheduleInput = WorkoutScheduleFormValues;
 // Schemas for the AI output structure
 const WorkoutExerciseSchema = z.object({
   name: z.string().describe('Name of the exercise.'),
-  setsAndReps: z.string().optional().describe('Recommended sets and repetitions (e.g., 3 sets of 8-12 reps).'),
-});
-
-const DailyWorkoutSchema = z.object({
-  dayName: z.string().describe('Day of the week or workout day number (e.g., Monday, Day 1).'),
-  focus: z.string().describe('Main muscle groups or focus for the day (e.g., Chest + Triceps, Full Body, Upper Body).'),
-  exercises: z.array(WorkoutExerciseSchema).min(3).max(5).describe('List of 3-5 exercises for the day.'),
+  sets: z.string().describe('Recommended number of sets (e.g., "3", "4").'),
+  reps: z.string().describe('Recommended repetitions per set (e.g., "8-12", "15").'),
+  rest: z.string().describe('Recommended rest time between sets (e.g., "60-90s", "2 minutes").'),
 });
 
 export const GenerateWorkoutScheduleOutputSchema = z.object({
-  scheduleTitle: z.string().describe('A catchy and descriptive title for the workout schedule.'),
-  weeklySchedule: z.array(DailyWorkoutSchema).describe('The day-by-day workout split for the week. Ensure the number of workout days matches the "daysAvailable" input.'),
-  recoveryTips: z.string().describe('General recovery tips, including rest day advice and importance of proper form, warm-up, and cool-down.'),
-  disclaimer: z.string().default("Always consult with a healthcare professional or certified personal trainer before starting any new workout program, especially if you have pre-existing health conditions. Proper form is crucial to prevent injuries. Listen to your body and adjust as needed.").describe("Important safety disclaimer to include verbatim.")
+  workoutTitle: z.string().describe('A catchy and descriptive title for the workout session.'),
+  exercises: z.array(WorkoutExerciseSchema).min(3).max(7).describe('List of 3-7 exercises for the session.'),
+  notes: z.string().optional().describe('Important notes on form, intensity, or how to perform the workout.'),
+  disclaimer: z.string().default("Always consult with a healthcare professional or certified personal trainer before starting any new workout program. Proper form is crucial to prevent injuries. Listen to your body and adjust as needed.").describe("Important safety disclaimer to include verbatim.")
 });
 export type GenerateWorkoutScheduleOutput = z.infer<typeof GenerateWorkoutScheduleOutputSchema>;
