@@ -1,9 +1,9 @@
 
 'use server';
 /**
- * @fileOverview An AI agent for generating single workout sessions.
+ * @fileOverview An AI agent for generating weekly workout schedules.
  *
- * - generateWorkoutSchedule - A function to generate a workout session.
+ * - generateWorkoutSchedule - A function to generate a full weekly workout plan.
  */
 
 import {ai} from '@/ai/genkit';
@@ -26,28 +26,32 @@ const prompt = ai.definePrompt({
   input: {schema: GenerateWorkoutScheduleInputSchema},
   output: {schema: GenerateWorkoutScheduleOutputSchema},
   prompt: `You are an expert fitness coach and personal trainer.
-  Create a single, targeted workout session for a user based on the body part they want to train, the time they have available, their fitness level, and where they are working out.
+  Create a comprehensive 7-day workout schedule for a user based on their fitness goals, experience level, workout location, gender, and the number of days they can train per week.
 
   User Details:
-  - Body Part to Train: {{{bodyPart}}}
-  - Time Available: {{{timeAvailable}}} minutes
-  - Fitness Level: {{{fitnessLevel}}}
-  - Workout Location: {{{workoutLocation}}}
+  - Primary Goal: {{{goal}}}
+  - Strength Level: {{{strengthLevel}}}
+  - Days Available per Week: {{{daysAvailable}}}
+  - Workout Location: {{{location}}}
+  - Gender: {{{gender}}}
 
   Output Requirements:
-  1.  **Workout Title:** A catchy and descriptive title for the workout session (e.g., "30-Minute Power Chest Workout").
-  2.  **Exercises:**
-      *   Provide a list of 3-7 exercises suitable for the user's inputs.
-      *   For each exercise, you MUST provide the exercise name, the number of sets, the number of reps per set, and the rest time between sets.
-      *   Prioritize high-intensity or compound exercises if the time is short to maximize effectiveness.
-      *   Tailor exercises based on the 'Workout Location'. For 'home', prioritize bodyweight exercises or suggest common household items as alternatives if no equipment is mentioned. For 'gym', assume access to standard gym equipment.
-  3.  **Notes:** Provide brief but important notes on form, intensity, or a suggested warm-up/cool-down if relevant.
+  1.  **Schedule Title:** A catchy and descriptive title for the weekly plan (e.g., "4-Day Muscle Building Split").
+  2.  **Weekly Schedule:**
+      *   Provide a plan for all 7 days of the week, from Monday to Sunday.
+      *   Training days should be distributed logically throughout the week. Days the user cannot train must be 'Rest' days.
+      *   For each day, specify the 'focus' (e.g., "Chest & Triceps," "Leg Day," "Full Body," "Cardio & Abs," or "Rest").
+      *   For each training day, list 4-6 exercises. For each exercise, provide the exercise name, sets, and reps. Do not provide rest times.
+      *   For 'Rest' days, the 'exercises' array should be empty.
+      *   Tailor exercises based on the 'Workout Location'. For 'home', prioritize bodyweight or minimal equipment exercises. For 'gym', assume access to standard gym equipment.
+  3.  **Notes:** Provide brief but important notes on progressive overload, warm-ups, or cool-downs.
   4.  **Disclaimer:** Include the provided safety disclaimer verbatim.
 
-  Make sure the plan is well-balanced, safe, and effective for the user's fitness level and available time.
-  - For 'beginner', focus on fundamental movements.
-  - For 'intermediate', use a mix of compound and isolation exercises.
-  - For 'advanced', suggest more complex movements and techniques.
+  Adapt the workout split based on the 'Days Available':
+  - 3 days: Suggest a full-body routine.
+  - 4 days: Suggest an upper/lower body split.
+  - 5 days: Suggest a 'bro split' (each day focuses on a different muscle group).
+  - 6 days: Suggest a push/pull/legs split.
   `,
 });
 

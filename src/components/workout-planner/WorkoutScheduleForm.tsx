@@ -8,12 +8,11 @@ import { useMutation } from '@tanstack/react-query';
 import { Loader2, Dumbbell } from 'lucide-react';
 
 import type { GenerateWorkoutScheduleOutput } from '@/ai/flows/generate-workout-schedule-types';
-import { workoutScheduleFormSchema, type WorkoutScheduleFormValues, bodyParts, fitnessLevels, workoutLocations } from './schemas';
+import { workoutScheduleFormSchema, type WorkoutScheduleFormValues, fitnessGoals, strengthLevels, workoutLocations, daysAvailable } from './schemas';
 import { handleGenerateWorkoutScheduleAction } from '@/lib/actions';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -37,10 +36,11 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
   const form = useForm<WorkoutScheduleFormValues>({
     resolver: zodResolver(workoutScheduleFormSchema),
     defaultValues: {
-      bodyPart: undefined,
-      timeAvailable: 30,
-      fitnessLevel: 'intermediate',
-      workoutLocation: undefined,
+      goal: undefined,
+      strengthLevel: 'intermediate',
+      location: undefined,
+      gender: undefined,
+      daysAvailable: '4',
     },
   });
 
@@ -54,16 +54,16 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
     onSuccess: (data) => {
       onScheduleGenerated(data);
       toast({
-        title: "Workout Generated!",
-        description: "Your personalized workout session is ready.",
+        title: "Workout Schedule Generated!",
+        description: "Your personalized weekly workout plan is ready.",
         variant: "default",
       });
     },
     onError: (error) => {
       setError(error.message || "An unexpected error occurred.");
       toast({
-        title: "Error Generating Workout",
-        description: error.message || "Could not generate workout. Please try again.",
+        title: "Error Generating Schedule",
+        description: error.message || "Could not generate workout schedule. Please try again.",
         variant: "destructive",
       });
     },
@@ -84,68 +84,136 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
           Your Workout Preferences
         </CardTitle>
         <CardDescription>
-          Tell us what you want to train today, and we'll generate a targeted workout session.
+          Tell us about your goals, and we'll generate a personalized weekly workout schedule for you.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField
-                  control={form.control}
-                  name="bodyPart"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Body Part to Train</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormField
+                control={form.control}
+                name="goal"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Primary Fitness Goal</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select your main fitness goal" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {fitnessGoals.map(goal => (
+                          <SelectItem key={goal} value={goal} className="capitalize">
+                            {goal}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="location"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Workout Location</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a body part" />
+                            <SelectValue placeholder="Select your workout location" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {bodyParts.map(part => (
-                            <SelectItem key={part} value={part} className="capitalize">
-                              {part.charAt(0).toUpperCase() + part.slice(1)}
+                          {workoutLocations.map(location => (
+                            <SelectItem key={location} value={location} className="capitalize">
+                              {location}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                 <FormField
-                  control={form.control}
-                  name="timeAvailable"
-                  render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>Time Available (minutes)</FormLabel>
-                        <FormControl>
-                            <Input type="number" placeholder="e.g., 45" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="strengthLevel"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Strength Level</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select your current strength level" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {strengthLevels.map(level => (
+                          <SelectItem key={level} value={level} className="capitalize">
+                            {level}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Gender</FormLabel>
+                     <FormControl>
+                       <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className="flex space-x-4 pt-2"
+                      >
+                        <FormItem className="flex items-center space-x-2 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="male" />
+                          </FormControl>
+                          <FormLabel className="font-normal">Male</FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-2 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="female" />
+                          </FormControl>
+                          <FormLabel className="font-normal">Female</FormLabel>
+                        </FormItem>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
             
             <FormField
               control={form.control}
-              name="fitnessLevel"
+              name="daysAvailable"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Fitness Level</FormLabel>
+                  <FormLabel>Days Available for Workout (per week)</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select your current fitness level" />
+                        <SelectValue placeholder="Select how many days you can train" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {fitnessLevels.map(level => (
-                        <SelectItem key={level} value={level} className="capitalize">
-                           {level.charAt(0).toUpperCase() + level.slice(1)}
+                      {daysAvailable.map(day => (
+                        <SelectItem key={day} value={day}>
+                          {`${day} days`}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -155,43 +223,14 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="workoutLocation"
-              render={({ field }) => (
-                <FormItem className="space-y-3">
-                  <FormLabel>Workout Location</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex flex-row space-x-4 pt-2"
-                    >
-                      {workoutLocations.map(location => (
-                        <FormItem key={location} className="flex items-center space-x-2 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value={location} />
-                          </FormControl>
-                          <FormLabel className="font-normal capitalize">
-                            {location}
-                          </FormLabel>
-                        </FormItem>
-                      ))}
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <Button type="submit" disabled={mutation.isPending} className="w-full md:w-auto">
               {mutation.isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Generating Workout...
+                  Generating Schedule...
                 </>
               ) : (
-                "Generate My Workout"
+                "Generate My Workout Schedule"
               )}
             </Button>
           </form>
