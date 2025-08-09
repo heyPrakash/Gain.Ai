@@ -25,4 +25,3 @@ export const workoutScheduleFormSchema = z.object({
 });
 
 export type WorkoutScheduleFormValues = z.infer<typeof workoutScheduleFormSchema>;
-

@@ -27,4 +27,3 @@ export const GenerateWorkoutScheduleOutputSchema = z.object({
   disclaimer: z.string().default("Always consult with a healthcare professional or certified personal trainer before starting any new workout program, especially if you have pre-existing health conditions. Proper form is crucial to prevent injuries. Listen to your body and adjust as needed.").describe("Important safety disclaimer to include verbatim.")
 });
 export type GenerateWorkoutScheduleOutput = z.infer<typeof GenerateWorkoutScheduleOutputSchema>;
-

@@ -105,4 +105,3 @@ const generateWorkoutScheduleFlow = ai.defineFlow(
     }
   }
 );
-
