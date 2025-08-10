@@ -9,7 +9,7 @@ export default function Footer() {
         <p>&copy; {currentYear} Gain. All rights reserved.</p>
         <div className="flex items-center justify-center gap-2 mt-1">
           <span>Powered by</span>
-          <a href="#" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 font-semibold text-foreground hover:text-primary transition-colors">
+          <a href="https://anthora0.framer.website/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 font-semibold text-foreground hover:text-primary transition-colors">
             <AnthoraLogo className="h-4 w-4" />
             <span>Anthora</span>
           </a>
