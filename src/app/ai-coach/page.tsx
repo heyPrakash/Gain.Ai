@@ -1,5 +1,7 @@
-import ChatCoachSection from '@/components/sections/ChatCoachSection';
+
+import ChatCoach from '@/components/chat-coach/ChatCoach';
 
 export default function AiCoachPage() {
-  return <ChatCoachSection />;
+  // Directly rendering ChatCoach for a full-page experience
+  return <ChatCoach />;
 }

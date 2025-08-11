@@ -95,7 +95,7 @@ export default function RootLayout({
 
               <SidebarInset className="flex flex-col min-h-screen">
                 <Header />
-                <main className="flex-grow p-4 md:p-6 lg:p-8">
+                <main className="flex-grow flex flex-col p-0 md:p-0 lg:p-0 has-[[data-page=chat]]:p-0">
                   {children}
                 </main>
                 <Footer />

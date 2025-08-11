@@ -86,8 +86,9 @@ export default function ChatCoach() {
   }, []);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-150px)] w-full max-w-3xl mx-auto bg-background rounded-lg shadow-lg border">
-        <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
+    <div className="flex flex-col h-full w-full">
+      <div className="flex-1 flex flex-col items-center overflow-hidden">
+        <ScrollArea className="flex-1 w-full max-w-3xl p-4" ref={scrollAreaRef}>
              <div className="space-y-6">
             {messages.map((message) => (
               <div
@@ -144,7 +145,8 @@ export default function ChatCoach() {
              )}
           </div>
         </ScrollArea>
-        <div className="p-4 border-t bg-background">
+      </div>
+        <div className="p-4 bg-background/50 backdrop-blur-sm w-full max-w-3xl mx-auto">
              {messages.length === 0 && !mutation.isPending && (
                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3">
                      {suggestedPrompts.map((prompt, i) => (
