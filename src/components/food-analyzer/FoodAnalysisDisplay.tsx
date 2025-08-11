@@ -94,9 +94,9 @@ export default function FoodAnalysisDisplay({ analysisOutput }: FoodAnalysisDisp
           </Table>
         </ScrollArea>
         
-        <Alert variant="default" className="mt-6">
-          <Info className="h-4 w-4" />
-          <AlertTitle>Fitness Summary</AlertTitle>
+        <Alert variant="default" className="mt-6 bg-primary/10 border-primary/20">
+          <Info className="h-4 w-4 text-primary" />
+          <AlertTitle className="text-primary">Fitness Summary</AlertTitle>
           <AlertDescription>
             {fitnessSummary || "A balanced meal is key to achieving your fitness goals."}
           </AlertDescription>
