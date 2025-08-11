@@ -3,24 +3,28 @@
 import type { FormEvent } from 'react';
 import { useState, useRef, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { Send, User, Sparkles, Loader2, MessageSquareHeart } from 'lucide-react';
+import { Send, User, Sparkles, Loader2, ArrowUp } from 'lucide-react';
 
 import { handleAiChatCoachAction } from '@/lib/actions';
 import type { AiChatCoachInput } from '@/ai/flows/ai-chat-coach-types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
-
 
 interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
 }
+
+const suggestedPrompts = [
+    "How can I improve my deadlift form?",
+    "Give me a quick 15-minute home workout.",
+    "What are some healthy post-workout snacks?",
+];
 
 export default function ChatCoach() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -43,21 +47,33 @@ export default function ChatCoach() {
         description: error.message || "The AI coach is currently unavailable. Please try again later.",
         variant: "destructive",
       });
+      // Remove the optimistic user message if the API call fails
+      setMessages(prev => prev.slice(0, -1));
     },
   });
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!input.trim()) return;
+  const handleSendMessage = (messageContent: string) => {
+    if (!messageContent.trim()) return;
 
-    const newUserMessage: Message = { id: String(Date.now()), role: 'user', content: input };
+    const newUserMessage: Message = { id: String(Date.now()), role: 'user', content: messageContent };
     setMessages((prevMessages) => [...prevMessages, newUserMessage]);
 
-    const chatHistoryForAI = messages.map(msg => ({ role: msg.role, content: msg.content }));
+    const chatHistoryForAI = [...messages, newUserMessage].map(msg => ({ role: msg.role, content: msg.content }));
     
-    mutation.mutate({ message: input, chatHistory: chatHistoryForAI });
+    mutation.mutate({ message: messageContent, chatHistory: chatHistoryForAI });
     setInput('');
+  }
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handleSendMessage(input);
   };
+  
+  const handlePromptClick = (prompt: string) => {
+    setInput(prompt);
+    // Automatically send the message
+    handleSendMessage(prompt);
+  }
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -70,27 +86,19 @@ export default function ChatCoach() {
   }, []);
 
   return (
-    <Card className="w-full max-w-2xl mx-auto shadow-xl">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-2xl">
-          <MessageSquareHeart className="text-primary"/>
-          AI Fitness Coach
-        </CardTitle>
-        <CardDescription>Chat with your AI coach for fitness advice, motivation, and support.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ScrollArea className="h-[400px] w-full p-4 border rounded-md" ref={scrollAreaRef}>
-          <div className="space-y-4">
+    <div className="flex flex-col h-[calc(100vh-150px)] w-full max-w-3xl mx-auto bg-background rounded-lg shadow-lg border">
+        <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
+             <div className="space-y-6">
             {messages.map((message) => (
               <div
                 key={message.id}
                 className={cn(
-                  "flex items-end gap-2",
+                  "flex items-start gap-3",
                   message.role === 'user' ? "justify-end" : "justify-start"
                 )}
               >
                 {message.role === 'assistant' && (
-                  <Avatar className="h-8 w-8">
+                  <Avatar className="h-8 w-8 border">
                     <AvatarFallback className="bg-primary text-primary-foreground">
                       <Sparkles className="h-5 w-5" />
                     </AvatarFallback>
@@ -98,16 +106,16 @@ export default function ChatCoach() {
                 )}
                 <div
                   className={cn(
-                    "max-w-[70%] rounded-lg p-3 text-sm shadow",
+                    "max-w-[75%] rounded-2xl p-3 text-sm shadow-sm",
                     message.role === 'user'
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-foreground" 
+                      ? "bg-primary text-primary-foreground rounded-br-none"
+                      : "bg-muted text-foreground rounded-bl-none" 
                   )}
                 >
                   {message.content}
                 </div>
                 {message.role === 'user' && (
-                  <Avatar className="h-8 w-8">
+                  <Avatar className="h-8 w-8 border">
                     <AvatarFallback className="bg-secondary text-secondary-foreground">
                       <User className="h-5 w-5" />
                     </AvatarFallback>
@@ -116,37 +124,61 @@ export default function ChatCoach() {
               </div>
             ))}
             {mutation.isPending && (
-              <div className="flex items-end gap-2 justify-start">
-                 <Avatar className="h-8 w-8">
+              <div className="flex items-end gap-3 justify-start">
+                 <Avatar className="h-8 w-8 border">
                     <AvatarFallback className="bg-primary text-primary-foreground">
                       <Sparkles className="h-5 w-5" />
                     </AvatarFallback>
                   </Avatar>
-                <div className="max-w-[70%] rounded-lg p-3 text-sm shadow bg-muted text-muted-foreground">
+                <div className="max-w-[75%] rounded-2xl p-3 text-sm shadow-sm bg-muted text-muted-foreground rounded-bl-none">
                   <Loader2 className="h-4 w-4 animate-spin inline-block" /> Typing...
                 </div>
               </div>
             )}
+             {messages.length === 0 && !mutation.isPending && (
+                <div className="text-center text-muted-foreground pt-16">
+                    <Sparkles className="mx-auto h-12 w-12 text-primary/30" />
+                    <h3 className="text-lg font-semibold mt-4">Ask me anything about fitness!</h3>
+                    <p>I can help you with workout routines, nutrition advice, and more.</p>
+                </div>
+             )}
           </div>
         </ScrollArea>
-      </CardContent>
-      <CardFooter>
-        <form onSubmit={handleSubmit} className="flex w-full items-center gap-2">
-          <Input
-            ref={inputRef}
-            type="text"
-            placeholder="Ask your AI coach..."
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="flex-1"
-            disabled={mutation.isPending}
-          />
-          <Button type="submit" size="icon" disabled={mutation.isPending || !input.trim()}>
-            {mutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-            <span className="sr-only">Send message</span>
-          </Button>
-        </form>
-      </CardFooter>
-    </Card>
+        <div className="p-4 border-t bg-background">
+             {messages.length === 0 && !mutation.isPending && (
+                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3">
+                     {suggestedPrompts.map((prompt, i) => (
+                         <Button
+                            key={i}
+                            variant="outline"
+                            className="text-left h-auto py-2"
+                            onClick={() => handlePromptClick(prompt)}
+                         >
+                            {prompt}
+                         </Button>
+                     ))}
+                 </div>
+             )}
+             <form onSubmit={handleSubmit} className="flex w-full items-center gap-2 relative">
+                <Input
+                    ref={inputRef}
+                    type="text"
+                    placeholder="Ask anything..."
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    className="flex-1 rounded-full pr-12 h-12"
+                    disabled={mutation.isPending}
+                />
+                <Button 
+                    type="submit" 
+                    size="icon"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full w-9 h-9"
+                    disabled={mutation.isPending || !input.trim()}>
+                    {mutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowUp className="h-4 w-4" />}
+                    <span className="sr-only">Send message</span>
+                </Button>
+            </form>
+        </div>
+    </div>
   );
 }
