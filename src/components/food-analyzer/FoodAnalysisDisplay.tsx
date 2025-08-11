@@ -6,14 +6,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter as TableFoot } from "@/components/ui/table";
-import { PieChart, Flame, Beef, Droplets, Wheat, Info } from 'lucide-react';
+import { PieChart, Flame, Beef, Droplets, Wheat, Info, HeartPulse } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils';
 
 interface FoodAnalysisDisplayProps {
   analysisOutput: AnalyzeFoodImageOutput;
 }
 
 export default function FoodAnalysisDisplay({ analysisOutput }: FoodAnalysisDisplayProps) {
-  const { foodItems, totalCalories, totalProtein, totalFats, totalCarbohydrates, fitnessSummary } = analysisOutput;
+  const { foodItems, totalCalories, totalProtein, totalFats, totalCarbohydrates, fitnessSummary, healthScore, healthSummary } = analysisOutput;
+
+  const getHealthScoreColor = (score: number) => {
+    if (score >= 75) return "bg-green-500"; // Healthy
+    if (score >= 40) return "bg-yellow-500"; // Moderate
+    return "bg-red-500"; // Unhealthy
+  };
 
   return (
     <Card className="mt-8 w-full max-w-3xl mx-auto shadow-xl">
@@ -27,6 +35,17 @@ export default function FoodAnalysisDisplay({ analysisOutput }: FoodAnalysisDisp
         </CardDescription>
       </CardHeader>
       <CardContent>
+        <div className="mb-6 space-y-4">
+            <div className="p-4 bg-muted rounded-lg shadow-sm">
+                <h4 className="text-md font-semibold text-center mb-2">Health Score</h4>
+                <div className="flex items-center gap-4">
+                    <Progress value={healthScore} className={cn("h-3", getHealthScoreColor(healthScore))} />
+                    <span className="text-xl font-bold text-primary">{healthScore}%</span>
+                </div>
+                <p className="text-sm text-muted-foreground text-center mt-2">{healthSummary || "A general overview of the meal's healthiness."}</p>
+            </div>
+        </div>
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-center">
             <div className="p-3 bg-muted rounded-lg shadow-sm">
                 <div className="flex items-center justify-center gap-2">

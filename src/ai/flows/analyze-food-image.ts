@@ -36,7 +36,9 @@ Instructions:
 3.  **Calculate Nutritional Data**: For each item, provide the estimated calories, protein, fats, and carbohydrates.
 4.  **Calculate Totals**: Sum the nutritional data for all items to provide a total for the entire meal.
 5.  **Provide a Fitness Summary**: Write a brief, encouraging summary (1-2 sentences) about how this meal could fit into a fitness diet (e.g., "This looks like a great post-workout meal, high in protein to help with muscle recovery.").
-6.  **Accuracy is Key**: Be as accurate as possible. If an item is unclear or cannot be identified confidently, it's better to omit it than to provide incorrect information. If no food is detected, return empty arrays and zeros for totals.
+6.  **Calculate Health Score**: Based on the overall nutritional profile, calculate a 'healthScore' from 0 (unhealthy) to 100 (very healthy). Consider factors like balance of macronutrients, presence of vegetables, lean protein, healthy fats, and estimated processed sugars or saturated fats. A balanced meal with whole foods gets a high score; a sugary dessert gets a low score.
+7.  **Provide Health Summary**: Write a short 'healthSummary' text that justifies the score (e.g., "Excellent balance of nutrients", "A bit high in fats", "High in processed sugar").
+8.  **Accuracy is Key**: Be as accurate as possible. If an item is unclear or cannot be identified confidently, it's better to omit it than to provide incorrect information. If no food is detected, return empty arrays, zeros for totals, and a health score of 0.
 `,
 });
 

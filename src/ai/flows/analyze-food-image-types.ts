@@ -28,5 +28,7 @@ export const AnalyzeFoodImageOutputSchema = z.object({
   totalFats: z.number().describe("The total estimated fats in grams for the entire meal."),
   totalCarbohydrates: z.number().describe("The total estimated carbohydrates in grams for the entire meal."),
   fitnessSummary: z.string().describe("A brief, encouraging summary of how this meal fits into a fitness-oriented diet."),
+  healthScore: z.number().min(0).max(100).describe("A score from 0 to 100 indicating how healthy the meal is, considering macro balance, sugar, and processed ingredients."),
+  healthSummary: z.string().describe("A brief summary explaining the health score, e.g., 'Very Healthy', 'Balanced', or 'High in Sugar'."),
 });
 export type AnalyzeFoodImageOutput = z.infer<typeof AnalyzeFoodImageOutputSchema>;
