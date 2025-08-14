@@ -7,7 +7,7 @@ import {
   useSignInWithEmailAndPassword,
 } from 'react-firebase-hooks/auth';
 import { signOut, type User, signInWithPopup } from 'firebase/auth';
-import { auth, googleAuthProvider } from '@/lib/firebase/clientApp';
+import { getFirebaseAuth, googleAuthProvider } from '@/lib/firebase/clientApp';
 import type { LoginFormData, SignupFormData } from '@/components/auth/schemas';
 
 interface AuthContextType {
@@ -23,6 +23,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const auth = getFirebaseAuth(); // Get auth instance on the client
   const [user, loading, error] = useAuthState(auth);
   const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
   const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
