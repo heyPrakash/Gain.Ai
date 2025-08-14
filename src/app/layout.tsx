@@ -1,6 +1,4 @@
 
-'use client';
-
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
@@ -19,12 +17,11 @@ import {
   SidebarMenuButton,
   SidebarInset,
 } from '@/components/ui/sidebar';
-import { Home, HeartPulse, Dumbbell, MessageSquareHeart, Camera, Loader2 } from 'lucide-react';
+import { Home, HeartPulse, Dumbbell, MessageSquareHeart, Camera } from 'lucide-react';
 import { GainAppIcon } from '@/components/icons/GainAppIcon';
 import Link from 'next/link';
-import { AuthProvider, useAuth } from '@/hooks/use-auth';
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import ClientOnly from '@/components/layout/ClientOnly';
+
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -37,39 +34,6 @@ const geistMono = Geist_Mono({
 });
 
 function AppLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
-  const router = useRouter();
-  const pathname = usePathname();
-
-  useEffect(() => {
-    if (loading) return; // Wait until loading is finished
-
-    const isAuthPage = pathname === '/login' || pathname === '/signup';
-
-    if (!user && !isAuthPage) {
-      router.replace('/login');
-    } else if (user && isAuthPage) {
-      router.replace('/');
-    }
-  }, [user, loading, router, pathname]);
-
-  if (loading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-4">
-          <Dumbbell className="h-16 w-16 animate-spin text-primary" />
-          <p className="text-muted-foreground">Loading Your Fitness Journey...</p>
-        </div>
-      </div>
-    );
-  }
-
-  const isAuthPage = pathname === '/login' || pathname === '/signup';
-  if (isAuthPage) {
-    return <>{children}</>;
-  }
-
-
   return (
     <SidebarProvider defaultOpen>
       <Sidebar collapsible="icon" className="border-r border-sidebar-border">
@@ -142,9 +106,9 @@ export default function RootLayout({
         )}
       >
         <QueryProvider>
-          <AuthProvider>
+          <ClientOnly>
             <AppLayout>{children}</AppLayout>
-          </AuthProvider>
+          </ClientOnly>
           <Toaster />
         </QueryProvider>
       </body>
