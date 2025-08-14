@@ -1,4 +1,3 @@
-
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
@@ -21,6 +20,10 @@ import { Home, HeartPulse, Dumbbell, MessageSquareHeart, Camera } from 'lucide-r
 import { GainAppIcon } from '@/components/icons/GainAppIcon';
 import Link from 'next/link';
 import ClientOnly from '@/components/layout/ClientOnly';
+import { AuthProvider, useAuth } from '@/hooks/use-auth';
+import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -36,6 +39,96 @@ export const metadata: Metadata = {
   title: 'Gain - AI Powered Fitness',
   description: 'Personalized AI diet plans, workout schedules, and 24/7 fitness coaching.',
 };
+
+function AppLayout({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user && pathname !== '/login' && pathname !== '/signup') {
+      router.push('/login');
+    }
+  }, [user, loading, pathname, router]);
+
+  if (loading && pathname !== '/login' && pathname !== '/signup') {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Dumbbell className="h-10 w-10 text-primary animate-spin" />
+      </div>
+    );
+  }
+  
+  if (!user && pathname !== '/login' && pathname !== '/signup') {
+      return null;
+  }
+  
+  if (user && (pathname === '/login' || pathname === '/signup')) {
+    // Redirect to home if logged in and trying to access login/signup
+     router.push('/');
+     return (
+        <div className="flex items-center justify-center min-h-screen">
+          <Dumbbell className="h-10 w-10 text-primary animate-spin" />
+        </div>
+      );
+  }
+
+  // Render login/signup pages without the main layout
+  if (!user && (pathname === '/login' || pathname === '/signup')) {
+    return <>{children}</>;
+  }
+
+  return (
+    <SidebarProvider defaultOpen>
+      <Sidebar collapsible="icon" className="border-r border-sidebar-border">
+        <SidebarHeader className="p-4">
+          <Link href="/" className="flex items-center gap-2 text-xl font-bold text-sidebar-primary hover:opacity-80 transition-opacity">
+            <GainAppIcon className="h-7 w-7" />
+            <span className="group-data-[collapsible=icon]:hidden">Gain</span>
+          </Link>
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild tooltip={{content: "Home", side: "right", align: "center"}}>
+                <Link href="/"><Home /> <span className="group-data-[collapsible=icon]:hidden">Home</span></Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+             <SidebarMenuItem>
+              <SidebarMenuButton asChild tooltip={{content: "Nutrition Snap", side: "right", align: "center"}}>
+                <Link href="/food-analyzer"><Camera /> <span className="group-data-[collapsible=icon]:hidden">Nutrition Snap</span></Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild tooltip={{content: "Diet Planner", side: "right", align: "center"}}>
+                <Link href="/diet-planner"><HeartPulse /> <span className="group-data-[collapsible=icon]:hidden">Diet Planner</span></Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild tooltip={{content: "Workout Planner", side: "right", align: "center"}}>
+                <Link href="/workout-planner"><Dumbbell /> <span className="group-data-[collapsible=icon]:hidden">Workout Planner</span></Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild tooltip={{content: "AI Coach", side: "right", align: "center"}}>
+                <Link href="/ai-coach"><MessageSquareHeart /> <span className="group-data-[collapsible=icon]:hidden">AI Coach</span></Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarContent>
+      </Sidebar>
+
+      <SidebarInset className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-grow flex flex-col p-0 md:p-0 lg:p-0 has-[[data-page=chat]]:p-0">
+          {children}
+        </main>
+        <Footer />
+      </SidebarInset>
+    </SidebarProvider>
+  );
+}
+
 
 export default function RootLayout({
   children,
@@ -53,56 +146,12 @@ export default function RootLayout({
         )}
       >
         <QueryProvider>
-          <ClientOnly>
-            <SidebarProvider defaultOpen>
-              <Sidebar collapsible="icon" className="border-r border-sidebar-border">
-                <SidebarHeader className="p-4">
-                  <Link href="/" className="flex items-center gap-2 text-xl font-bold text-sidebar-primary hover:opacity-80 transition-opacity">
-                    <GainAppIcon className="h-7 w-7" />
-                    <span className="group-data-[collapsible=icon]:hidden">Gain</span>
-                  </Link>
-                </SidebarHeader>
-                <SidebarContent>
-                  <SidebarMenu>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton asChild tooltip={{content: "Home", side: "right", align: "center"}}>
-                        <Link href="/"><Home /> <span className="group-data-[collapsible=icon]:hidden">Home</span></Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                     <SidebarMenuItem>
-                      <SidebarMenuButton asChild tooltip={{content: "Nutrition Snap", side: "right", align: "center"}}>
-                        <Link href="/food-analyzer"><Camera /> <span className="group-data-[collapsible=icon]:hidden">Nutrition Snap</span></Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton asChild tooltip={{content: "Diet Planner", side: "right", align: "center"}}>
-                        <Link href="/diet-planner"><HeartPulse /> <span className="group-data-[collapsible=icon]:hidden">Diet Planner</span></Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton asChild tooltip={{content: "Workout Planner", side: "right", align: "center"}}>
-                        <Link href="/workout-planner"><Dumbbell /> <span className="group-data-[collapsible=icon]:hidden">Workout Planner</span></Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton asChild tooltip={{content: "AI Coach", side: "right", align: "center"}}>
-                        <Link href="/ai-coach"><MessageSquareHeart /> <span className="group-data-[collapsible=icon]:hidden">AI Coach</span></Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  </SidebarMenu>
-                </SidebarContent>
-              </Sidebar>
-
-              <SidebarInset className="flex flex-col min-h-screen">
-                <Header />
-                <main className="flex-grow flex flex-col p-0 md:p-0 lg:p-0 has-[[data-page=chat]]:p-0">
-                  {children}
-                </main>
-                <Footer />
-              </SidebarInset>
-            </SidebarProvider>
-          </ClientOnly>
-          <Toaster />
+          <AuthProvider>
+            <ClientOnly>
+              <AppLayout>{children}</AppLayout>
+            </ClientOnly>
+            <Toaster />
+          </AuthProvider>
         </QueryProvider>
       </body>
     </html>
