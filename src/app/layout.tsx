@@ -1,3 +1,6 @@
+
+'use client';
+
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
@@ -35,49 +38,59 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-export const metadata: Metadata = {
-  title: 'Gain - AI Powered Fitness',
-  description: 'Personalized AI diet plans, workout schedules, and 24/7 fitness coaching.',
-};
+// Metadata can't be in a client component, but since RootLayout is separate, this is fine.
+// We are only making AppLayout a client component.
+// Note: Exporting metadata from a layout that is marked with "use client" is not supported.
+// However, we are not marking the entire file as 'use client' at the top, just the component logic that needs it.
+// The best practice is to have RootLayout as server, and AppLayout as client.
 
 function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
 
+  const isAuthPage = pathname === '/login' || pathname === '/signup';
+
   useEffect(() => {
-    if (!loading && !user && pathname !== '/login' && pathname !== '/signup') {
+    if (loading) return; // Wait until loading is finished
+
+    // If not authenticated and not on an auth page, redirect to login
+    if (!user && !isAuthPage) {
       router.push('/login');
     }
-  }, [user, loading, pathname, router]);
+    
+    // If authenticated and on an auth page, redirect to home
+    if (user && isAuthPage) {
+      router.push('/');
+    }
+  }, [user, loading, pathname, router, isAuthPage]);
 
-  if (loading && pathname !== '/login' && pathname !== '/signup') {
+
+  if (loading) {
+     return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Dumbbell className="h-10 w-10 text-primary animate-spin" />
+      </div>
+    );
+  }
+
+  // If we are on an auth page, render the children directly (the login/signup form)
+  if (isAuthPage) {
+    return <>{children}</>;
+  }
+
+  // If we are not on an auth page, but there's no user, we should have been redirected.
+  // We can return null or a loader to prevent a flash of content.
+  if (!user) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Dumbbell className="h-10 w-10 text-primary animate-spin" />
       </div>
     );
   }
-  
-  if (!user && pathname !== '/login' && pathname !== '/signup') {
-      return null;
-  }
-  
-  if (user && (pathname === '/login' || pathname === '/signup')) {
-    // Redirect to home if logged in and trying to access login/signup
-     router.push('/');
-     return (
-        <div className="flex items-center justify-center min-h-screen">
-          <Dumbbell className="h-10 w-10 text-primary animate-spin" />
-        </div>
-      );
-  }
 
-  // Render login/signup pages without the main layout
-  if (!user && (pathname === '/login' || pathname === '/signup')) {
-    return <>{children}</>;
-  }
 
+  // Render the main app layout for authenticated users
   return (
     <SidebarProvider defaultOpen>
       <Sidebar collapsible="icon" className="border-r border-sidebar-border">
@@ -129,7 +142,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-
+// This remains a server component
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -137,6 +150,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+       <head>
+        <title>Gain - AI Powered Fitness</title>
+        <meta name="description" content="Personalized AI diet plans, workout schedules, and 24/7 fitness coaching." />
+      </head>
       <body
         suppressHydrationWarning
         className={cn(
