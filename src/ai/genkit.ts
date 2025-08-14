@@ -5,26 +5,26 @@ import {googleAI} from '@genkit-ai/googleai';
 const googleApiKey = process.env.GOOGLE_API_KEY;
 
 if (!googleApiKey || googleApiKey === "YOUR_API_KEY_HERE" || googleApiKey.trim() === "") {
-  console.error(
-    "\n*********************************************************************************\n" +
-    "ERROR: GOOGLE_API_KEY is not properly configured.\n" +
-    "Please ensure GOOGLE_API_KEY is set in your .env file with a valid API key.\n" +
-    " - It should not be empty or still be 'YOUR_API_KEY_HERE'.\n" +
-    " - Make sure there are no extra spaces around the key.\n" +
-    "If you've recently updated the .env file, please restart your Next.js development server (e.g., 'npm run dev').\n" +
-    "The application's AI features will not work until this is resolved.\n" +
-    "*********************************************************************************\n"
+  // This error will be thrown during server startup (e.g., when `next dev` or `next start` runs)
+  // if the environment variable is missing. This provides a clear, immediate failure.
+  throw new Error(
+    "FATAL_ERROR: The GOOGLE_API_KEY environment variable is not set or is invalid. " +
+    "This is required for all AI features to function. " +
+    "Please add GOOGLE_API_KEY to your .env file for local development or to your Vercel/hosting provider's environment variable settings for production. " +
+    "The application cannot start without it."
   );
-} else {
-  if (process.env.NODE_ENV === 'development') {
-    console.log("INFO: GOOGLE_API_KEY seems to be loaded for Genkit. AI features should attempt to use it.");
-  }
 }
+
+// If the key exists, log a confirmation message in development to help with debugging.
+if (process.env.NODE_ENV === 'development') {
+    console.log("INFO: GOOGLE_API_KEY loaded for Genkit. AI features should be available.");
+}
+
 
 export const ai = genkit({
   plugins: [
     googleAI({
-      apiKey: googleApiKey, // Pass the key; the googleAI plugin will handle if it's invalid/missing.
+      apiKey: googleApiKey, // The apiKey is guaranteed to be a valid string here.
     }),
   ],
   model: 'googleai/gemini-2.0-flash',
