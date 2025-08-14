@@ -4,10 +4,9 @@ import { createContext, useContext, ReactNode } from 'react';
 import { 
   useAuthState, 
   useCreateUserWithEmailAndPassword, 
-  useSignInWithEmailAndPassword, 
-  useSignInWithPopup
+  useSignInWithEmailAndPassword,
 } from 'react-firebase-hooks/auth';
-import { signOut, type User } from 'firebase/auth';
+import { signOut, type User, signInWithPopup } from 'firebase/auth';
 import { auth, googleAuthProvider } from '@/lib/firebase/clientApp';
 import type { LoginFormData, SignupFormData } from '@/components/auth/schemas';
 
@@ -27,7 +26,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, loading, error] = useAuthState(auth);
   const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
   const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
-  const [signInWithPopup] = useSignInWithPopup(auth);
 
   const login = async (credentials: LoginFormData) => {
     return signInWithEmailAndPassword(credentials.email, credentials.password);
@@ -38,7 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
   
   const loginWithGoogle = async () => {
-    return signInWithPopup(googleAuthProvider);
+    return signInWithPopup(auth, googleAuthProvider);
   }
 
   const logout = async () => {
