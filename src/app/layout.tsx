@@ -1,5 +1,7 @@
 
-import type { Metadata } from 'next';
+'use client';
+
+import type { ReactNode } from 'react';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { QueryProvider } from '@/lib/query-provider';
@@ -17,12 +19,13 @@ import {
   SidebarMenuButton,
   SidebarInset,
 } from '@/components/ui/sidebar';
-import { Home, HeartPulse, Dumbbell, MessageSquareHeart, Camera } from 'lucide-react';
+import { Home, HeartPulse, Dumbbell, MessageSquareHeart, Camera, Loader2 } from 'lucide-react';
 import { GainAppIcon } from '@/components/icons/GainAppIcon';
 import Link from 'next/link';
-import ClientOnly from '@/components/layout/ClientOnly';
 import { ThemeProvider } from '@/components/layout/ThemeProvider';
-
+import { AuthProvider, useAuth } from '@/hooks/use-auth';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -35,6 +38,42 @@ const geistMono = Geist_Mono({
 });
 
 function AppLayout({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const isAuthPage = pathname === '/login' || pathname === '/signup';
+
+  useEffect(() => {
+    if (loading) return; // Wait until loading is complete
+
+    if (user && isAuthPage) {
+      // If user is logged in and on an auth page, redirect to home
+      router.push('/');
+    } else if (!user && !isAuthPage) {
+      // If user is not logged in and not on an auth page, redirect to login
+      router.push('/login');
+    }
+  }, [user, loading, isAuthPage, router]);
+
+
+  if (loading || (!user && !isAuthPage)) {
+    return (
+      <div className="flex h-screen w-screen flex-col items-center justify-center bg-background text-foreground">
+        <div className="flex items-center gap-3 text-2xl font-semibold">
+          <Dumbbell className="h-12 w-12 animate-spin text-primary" />
+          <span className="text-3xl font-bold">Gain</span>
+        </div>
+        <p className="mt-4 text-muted-foreground">Loading your personalized experience...</p>
+      </div>
+    );
+  }
+
+  // Render auth pages without the main layout
+  if (!user && isAuthPage) {
+    return <>{children}</>;
+  }
+  
   return (
     <SidebarProvider defaultOpen>
       <Sidebar collapsible="icon" className="border-r border-sidebar-border">
@@ -113,9 +152,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <QueryProvider>
-            <ClientOnly>
+            <AuthProvider>
               <AppLayout>{children}</AppLayout>
-            </ClientOnly>
+            </AuthProvider>
             <Toaster />
           </QueryProvider>
         </ThemeProvider>
