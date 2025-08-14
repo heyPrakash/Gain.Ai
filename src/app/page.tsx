@@ -30,25 +30,25 @@ export default function HomePage() {
                <Button asChild variant="outline" size="lg" className="h-auto py-4 flex flex-col items-center justify-center gap-2 hover:bg-primary/5 hover:border-primary transition-all duration-300">
                 <Link href="/food-analyzer" className="flex flex-col items-center gap-2">
                   <Camera className="w-8 h-8 text-primary" />
-                  <span className="text-md font-medium">Nutrition Snap</span>
+                  <span className="text-md font-medium text-center">Nutrition Snap</span>
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="h-auto py-4 flex flex-col items-center justify-center gap-2 hover:bg-primary/5 hover:border-primary transition-all duration-300">
                 <Link href="/diet-planner" className="flex flex-col items-center gap-2">
                   <HeartPulse className="w-8 h-8 text-primary" />
-                  <span className="text-md font-medium">AI Diet Planner</span>
+                  <span className="text-md font-medium text-center">AI Diet Planner</span>
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="h-auto py-4 flex flex-col items-center justify-center gap-2 hover:bg-primary/5 hover:border-primary transition-all duration-300">
                 <Link href="/workout-planner" className="flex flex-col items-center gap-2">
                   <Dumbbell className="w-8 h-8 text-primary" />
-                  <span className="text-md font-medium">Workout Planner</span>
+                  <span className="text-md font-medium text-center">Workout Planner</span>
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="h-auto py-4 flex flex-col items-center justify-center gap-2 hover:bg-primary/5 hover:border-primary transition-all duration-300">
                 <Link href="/ai-coach" className="flex flex-col items-center gap-2">
                   <MessageSquareHeart className="w-8 h-8 text-primary" />
-                  <span className="text-md font-medium">AI Chat Coach</span>
+                  <span className="text-md font-medium text-center">AI Chat Coach</span>
                 </Link>
               </Button>
             </div>
@@ -61,7 +61,7 @@ export default function HomePage() {
       <section>
           <Card className="max-w-4xl mx-auto shadow-lg">
             <CardHeader>
-                <CardTitle className="flex items-center gap-3 text-2xl">
+                <CardTitle className="flex items-center gap-3 text-xl md:text-2xl">
                     <UserCircle className="w-8 h-8 text-primary" />
                     About Gain
                 </CardTitle>

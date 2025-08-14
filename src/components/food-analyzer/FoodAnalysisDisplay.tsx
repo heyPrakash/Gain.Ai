@@ -38,7 +38,7 @@ export default function FoodAnalysisDisplay({ analysisOutput }: FoodAnalysisDisp
         <div className="mb-6 space-y-4">
             <div className="p-4 bg-muted rounded-lg shadow-sm">
                 <h4 className="text-md font-semibold text-center mb-2">Health Score</h4>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 sm:gap-4">
                     <Progress value={healthScore} className={cn("h-3", getHealthScoreColor(healthScore))} />
                     <span className="text-xl font-bold text-primary">{healthScore}%</span>
                 </div>
@@ -46,34 +46,34 @@ export default function FoodAnalysisDisplay({ analysisOutput }: FoodAnalysisDisp
             </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-center">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mb-6 text-center">
             <div className="p-3 bg-muted rounded-lg shadow-sm">
                 <div className="flex items-center justify-center gap-2">
                     <Flame className="w-5 h-5 text-destructive"/>
-                    <h4 className="text-sm font-semibold">Calories</h4>
+                    <h4 className="text-xs sm:text-sm font-semibold">Calories</h4>
                 </div>
-                <p className="text-xl font-bold">{Math.round(totalCalories)}</p>
+                <p className="text-lg sm:text-xl font-bold">{Math.round(totalCalories)}</p>
             </div>
              <div className="p-3 bg-muted rounded-lg shadow-sm">
                 <div className="flex items-center justify-center gap-2">
                     <Beef className="w-5 h-5 text-primary"/>
-                    <h4 className="text-sm font-semibold">Protein</h4>
+                    <h4 className="text-xs sm:text-sm font-semibold">Protein</h4>
                 </div>
-                <p className="text-xl font-bold">{Math.round(totalProtein)}g</p>
+                <p className="text-lg sm:text-xl font-bold">{Math.round(totalProtein)}g</p>
             </div>
              <div className="p-3 bg-muted rounded-lg shadow-sm">
                  <div className="flex items-center justify-center gap-2">
                     <Droplets className="w-5 h-5 text-yellow-500"/>
-                    <h4 className="text-sm font-semibold">Fats</h4>
+                    <h4 className="text-xs sm:text-sm font-semibold">Fats</h4>
                 </div>
-                <p className="text-xl font-bold">{Math.round(totalFats)}g</p>
+                <p className="text-lg sm:text-xl font-bold">{Math.round(totalFats)}g</p>
             </div>
              <div className="p-3 bg-muted rounded-lg shadow-sm">
                 <div className="flex items-center justify-center gap-2">
                     <Wheat className="w-5 h-5 text-orange-500"/>
-                    <h4 className="text-sm font-semibold">Carbs</h4>
+                    <h4 className="text-xs sm:text-sm font-semibold">Carbs</h4>
                 </div>
-                <p className="text-xl font-bold">{Math.round(totalCarbohydrates)}g</p>
+                <p className="text-lg sm:text-xl font-bold">{Math.round(totalCarbohydrates)}g</p>
             </div>
         </div>
 

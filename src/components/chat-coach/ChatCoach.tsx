@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { FormEvent } from 'react';
@@ -86,7 +87,7 @@ export default function ChatCoach() {
   }, []);
 
   return (
-    <div className="flex flex-col h-full w-full">
+    <div data-page="chat" className="flex flex-col h-full w-full">
       <div className="flex-1 flex flex-col items-center overflow-hidden">
         <ScrollArea className="flex-1 w-full max-w-3xl p-4" ref={scrollAreaRef}>
              <div className="space-y-6">
@@ -107,7 +108,7 @@ export default function ChatCoach() {
                 )}
                 <div
                   className={cn(
-                    "max-w-[75%] rounded-2xl p-3 text-sm shadow-sm",
+                    "max-w-[85%] sm:max-w-[75%] rounded-2xl p-3 text-sm shadow-sm",
                     message.role === 'user'
                       ? "bg-primary text-primary-foreground rounded-br-none"
                       : "bg-muted text-foreground rounded-bl-none" 
@@ -137,10 +138,10 @@ export default function ChatCoach() {
               </div>
             )}
              {messages.length === 0 && !mutation.isPending && (
-                <div className="text-center text-muted-foreground pt-16">
+                <div className="text-center text-muted-foreground pt-8 sm:pt-16">
                     <Sparkles className="mx-auto h-12 w-12 text-primary/30" />
                     <h3 className="text-lg font-semibold mt-4">Ask me anything about fitness!</h3>
-                    <p>I can help you with workout routines, nutrition advice, and more.</p>
+                    <p className="text-sm sm:text-base">I can help you with workout routines, nutrition advice, and more.</p>
                 </div>
              )}
           </div>
@@ -153,7 +154,7 @@ export default function ChatCoach() {
                          <Button
                             key={i}
                             variant="outline"
-                            className="text-left h-auto py-2"
+                            className="text-left h-auto py-2 text-sm sm:text-base"
                             onClick={() => handlePromptClick(prompt)}
                          >
                             {prompt}

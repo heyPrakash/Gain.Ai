@@ -33,7 +33,7 @@ function UserProfileButton() {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">{user.displayName || 'User'}</p>
-            <p className="text-xs leading-none text-muted-foreground">
+            <p className="text-xs leading-none text-muted-foreground truncate">
               {user.email}
             </p>
           </div>
@@ -51,12 +51,12 @@ function UserProfileButton() {
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-40 flex h-14 items-center gap-4 border-b bg-background px-4 sm:h-16 sm:px-6">
+    <header className="sticky top-0 z-40 flex h-14 items-center gap-2 border-b bg-background px-4 sm:h-16 sm:px-6">
       <div className="md:hidden">
         <SidebarTrigger />
       </div>
       <div className="flex-1" />
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-4">
         <ThemeToggle />
         <UserProfileButton />
       </div>
