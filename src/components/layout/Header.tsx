@@ -1,5 +1,4 @@
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import UserProfileButton from '@/components/auth/UserProfileButton';
 
 export default function Header() {
   return (
@@ -10,7 +9,6 @@ export default function Header() {
       <div className="flex-1">
         {/* Future elements like page title or breadcrumbs can go here */}
       </div>
-      <UserProfileButton />
     </header>
   );
 }

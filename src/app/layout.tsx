@@ -23,10 +23,6 @@ import { Home, HeartPulse, Dumbbell, MessageSquareHeart, Camera } from 'lucide-r
 import { GainAppIcon } from '@/components/icons/GainAppIcon';
 import Link from 'next/link';
 import ClientOnly from '@/components/layout/ClientOnly';
-import { AuthProvider, useAuth } from '@/hooks/use-auth';
-import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -38,59 +34,7 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-// Metadata can't be in a client component, but since RootLayout is separate, this is fine.
-// We are only making AppLayout a client component.
-// Note: Exporting metadata from a layout that is marked with "use client" is not supported.
-// However, we are not marking the entire file as 'use client' at the top, just the component logic that needs it.
-// The best practice is to have RootLayout as server, and AppLayout as client.
-
 function AppLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
-  const pathname = usePathname();
-  const router = useRouter();
-
-  const isAuthPage = pathname === '/login' || pathname === '/signup';
-
-  useEffect(() => {
-    if (loading) return; // Wait until loading is finished
-
-    // If not authenticated and not on an auth page, redirect to login
-    if (!user && !isAuthPage) {
-      router.push('/login');
-    }
-    
-    // If authenticated and on an auth page, redirect to home
-    if (user && isAuthPage) {
-      router.push('/');
-    }
-  }, [user, loading, pathname, router, isAuthPage]);
-
-
-  if (loading) {
-     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Dumbbell className="h-10 w-10 text-primary animate-spin" />
-      </div>
-    );
-  }
-
-  // If we are on an auth page, render the children directly (the login/signup form)
-  if (isAuthPage) {
-    return <>{children}</>;
-  }
-
-  // If we are not on an auth page, but there's no user, we should have been redirected.
-  // We can return null or a loader to prevent a flash of content.
-  if (!user) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Dumbbell className="h-10 w-10 text-primary animate-spin" />
-      </div>
-    );
-  }
-
-
-  // Render the main app layout for authenticated users
   return (
     <SidebarProvider defaultOpen>
       <Sidebar collapsible="icon" className="border-r border-sidebar-border">
@@ -163,12 +107,10 @@ export default function RootLayout({
         )}
       >
         <QueryProvider>
-          <AuthProvider>
             <ClientOnly>
-              <AppLayout>{children}</AppLayout>
+               <AppLayout>{children}</AppLayout>
             </ClientOnly>
             <Toaster />
-          </AuthProvider>
         </QueryProvider>
       </body>
     </html>
