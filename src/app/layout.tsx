@@ -21,6 +21,7 @@ import { Home, HeartPulse, Dumbbell, MessageSquareHeart, Camera } from 'lucide-r
 import { GainAppIcon } from '@/components/icons/GainAppIcon';
 import Link from 'next/link';
 import ClientOnly from '@/components/layout/ClientOnly';
+import { ThemeProvider } from '@/components/layout/ThemeProvider';
 
 
 const geistSans = Geist({
@@ -105,12 +106,19 @@ export default function RootLayout({
           geistMono.variable
         )}
       >
-        <QueryProvider>
-          <ClientOnly>
-            <AppLayout>{children}</AppLayout>
-          </ClientOnly>
-          <Toaster />
-        </QueryProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <QueryProvider>
+            <ClientOnly>
+              <AppLayout>{children}</AppLayout>
+            </ClientOnly>
+            <Toaster />
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

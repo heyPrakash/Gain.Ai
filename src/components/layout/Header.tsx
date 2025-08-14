@@ -1,6 +1,7 @@
 
 'use client';
 import { SidebarTrigger } from '@/components/ui/sidebar';
+import { ThemeToggle } from './ThemeToggle';
 
 export default function Header() {
   return (
@@ -10,7 +11,7 @@ export default function Header() {
       </div>
       <div className="flex-1" />
       <div className="flex items-center gap-4">
-        {/* User menu removed */}
+        <ThemeToggle />
       </div>
     </header>
   );
