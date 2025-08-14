@@ -78,14 +78,14 @@ export default function LoginForm() {
   }
 
   return (
-    <Card className="w-full max-w-md shadow-xl">
+    <Card className="w-full max-w-sm sm:max-w-md shadow-xl">
       <CardHeader className="text-center">
         <Link href="/" className="flex items-center justify-center gap-2 text-2xl font-bold text-primary mb-2">
             <GainAppIcon className="h-8 w-8" />
             <span>Gain</span>
         </Link>
-        <CardTitle className="text-2xl">Welcome Back!</CardTitle>
-        <CardDescription>Enter your credentials to access your account.</CardDescription>
+        <CardTitle className="text-xl sm:text-2xl">Welcome Back!</CardTitle>
+        <CardDescription className="text-sm sm:text-base">Enter your credentials to access your account.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -122,7 +122,7 @@ export default function LoginForm() {
             </Button>
           </form>
         </Form>
-        <Separator className="my-6" />
+        <Separator className="my-4 sm:my-6" />
          <Button onClick={handleGoogleSignIn} variant="outline" className="w-full" disabled={isGoogleLoading || isLoading}>
             {isGoogleLoading ? <Loader2 className="animate-spin" /> : <GoogleIcon />}
              Sign in with Google

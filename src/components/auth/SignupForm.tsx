@@ -79,14 +79,14 @@ export default function SignupForm() {
 
 
   return (
-    <Card className="w-full max-w-md shadow-xl">
+    <Card className="w-full max-w-sm sm:max-w-md shadow-xl">
         <CardHeader className="text-center">
             <Link href="/" className="flex items-center justify-center gap-2 text-2xl font-bold text-primary mb-2">
                 <GainAppIcon className="h-8 w-8" />
                 <span>Gain</span>
             </Link>
-            <CardTitle className="text-2xl">Create an Account</CardTitle>
-            <CardDescription>Join Gain today to start your fitness journey.</CardDescription>
+            <CardTitle className="text-xl sm:text-2xl">Create an Account</CardTitle>
+            <CardDescription className="text-sm sm:text-base">Join Gain today to start your fitness journey.</CardDescription>
         </CardHeader>
         <CardContent>
             <Form {...form}>
@@ -123,7 +123,7 @@ export default function SignupForm() {
                 </Button>
             </form>
             </Form>
-            <Separator className="my-6" />
+            <Separator className="my-4 sm:my-6" />
             <Button onClick={handleGoogleSignIn} variant="outline" className="w-full" disabled={isGoogleLoading || isLoading}>
                 {isGoogleLoading ? <Loader2 className="animate-spin" /> : <GoogleIcon />}
                 Sign up with Google
