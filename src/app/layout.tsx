@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import type { ReactNode } from 'react';
@@ -26,6 +27,8 @@ import { ThemeProvider } from '@/components/layout/ThemeProvider';
 import { AuthProvider, useAuth } from '@/hooks/use-auth';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import ClientOnly from '@/components/layout/ClientOnly';
+
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -153,7 +156,9 @@ export default function RootLayout({
         >
           <QueryProvider>
             <AuthProvider>
-              <AppLayout>{children}</AppLayout>
+              <ClientOnly>
+                <AppLayout>{children}</AppLayout>
+              </ClientOnly>
             </AuthProvider>
             <Toaster />
           </QueryProvider>
