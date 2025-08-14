@@ -20,3 +20,4 @@ const getFirebaseAuth = (): Auth => getAuth(app);
 const googleAuthProvider = new GoogleAuthProvider();
 
 export { app, getFirebaseAuth, googleAuthProvider };
+

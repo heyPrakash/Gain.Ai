@@ -1,12 +1,11 @@
-
 'use client';
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode, useEffect, useState } from 'react';
 import { 
   useAuthState, 
   useCreateUserWithEmailAndPassword, 
   useSignInWithEmailAndPassword,
 } from 'react-firebase-hooks/auth';
-import { signOut, type User, signInWithPopup } from 'firebase/auth';
+import { signOut, type User, signInWithPopup, type Auth } from 'firebase/auth';
 import { getFirebaseAuth, googleAuthProvider } from '@/lib/firebase/clientApp';
 import type { LoginFormData, SignupFormData } from '@/components/auth/schemas';
 
@@ -23,30 +22,42 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const auth = getFirebaseAuth(); // Get auth instance on the client
-  const [user, loading, error] = useAuthState(auth);
-  const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
-  const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
+  const [auth, setAuth] = useState<Auth | null>(null);
+
+  useEffect(() => {
+    // getFirebaseAuth() returns the auth instance, which is a browser-only API.
+    // This ensures it only runs on the client.
+    setAuth(getFirebaseAuth());
+  }, []);
+
+
+  const [user, loading, error] = useAuthState(auth ?? undefined);
+  const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth ?? undefined);
+  const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth ?? undefined);
 
   const login = async (credentials: LoginFormData) => {
+    if (!auth) throw new Error("Auth not initialized");
     return signInWithEmailAndPassword(credentials.email, credentials.password);
   };
 
   const signup = async (credentials: SignupFormData) => {
+    if (!auth) throw new Error("Auth not initialized");
     return createUserWithEmailAndPassword(credentials.email, credentials.password);
   };
   
   const loginWithGoogle = async () => {
+    if (!auth) throw new Error("Auth not initialized");
     return signInWithPopup(auth, googleAuthProvider);
   }
 
   const logout = async () => {
+    if (!auth) throw new Error("Auth not initialized");
     await signOut(auth);
   };
 
-  const value = {
+  const value: AuthContextType = {
     user,
-    loading,
+    loading: loading || !auth, // Consider it loading until auth is initialized
     error,
     login,
     signup,
