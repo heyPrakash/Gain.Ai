@@ -3,12 +3,12 @@ import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyByoKS5XKJceRGlvOCJrrDmZ1KlC2zsHbo",
+  authDomain: "cortex-fit.firebaseapp.com",
+  projectId: "cortex-fit",
+  storageBucket: "cortex-fit.appspot.com",
+  messagingSenderId: "189108185606",
+  appId: "1:189108185606:web:3f5477021ae7767790f187"
 };
 
 // Initialize Firebase
