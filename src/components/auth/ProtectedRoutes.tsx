@@ -1,61 +1,67 @@
-
-'use client';
-
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, type ReactNode } from 'react';
-import { useAuth } from '@/hooks/use-auth';
-import { Loader2 } from 'lucide-react';
-
-const publicPaths = ['/login', '/signup'];
-
-export default function ProtectedRoutes({ children }: { children: ReactNode }) {
-  const { user, loading } = useAuth();
-  const router = useRouter();
-  const pathname = usePathname();
-  
-  const isPublicPath = publicPaths.includes(pathname);
-
-  useEffect(() => {
-    // If loading, we don't know the auth state yet.
-    if (loading.auth) {
-      return;
-    }
-
-    // If user is not authenticated and is trying to access a protected page
-    if (!user && !isPublicPath) {
-      router.push('/login');
-    }
-
-    // If user is authenticated and is on a public page (like login/signup)
-    if (user && isPublicPath) {
-      router.push('/');
-    }
-  }, [user, loading.auth, router, isPublicPath, pathname]);
-
-
-  if (loading.auth) {
-     return (
-        <div className="flex min-h-screen w-full items-center justify-center bg-background">
-            <Loader2 className="h-10 w-10 animate-spin text-primary" />
-        </div>
-    );
+{
+  "name": "nextn",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack -p 9002",
+    "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
+    "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "postinstall": "patch-package"
+  },
+  "dependencies": {
+    "@genkit-ai/googleai": "^1.8.0",
+    "@genkit-ai/next": "^1.8.0",
+    "@radix-ui/react-accordion": "^1.2.3",
+    "@radix-ui/react-alert-dialog": "^1.1.6",
+    "@radix-ui/react-avatar": "^1.1.3",
+    "@radix-ui/react-checkbox": "^1.1.4",
+    "@radix-ui/react-dialog": "^1.1.6",
+    "@radix-ui/react-dropdown-menu": "^2.1.6",
+    "@radix-ui/react-label": "^2.1.2",
+    "@radix-ui/react-menubar": "^1.1.6",
+    "@radix-ui/react-popover": "^1.1.6",
+    "@radix-ui/react-progress": "^1.1.2",
+    "@radix-ui/react-radio-group": "^1.2.3",
+    "@radix-ui/react-scroll-area": "^1.2.3",
+    "@radix-ui/react-select": "^2.1.6",
+    "@radix-ui/react-separator": "^1.1.2",
+    "@radix-ui/react-slider": "^1.2.3",
+    "@radix-ui/react-slot": "^1.1.2",
+    "@radix-ui/react-switch": "^1.1.3",
+    "@radix-ui/react-tabs": "^1.1.3",
+    "@radix-ui/react-toast": "^1.2.6",
+    "@radix-ui/react-tooltip": "^1.1.8",
+    "@radix-ui/react-visually-hidden": "^1.1.0",
+    "@tanstack/react-query": "^5.66.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
+    "dotenv": "^16.5.0",
+    "genkit": "^1.8.0",
+    "html2pdf.js": "^0.10.1",
+    "lucide-react": "^0.475.0",
+    "next": "15.2.3",
+    "next-themes": "^0.3.0",
+    "patch-package": "^8.0.0",
+    "react": "^18.3.1",
+    "react-day-picker": "^8.10.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.15.1",
+    "tailwind-merge": "^3.0.1",
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "genkit-cli": "^1.8.0",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   }
-
-  // If the user is not logged in, and they are on a public path, show the page content
-  if (isPublicPath) {
-    return <>{children}</>;
-  }
-  
-  // If the user is logged in, and they are on a protected path, show the page content
-  if (user) {
-     return <>{children}</>;
-  }
-
-  // Otherwise, the effect will handle the redirect, so we can render null or a loader.
-  // Rendering the loader is better for UX to avoid flashes of content.
-  return (
-    <div className="flex min-h-screen w-full items-center justify-center bg-background">
-        <Loader2 className="h-10 w-10 animate-spin text-primary" />
-    </div>
-  );
 }
