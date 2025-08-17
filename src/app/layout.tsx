@@ -1,7 +1,5 @@
 
 
-'use client';
-
 import type { ReactNode } from 'react';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
@@ -20,15 +18,11 @@ import {
   SidebarMenuButton,
   SidebarInset,
 } from '@/components/ui/sidebar';
-import { Home, HeartPulse, Dumbbell, MessageSquareHeart, Camera, Loader2 } from 'lucide-react';
+import { Home, HeartPulse, Dumbbell, MessageSquareHeart, Camera } from 'lucide-react';
 import { GainAppIcon } from '@/components/icons/GainAppIcon';
 import Link from 'next/link';
 import { ThemeProvider } from '@/components/layout/ThemeProvider';
-import { AuthProvider, useAuth } from '@/hooks/use-auth';
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import ClientOnly from '@/components/layout/ClientOnly';
-
+import { AuthProvider } from '@/hooks/use-auth';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -40,95 +34,6 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-function AppLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const isAuthPage = pathname === '/login' || pathname === '/signup';
-
-  useEffect(() => {
-    if (loading) return; // Wait until loading is complete
-
-    if (user && isAuthPage) {
-      // If user is logged in and on an auth page, redirect to home
-      router.push('/');
-    } else if (!user && !isAuthPage) {
-      // If user is not logged in and not on an auth page, redirect to login
-      router.push('/login');
-    }
-  }, [user, loading, isAuthPage, router]);
-
-
-  if (loading || (!user && !isAuthPage)) {
-    return (
-      <div className="flex h-screen w-screen flex-col items-center justify-center bg-background text-foreground">
-        <div className="flex items-center gap-3 text-2xl font-semibold">
-          <Dumbbell className="h-12 w-12 animate-spin text-primary" />
-          <span className="text-3xl font-bold">Gain</span>
-        </div>
-        <p className="mt-4 text-muted-foreground">Loading your personalized experience...</p>
-      </div>
-    );
-  }
-
-  // Render auth pages without the main layout
-  if (!user && isAuthPage) {
-    return <>{children}</>;
-  }
-  
-  return (
-    <SidebarProvider defaultOpen>
-      <Sidebar collapsible="icon" className="border-r border-sidebar-border">
-        <SidebarHeader className="p-4">
-          <Link href="/" className="flex items-center gap-2 text-xl font-bold text-sidebar-primary hover:opacity-80 transition-opacity">
-            <GainAppIcon className="h-7 w-7" />
-            <span className="group-data-[collapsible=icon]:hidden">Gain</span>
-          </Link>
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={{content: "Home", side: "right", align: "center"}}>
-                <Link href="/"><Home /> <span className="group-data-[collapsible=icon]:hidden">Home</span></Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-             <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={{content: "Nutrition Snap", side: "right", align: "center"}}>
-                <Link href="/food-analyzer"><Camera /> <span className="group-data-[collapsible=icon]:hidden">Nutrition Snap</span></Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={{content: "Diet Planner", side: "right", align: "center"}}>
-                <Link href="/diet-planner"><HeartPulse /> <span className="group-data-[collapsible=icon]:hidden">Diet Planner</span></Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={{content: "Workout Planner", side: "right", align: "center"}}>
-                <Link href="/workout-planner"><Dumbbell /> <span className="group-data-[collapsible=icon]:hidden">Workout Planner</span></Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={{content: "AI Coach", side: "right", align: "center"}}>
-                <Link href="/ai-coach"><MessageSquareHeart /> <span className="group-data-[collapsible=icon]:hidden">AI Coach</span></Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarContent>
-      </Sidebar>
-
-      <SidebarInset className="flex flex-col min-h-screen">
-        <Header />
-        <main className="flex-grow flex flex-col p-4 md:p-6 lg:p-8 has-[[data-page=chat]]:p-0">
-          {children}
-        </main>
-        <Footer />
-      </SidebarInset>
-    </SidebarProvider>
-  );
-}
-
-// This remains a server component
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -156,9 +61,53 @@ export default function RootLayout({
         >
           <QueryProvider>
             <AuthProvider>
-              <ClientOnly>
-                <AppLayout>{children}</AppLayout>
-              </ClientOnly>
+              <SidebarProvider defaultOpen>
+                <Sidebar collapsible="icon" className="border-r border-sidebar-border">
+                  <SidebarHeader className="p-4">
+                    <Link href="/" className="flex items-center gap-2 text-xl font-bold text-sidebar-primary hover:opacity-80 transition-opacity">
+                      <GainAppIcon className="h-7 w-7" />
+                      <span className="group-data-[collapsible=icon]:hidden">Gain</span>
+                    </Link>
+                  </SidebarHeader>
+                  <SidebarContent>
+                    <SidebarMenu>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild tooltip={{content: "Home", side: "right", align: "center"}}>
+                          <Link href="/"><Home /> <span className="group-data-[collapsible=icon]:hidden">Home</span></Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                       <SidebarMenuItem>
+                        <SidebarMenuButton asChild tooltip={{content: "Nutrition Snap", side: "right", align: "center"}}>
+                          <Link href="/food-analyzer"><Camera /> <span className="group-data-[collapsible=icon]:hidden">Nutrition Snap</span></Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild tooltip={{content: "Diet Planner", side: "right", align: "center"}}>
+                          <Link href="/diet-planner"><HeartPulse /> <span className="group-data-[collapsible=icon]:hidden">Diet Planner</span></Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild tooltip={{content: "Workout Planner", side: "right", align: "center"}}>
+                          <Link href="/workout-planner"><Dumbbell /> <span className="group-data-[collapsible=icon]:hidden">Workout Planner</span></Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild tooltip={{content: "AI Coach", side: "right", align: "center"}}>
+                          <Link href="/ai-coach"><MessageSquareHeart /> <span className="group-data-[collapsible=icon]:hidden">AI Coach</span></Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    </SidebarMenu>
+                  </SidebarContent>
+                </Sidebar>
+
+                <SidebarInset className="flex flex-col min-h-screen">
+                  <Header />
+                  <main className="flex-grow flex flex-col p-4 md:p-6 lg:p-8 has-[[data-page=chat]]:p-0">
+                    {children}
+                  </main>
+                  <Footer />
+                </SidebarInset>
+              </SidebarProvider>
             </AuthProvider>
             <Toaster />
           </QueryProvider>
