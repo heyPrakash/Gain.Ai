@@ -22,8 +22,6 @@ import { Home, HeartPulse, Dumbbell, MessageSquareHeart, Camera } from 'lucide-r
 import { GainAppIcon } from '@/components/icons/GainAppIcon';
 import Link from 'next/link';
 import { ThemeProvider } from '@/components/layout/ThemeProvider';
-import { AuthProvider } from '@/hooks/use-auth';
-import ProtectedRoutes from '@/components/auth/ProtectedRoutes';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -114,13 +112,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <QueryProvider>
-            <AuthProvider>
-              <ProtectedRoutes>
-                <AppLayout>
-                  {children}
-                </AppLayout>
-              </ProtectedRoutes>
-            </AuthProvider>
+            <AppLayout>
+              {children}
+            </AppLayout>
             <Toaster />
           </QueryProvider>
         </ThemeProvider>
