@@ -17,7 +17,7 @@ export default function ProtectedRoutes({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // If loading, we don't know the auth state yet.
-    if (loading) {
+    if (loading.auth) {
       return;
     }
 
@@ -30,10 +30,10 @@ export default function ProtectedRoutes({ children }: { children: ReactNode }) {
     if (user && isPublicPath) {
       router.push('/');
     }
-  }, [user, loading, router, isPublicPath, pathname]);
+  }, [user, loading.auth, router, isPublicPath, pathname]);
 
 
-  if (loading) {
+  if (loading.auth) {
      return (
         <div className="flex min-h-screen w-full items-center justify-center bg-background">
             <Loader2 className="h-10 w-10 animate-spin text-primary" />
@@ -42,12 +42,12 @@ export default function ProtectedRoutes({ children }: { children: ReactNode }) {
   }
 
   // If the user is not logged in, and they are on a public path, show the page content
-  if (!user && isPublicPath) {
+  if (isPublicPath) {
     return <>{children}</>;
   }
   
   // If the user is logged in, and they are on a protected path, show the page content
-  if (user && !isPublicPath) {
+  if (user) {
      return <>{children}</>;
   }
 
