@@ -309,7 +309,6 @@ export default function FoodImageForm({ onAnalysisComplete, setIsLoading, setErr
             className="hidden"
             onChange={handleFileChange}
             accept="image/*"
-            capture="user"
             disabled={mutation.isPending}
         />
       </CardFooter>
