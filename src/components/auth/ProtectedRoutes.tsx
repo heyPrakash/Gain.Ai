@@ -13,17 +13,16 @@ export default function ProtectedRoutes({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const isPublicPath = publicPaths.includes(pathname);
 
   useEffect(() => {
-    // If loading is finished and there's no user, redirect to login.
-    // We allow access to public paths like login and signup.
-    if (!loading && !user && !publicPaths.includes(pathname)) {
+    // If loading is finished and there's no user on a protected path, redirect to login.
+    if (!loading && !user && !isPublicPath) {
       router.push('/login');
     }
-  }, [user, loading, router, pathname]);
+  }, [user, loading, router, pathname, isPublicPath]);
 
-  // If we are still loading the authentication state, show a full-screen loader.
-  // This prevents a flash of content before the redirect can happen.
+  // While checking auth status, show a loader
   if (loading) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
@@ -32,13 +31,18 @@ export default function ProtectedRoutes({ children }: { children: ReactNode }) {
     );
   }
 
-  // If the user is logged in OR they are on a public page, show the content.
-  if (user || publicPaths.includes(pathname)) {
+  // If user is logged in, show the protected app layout
+  if (user && !isPublicPath) {
     return <>{children}</>;
   }
+  
+  // If it's a public path, show the page content without the main layout
+  if (isPublicPath) {
+      return <>{children}</>
+  }
 
-  // If the user is not logged in and not on a public page,
-  // we show a loader while the redirect to /login is in progress.
+  // If user is not logged in and not on a public page, we are in the process of redirecting.
+  // Show a loader to prevent flashing content.
   return (
     <div className="flex h-screen w-full items-center justify-center">
       <Loader2 className="h-8 w-8 animate-spin text-primary" />
