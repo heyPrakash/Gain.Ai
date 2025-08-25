@@ -43,11 +43,18 @@ export default function ProtectedRoutes({ children }: ProtectedRoutesProps) {
       </div>
     );
   }
-
-  // If the user is logged in, or if it's a public path, show the children.
-  if (user || publicPaths.includes(pathname)) {
+  
+  // If the user is on a public path (and not logged in, handled by above),
+  // just render the children (e.g., the login page) without the main AppLayout.
+  if (!user && publicPaths.includes(pathname)) {
     return <>{children}</>;
   }
+
+  // If the user is logged in, show the main layout with its children.
+  if (user) {
+    return <>{children}</>;
+  }
+
 
   // This will be shown briefly during the redirect for unauthenticated users on protected routes.
   // Or if something goes wrong with the redirect logic.
