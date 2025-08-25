@@ -20,7 +20,6 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { GoogleIcon } from '@/components/icons/GoogleIcon';
 import { Loader2 } from 'lucide-react';
-import { GainAppIcon } from '@/components/icons/GainAppIcon';
 
 export default function LoginForm() {
   const { signInWithEmail, signInWithGoogle, loading } = useAuth();
@@ -71,8 +70,7 @@ export default function LoginForm() {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl flex items-center justify-center gap-2">
-          <GainAppIcon className="w-7 h-7" />
+        <CardTitle className="text-2xl text-primary">
           Welcome to Gain.Ai
         </CardTitle>
         <CardDescription>
