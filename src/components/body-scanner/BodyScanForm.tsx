@@ -183,11 +183,19 @@ export default function BodyScanForm({ onAnalysisComplete, setIsLoading, setErro
         });
         return;
     }
+    if (!weightKg) {
+        toast({
+            title: "Weight is required",
+            description: "Please enter your weight to get a more accurate analysis.",
+            variant: "destructive"
+        });
+        return;
+    }
     const photoDataUri = await fileToDataUri(selectedFile);
     mutation.mutate({ 
       photoDataUri,
       heightFt: Number(heightFt),
-      weightKg: weightKg ? Number(weightKg) : undefined
+      weightKg: Number(weightKg)
     });
   }
 
@@ -227,7 +235,7 @@ export default function BodyScanForm({ onAnalysisComplete, setIsLoading, setErro
             <Input id="height" type="number" placeholder="e.g., 5.8" value={heightFt} onChange={(e) => setHeightFt(e.target.value)} disabled={mutation.isPending} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="weight">Weight (kg) (Optional)</Label>
+            <Label htmlFor="weight">Weight (kg)</Label>
             <Input id="weight" type="number" placeholder="e.g., 70" value={weightKg} onChange={(e) => setWeightKg(e.target.value)} disabled={mutation.isPending} />
           </div>
         </div>

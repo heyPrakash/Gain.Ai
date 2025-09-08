@@ -9,7 +9,7 @@ export const AnalyzeBodyScanInputSchema = z.object({
       "A full-body, front-facing photo of a user, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
     ),
   heightFt: z.coerce.number().describe("The user's height in feet."),
-  weightKg: z.coerce.number().optional().describe('The user\'s weight in kilograms. Used to improve BMI estimation.'),
+  weightKg: z.coerce.number().describe('The user\'s weight in kilograms. Used to improve BMI estimation.'),
 });
 export type AnalyzeBodyScanInput = z.infer<typeof AnalyzeBodyScanInputSchema>;
 
