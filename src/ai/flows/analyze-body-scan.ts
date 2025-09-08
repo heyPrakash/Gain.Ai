@@ -30,13 +30,13 @@ const prompt = ai.definePrompt({
   Analyze this image: {{media url=photoDataUri}}
 
   User-provided data (use if available):
-  - Height: {{#if heightCm}}{{heightCm}} cm{{else}}Not Provided{{/if}}
+  - Height: {{heightFt}} ft
   - Weight: {{#if weightKg}}{{weightKg}} kg{{else}}Not Provided{{/if}}
 
   Instructions:
   1.  **Detect Body Shape**: Identify the user's body shape (e.g., Ectomorph, Mesomorph, Endomorph, or common shapes like Rectangle, Triangle, Hourglass).
   2.  **Estimate Metrics**:
-      -   **Body Mass Index (BMI)**: Estimate BMI. If height and weight are provided, use them for a more accurate estimation. Otherwise, rely on visual cues.
+      -   **Body Mass Index (BMI)**: Estimate BMI. Use the provided height and weight for a more accurate estimation.
       -   **Body Fat Percentage**: Provide a visual estimation of the body fat percentage.
       -   **Muscle Definition**: Assess muscle definition as 'low', 'medium', or 'high'.
       -   **Fitness Category**: Classify the user's physique into a fitness category (e.g., Underweight, Normal, Overweight, Athletic, Obese).

@@ -30,7 +30,7 @@ export default function BodyScanForm({ onAnalysisComplete, setIsLoading, setErro
   const { toast } = useToast();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [heightCm, setHeightCm] = useState('');
+  const [heightFt, setHeightFt] = useState('');
   const [weightKg, setWeightKg] = useState('');
   const [fileError, setFileError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -175,10 +175,18 @@ export default function BodyScanForm({ onAnalysisComplete, setIsLoading, setErro
         setFileError("Please select a photo first.");
         return;
     }
+     if (!heightFt) {
+        toast({
+            title: "Height is required",
+            description: "Please enter your height to get a more accurate analysis.",
+            variant: "destructive"
+        });
+        return;
+    }
     const photoDataUri = await fileToDataUri(selectedFile);
     mutation.mutate({ 
       photoDataUri,
-      heightCm: heightCm ? Number(heightCm) : undefined,
+      heightFt: Number(heightFt),
       weightKg: weightKg ? Number(weightKg) : undefined
     });
   }
@@ -215,8 +223,8 @@ export default function BodyScanForm({ onAnalysisComplete, setIsLoading, setErro
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="height">Height (cm) (Optional)</Label>
-            <Input id="height" type="number" placeholder="e.g., 175" value={heightCm} onChange={(e) => setHeightCm(e.target.value)} disabled={mutation.isPending} />
+            <Label htmlFor="height">Height (ft)</Label>
+            <Input id="height" type="number" placeholder="e.g., 5.8" value={heightFt} onChange={(e) => setHeightFt(e.target.value)} disabled={mutation.isPending} />
           </div>
           <div className="space-y-2">
             <Label htmlFor="weight">Weight (kg) (Optional)</Label>
