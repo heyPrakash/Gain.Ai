@@ -20,6 +20,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { GoogleIcon } from '@/components/icons/GoogleIcon';
 import { Loader2 } from 'lucide-react';
+import { GainAppIcon } from '@/components/icons/GainAppIcon';
 
 export default function LoginForm() {
   const { signInWithEmail, signInWithGoogle, loading } = useAuth();
@@ -40,7 +41,6 @@ export default function LoginForm() {
         title: 'Login Successful!',
         description: 'Welcome back.',
       });
-      // Redirect is handled by the ProtectedRoutes component
     } catch (error: any) {
       toast({
         title: 'Login Failed',
@@ -57,7 +57,6 @@ export default function LoginForm() {
         title: 'Login Successful!',
         description: 'Welcome back.',
       });
-      // Redirect is handled by the ProtectedRoutes component
     } catch (error: any) {
         toast({
             title: 'Google Sign-In Failed',
