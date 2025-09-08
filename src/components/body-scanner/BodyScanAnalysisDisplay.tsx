@@ -11,7 +11,7 @@ interface BodyScanAnalysisDisplayProps {
   analysisOutput: AnalyzeBodyScanOutput;
 }
 
-const MetricDisplay = ({ icon, label, value, unit }: { icon: React.ReactNode, label: string, value: string | number, unit?: string }) => (
+const MetricDisplay = ({ icon, label, value, unit }: { icon: React.ReactNode, label: string, value: string | number | React.ReactNode, unit?: string }) => (
     <div className="p-3 bg-muted rounded-lg shadow-sm text-center">
         <div className="flex items-center justify-center gap-2 mb-1">
             {icon}
@@ -73,7 +73,7 @@ export default function BodyScanAnalysisDisplay({ analysisOutput }: BodyScanAnal
             <div className="space-y-2">
                 {improvementPlan.map((item, index) => (
                     <div key={index} className="flex items-start gap-2 p-3 bg-card rounded-md shadow-sm">
-                        {item.toLowerCase().includes('diet') || item.toLowerCase().includes('eat') || item.toLowerCase().includes('nutrition') || itemtoLowerCase().includes('protein') ? 
+                        {item.toLowerCase().includes('diet') || item.toLowerCase().includes('eat') || item.toLowerCase().includes('nutrition') || item.toLowerCase().includes('protein') ? 
                          <Utensils className="w-4 h-4 mt-1 text-primary/80 flex-shrink-0" /> : 
                          <Dumbbell className="w-4 h-4 mt-1 text-primary/80 flex-shrink-0" />
                         }
