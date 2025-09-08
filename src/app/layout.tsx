@@ -18,7 +18,7 @@ import {
   SidebarMenuButton,
   SidebarInset,
 } from '@/components/ui/sidebar';
-import { Home, HeartPulse, Dumbbell, MessageSquareHeart, Camera } from 'lucide-react';
+import { Home, HeartPulse, Dumbbell, MessageSquareHeart, Camera, Scan } from 'lucide-react';
 import { GainAppIcon } from '@/components/icons/GainAppIcon';
 import Link from 'next/link';
 import { ThemeProvider } from '@/components/layout/ThemeProvider';
@@ -50,6 +50,11 @@ function AppLayout({ children }: { children: ReactNode }) {
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={{content: "Home", side: "right", align: "center"}}>
                 <Link href="/"><Home /> <span className="group-data-[collapsible=icon]:hidden">Home</span></Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+             <SidebarMenuItem>
+              <SidebarMenuButton asChild tooltip={{content: "Body Scanner", side: "right", align: "center"}}>
+                <Link href="/body-scanner"><Scan /> <span className="group-data-[collapsible=icon]:hidden">Body Scanner</span></Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
               <SidebarMenuItem>

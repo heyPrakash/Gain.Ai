@@ -14,6 +14,9 @@ import { generateWorkoutSchedule } from '@/ai/flows/generate-workout-schedule';
 import type { AnalyzeFoodImageInput, AnalyzeFoodImageOutput } from '@/ai/flows/analyze-food-image-types';
 import { analyzeFoodImage } from '@/ai/flows/analyze-food-image';
 
+import type { AnalyzeBodyScanInput, AnalyzeBodyScanOutput } from '@/ai/flows/analyze-body-scan-types';
+import { analyzeBodyScan } from '@/ai/flows/analyze-body-scan';
+
 
 export async function handleGenerateDietPlanAction(input: UserProfileFormValues): Promise<GenerateDietPlanOutput> {
   try {
@@ -70,5 +73,20 @@ export async function handleAnalyzeFoodImageAction(input: AnalyzeFoodImageInput)
             throw new Error(`Failed to analyze food image: ${error.message}`);
         }
         throw new Error("An unknown error occurred while analyzing the food image.");
+    }
+}
+
+export async function handleAnalyzeBodyScanAction(input: AnalyzeBodyScanInput): Promise<AnalyzeBodyScanOutput> {
+    try {
+        console.log("Analyzing body scan...");
+        const result = await analyzeBodyScan(input);
+        console.log("Body scan analysis complete:", result);
+        return result;
+    } catch (error) {
+        console.error("Error in handleAnalyzeBodyScanAction:", error);
+        if (error instanceof Error) {
+            throw new Error(`Failed to analyze body photo: ${error.message}`);
+        }
+        throw new Error("An unknown error occurred while analyzing the body photo.");
     }
 }

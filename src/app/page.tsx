@@ -2,7 +2,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { HeartPulse, Dumbbell, MessageSquareHeart, Camera, UserCircle } from 'lucide-react';
+import { HeartPulse, Dumbbell, MessageSquareHeart, Camera, UserCircle, Scan } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import HowItWorksSection from '@/components/sections/HowItWorksSection';
 
@@ -26,7 +26,13 @@ export default function HomePage() {
             <CardDescription>Choose a feature to begin your personalized fitness journey.</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+               <Button asChild variant="outline" size="lg" className="h-auto py-4 flex flex-col items-center justify-center gap-2 hover:bg-primary/5 hover:border-primary transition-all duration-300">
+                <Link href="/body-scanner" className="flex flex-col items-center gap-2">
+                  <Scan className="w-8 h-8 text-primary" />
+                  <span className="text-md font-medium text-center">AI Body Scanner</span>
+                </Link>
+              </Button>
                <Button asChild variant="outline" size="lg" className="h-auto py-4 flex flex-col items-center justify-center gap-2 hover:bg-primary/5 hover:border-primary transition-all duration-300">
                 <Link href="/food-analyzer" className="flex flex-col items-center gap-2">
                   <Camera className="w-8 h-8 text-primary" />
