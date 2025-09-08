@@ -34,15 +34,16 @@ const prompt = ai.definePrompt({
   - Weight: {{#if weightKg}}{{weightKg}} kg{{else}}Not Provided{{/if}}
 
   Instructions:
-  1.  **Detect Body Shape**: Identify the user's body shape (e.g., Ectomorph, Mesomorph, Endomorph, or common shapes like Rectangle, Triangle, Hourglass).
-  2.  **Estimate Metrics**:
+  1.  **Calculate Body Score**: Generate a 'bodyScore' from 0-100. This score should be a holistic representation of overall physique health, where a higher score is better. It should be calculated based on a healthy balance of low body fat, healthy BMI, and good muscle definition. A very athletic and lean person would be near 100. An average person might be 50-70. Someone with high body fat and low muscle would be lower.
+  2.  **Detect Body Shape**: Identify the user's body shape (e.g., Ectomorph, Mesomorph, Endomorph, or common shapes like Rectangle, Triangle, Hourglass).
+  3.  **Estimate Metrics**:
       -   **Body Mass Index (BMI)**: Estimate BMI. Use the provided height and weight for a more accurate estimation.
       -   **Body Fat Percentage**: Provide a visual estimation of the body fat percentage.
       -   **Muscle Definition**: Assess muscle definition as 'low', 'medium', or 'high'.
       -   **Fitness Category**: Classify the user's physique into a fitness category (e.g., Underweight, Normal, Overweight, Athletic, Obese).
-  3.  **Provide Physique Analysis**: Write a short (2-3 sentences), positive, and encouraging analysis of their current physique. Focus on strengths and potential.
-  4.  **Suggest Improvement Plan**: Create a personalized fitness improvement plan. Provide 3-5 actionable bullet points combining diet and workout advice. For example: "Incorporate lean proteins like chicken and fish to support muscle growth." or "Add 2-3 sessions of resistance training per week, focusing on compound movements like squats and deadlifts."
-  5.  **Safety First**: Do not provide medical advice. If the user appears to be significantly underweight or obese, gently suggest consulting a healthcare professional. Be empathetic and supportive. If the image is not a full-body photo or is unsuitable for analysis, explain this kindly in the 'physiqueAnalysis' field and return default/zero values for the other fields.`,
+  4.  **Provide Physique Analysis**: Write a short (2-3 sentences), positive, and encouraging analysis of their current physique. Focus on strengths and potential.
+  5.  **Suggest Improvement Plan**: Create a personalized fitness improvement plan. Provide 3-5 actionable bullet points combining diet and workout advice. For example: "Incorporate lean proteins like chicken and fish to support muscle growth." or "Add 2-3 sessions of resistance training per week, focusing on compound movements like squats and deadlifts."
+  6.  **Safety First**: Do not provide medical advice. If the user appears to be significantly underweight or obese, gently suggest consulting a healthcare professional. Be empathetic and supportive. If the image is not a full-body photo or is unsuitable for analysis, explain this kindly in the 'physiqueAnalysis' field and return default/zero values for the other fields.`,
 });
 
 const analyzeBodyScanFlow = ai.defineFlow(

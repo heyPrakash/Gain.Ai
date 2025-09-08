@@ -5,7 +5,10 @@ import type { AnalyzeBodyScanOutput } from '@/ai/flows/analyze-body-scan-types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from '@/components/ui/badge';
-import { List, CheckCircle, BarChart, Percent, Activity, Dumbbell, Utensils, Target, Info } from 'lucide-react';
+import { List, CheckCircle, BarChart, Percent, Activity, Dumbbell, Utensils, Target, Info, ShieldCheck } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils';
+
 
 interface BodyScanAnalysisDisplayProps {
   analysisOutput: AnalyzeBodyScanOutput;
@@ -24,6 +27,7 @@ const MetricDisplay = ({ icon, label, value, unit }: { icon: React.ReactNode, la
 
 export default function BodyScanAnalysisDisplay({ analysisOutput }: BodyScanAnalysisDisplayProps) {
   const { 
+    bodyScore,
     bodyShape, 
     estimatedBmi, 
     estimatedBodyFatPercentage, 
@@ -32,6 +36,13 @@ export default function BodyScanAnalysisDisplay({ analysisOutput }: BodyScanAnal
     physiqueAnalysis, 
     improvementPlan 
   } = analysisOutput;
+  
+  const getScoreColor = (score: number) => {
+    if (score >= 75) return "bg-green-500";
+    if (score >= 40) return "bg-yellow-500";
+    return "bg-red-500";
+  };
+
 
   return (
     <Card className="mt-8 w-full max-w-3xl mx-auto shadow-xl">
@@ -45,6 +56,18 @@ export default function BodyScanAnalysisDisplay({ analysisOutput }: BodyScanAnal
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
+        
+        <div className="p-4 bg-muted rounded-lg shadow-sm">
+            <h4 className="text-md font-semibold text-center mb-2 flex items-center justify-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-primary"/>
+                Overall Body Score
+            </h4>
+            <div className="flex items-center gap-2 sm:gap-4">
+                <Progress value={bodyScore} className={cn("h-3", getScoreColor(bodyScore))} />
+                <span className="text-xl font-bold text-primary">{bodyScore}%</span>
+            </div>
+        </div>
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
             <MetricDisplay icon={<BarChart className="w-5 h-5 text-primary" />} label="Est. BMI" value={estimatedBmi.toFixed(1)} />
             <MetricDisplay icon={<Percent className="w-5 h-5 text-primary" />} label="Est. Body Fat" value={estimatedBodyFatPercentage.toFixed(1)} unit="%" />

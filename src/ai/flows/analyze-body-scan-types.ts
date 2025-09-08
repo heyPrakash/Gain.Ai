@@ -15,6 +15,7 @@ export type AnalyzeBodyScanInput = z.infer<typeof AnalyzeBodyScanInputSchema>;
 
 
 export const AnalyzeBodyScanOutputSchema = z.object({
+  bodyScore: z.number().min(0).max(100).describe("A holistic score from 0-100 representing overall physique health, considering BMI, body fat, and muscle definition."),
   bodyShape: z.string().describe("The user's detected body shape (e.g., Ectomorph, Mesomorph, Endomorph, or common shapes like Rectangle, Triangle, Hourglass)."),
   estimatedBmi: z.number().describe("The estimated Body Mass Index (BMI). Calculated based on visual cues and user-provided height/weight if available."),
   estimatedBodyFatPercentage: z.number().describe("The estimated body fat percentage (%)."),
