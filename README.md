@@ -1,8 +1,14 @@
 
 # Gain
 
-This is a NextJS starter for Gain, an AI-powered fitness application.
+Fitness apps are often confusing and overloaded. Gain.AI focuses on 3 things:
 
-To get started, take a look at src/app/page.tsx.
+-Simplicity
+
+-Personalization
+
+-Real results
+
+Perfect for beginners, teens, students, or anyone wanting a better body without overthinking.
 
     
