@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from 'react';
-import type { GenerateWorkoutScheduleOutput } from '@/ai/flows/generate-workout-schedule';
+import type { GenerateWorkoutScheduleOutput } from '@/ai/flows/generate-workout-schedule-types';
 import WorkoutScheduleForm from '@/components/workout-planner/WorkoutScheduleForm';
 import WorkoutScheduleDisplay from '@/components/workout-planner/WorkoutScheduleDisplay';
 import { Loader2, Dumbbell } from 'lucide-react';

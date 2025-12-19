@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from 'react';
-import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan';
+import type { GenerateDietPlanOutput } from '@/ai/flows/generate-diet-plan-types';
 import UserProfileForm from '@/components/diet-planner/UserProfileForm';
 import DietPlanDisplay from '@/components/diet-planner/DietPlanDisplay';
 import { Loader2, HeartPulse } from 'lucide-react';
@@ -51,5 +51,3 @@ export default function UserProfileSection() {
     </section>
   );
 }
-
-    
