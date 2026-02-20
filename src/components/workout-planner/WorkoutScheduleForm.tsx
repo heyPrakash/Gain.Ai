@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/form';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { getActionErrorMessage } from '@/lib/action-errors';
 
 interface WorkoutScheduleFormProps {
   onScheduleGenerated: Dispatch<SetStateAction<GenerateWorkoutScheduleOutput | null>>;
@@ -60,10 +61,14 @@ export default function WorkoutScheduleForm({ onScheduleGenerated, setIsLoading,
       });
     },
     onError: (error) => {
-      setError(error.message || "An unexpected error occurred.");
+      const errorMessage = getActionErrorMessage(
+        error,
+        'Could not generate workout schedule. Please try again.'
+      );
+      setError(errorMessage);
       toast({
         title: "Error Generating Schedule",
-        description: error.message || "Could not generate workout schedule. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     },
