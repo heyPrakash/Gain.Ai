@@ -17,9 +17,18 @@ import { analyzeFoodImage } from '@/ai/flows/analyze-food-image';
 import type { AnalyzeBodyScanInput, AnalyzeBodyScanOutput } from '@/ai/flows/analyze-body-scan-types';
 import { analyzeBodyScan } from '@/ai/flows/analyze-body-scan';
 
+function assertAiFeaturesConfigured(): void {
+  const googleApiKey = process.env.GOOGLE_API_KEY?.trim();
+  if (!googleApiKey || googleApiKey === 'YOUR_API_KEY_HERE') {
+    throw new Error(
+      'AI features are not configured. Please set a valid GOOGLE_API_KEY environment variable and try again.'
+    );
+  }
+}
 
 export async function handleGenerateDietPlanAction(input: UserProfileFormValues): Promise<GenerateDietPlanOutput> {
   try {
+    assertAiFeaturesConfigured();
     console.log("Generating diet plan with input:", input);
     const result = await generateDietPlan(input);
     console.log("Diet plan generated:", result);
@@ -35,6 +44,7 @@ export async function handleGenerateDietPlanAction(input: UserProfileFormValues)
 
 export async function handleAiChatCoachAction(input: AiChatCoachInput): Promise<AiChatCoachOutput> {
   try {
+    assertAiFeaturesConfigured();
     const result = await aiChatCoach(input);
     return result;
   } catch (error) {
@@ -48,6 +58,7 @@ export async function handleAiChatCoachAction(input: AiChatCoachInput): Promise<
 
 export async function handleGenerateWorkoutScheduleAction(input: WorkoutScheduleFormValues): Promise<GenerateWorkoutScheduleOutput> {
   try {
+    assertAiFeaturesConfigured();
     console.log("Generating workout schedule with input:", input);
     const result = await generateWorkoutSchedule(input);
     console.log("Workout schedule generated:", result);
@@ -63,6 +74,7 @@ export async function handleGenerateWorkoutScheduleAction(input: WorkoutSchedule
 
 export async function handleAnalyzeFoodImageAction(input: AnalyzeFoodImageInput): Promise<AnalyzeFoodImageOutput> {
     try {
+        assertAiFeaturesConfigured();
         console.log("Analyzing food image...");
         const result = await analyzeFoodImage(input);
         console.log("Food image analysis complete:", result);
@@ -78,6 +90,7 @@ export async function handleAnalyzeFoodImageAction(input: AnalyzeFoodImageInput)
 
 export async function handleAnalyzeBodyScanAction(input: AnalyzeBodyScanInput): Promise<AnalyzeBodyScanOutput> {
     try {
+        assertAiFeaturesConfigured();
         console.log("Analyzing body scan...");
         const result = await analyzeBodyScan(input);
         console.log("Body scan analysis complete:", result);
