@@ -48,23 +48,25 @@ const aiChatCoachFlow = ai.defineFlow(
       const response = await aiChatCoachPromptDefinition(input);
       const output = response.output;
       const usage = response.usage;
+      const finishReason = response.finishReason;
+      const finishMessage = response.finishMessage;
 
       if (!output) {
         let errorMessage = 'AI coach did not provide a valid response. The output was unexpectedly empty.';
         if (usage) {
           console.error('AI Chat Coach Flow: LLM returned no output. Usage details:', JSON.stringify(usage, null, 2));
           // Check for specific finish reasons that indicate a problem
-          if (usage.finishReason && !['stop', 'length', 'unknown', 'unspecified'].includes(usage.finishReason.toLowerCase())) {
-            errorMessage = `AI coach response generation failed. Reason: ${usage.finishReason}.`;
-            if (usage.finishMessage) {
-              errorMessage += ` Message: ${usage.finishMessage}.`;
+          if (finishReason && !['stop', 'length', 'unknown', 'unspecified'].includes(finishReason.toLowerCase())) {
+            errorMessage = `AI coach response generation failed. Reason: ${finishReason}.`;
+            if (finishMessage) {
+              errorMessage += ` Message: ${finishMessage}.`;
             }
-            if (usage.finishReason.toLowerCase() === 'safety') {
+            if (finishReason.toLowerCase() === 'safety') {
               errorMessage += ' This may be due to safety filters. Please review your input or adjust safety settings if possible.';
             }
-          } else if (usage.finishMessage) {
+          } else if (finishMessage) {
             // Generic message if finishReason is normal but there's a finishMessage
-            errorMessage = `AI coach response generation issue: ${usage.finishMessage}.`;
+            errorMessage = `AI coach response generation issue: ${finishMessage}.`;
           }
         } else {
             console.error('AI Chat Coach Flow: LLM returned no output, and no usage details were available.');
