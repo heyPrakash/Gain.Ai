@@ -14,6 +14,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { getActionErrorMessage } from '@/lib/action-errors';
 
 interface Message {
   id: string;
@@ -43,9 +44,13 @@ export default function ChatCoach() {
       ]);
     },
     onError: (error) => {
-       toast({
+      const errorMessage = getActionErrorMessage(
+        error,
+        'The AI coach is currently unavailable. Please try again later.'
+      );
+      toast({
         title: "AI Coach Error",
-        description: error.message || "The AI coach is currently unavailable. Please try again later.",
+        description: errorMessage,
         variant: "destructive",
       });
       // Remove the optimistic user message if the API call fails

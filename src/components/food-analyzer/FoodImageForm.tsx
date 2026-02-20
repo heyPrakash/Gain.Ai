@@ -15,6 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from '@/components/ui/dialog';
+import { getActionErrorMessage } from '@/lib/action-errors';
 
 interface FoodImageFormProps {
   onAnalysisComplete: Dispatch<SetStateAction<AnalyzeFoodImageOutput | null>>;
@@ -65,10 +66,14 @@ export default function FoodImageForm({ onAnalysisComplete, setIsLoading, setErr
       }
     },
     onError: (error) => {
-      setError(error.message || "An unexpected error occurred during analysis.");
+      const errorMessage = getActionErrorMessage(
+        error,
+        'Could not analyze the image. Please try again.'
+      );
+      setError(errorMessage);
       toast({
         title: "Error Analyzing Image",
-        description: error.message || "Could not analyze the image. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     },

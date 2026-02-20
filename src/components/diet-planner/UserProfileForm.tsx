@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/form';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { getActionErrorMessage } from '@/lib/action-errors';
 
 interface UserProfileFormProps {
   onPlanGenerated: Dispatch<SetStateAction<GenerateDietPlanOutput | null>>;
@@ -65,10 +66,14 @@ export default function UserProfileForm({ onPlanGenerated, setIsLoading, setErro
       });
     },
     onError: (error) => {
-      setError(error.message || "An unexpected error occurred.");
+      const errorMessage = getActionErrorMessage(
+        error,
+        'Could not generate diet plan. Please try again.'
+      );
+      setError(errorMessage);
       toast({
         title: "Error Generating Plan",
-        description: error.message || "Could not generate diet plan. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     },

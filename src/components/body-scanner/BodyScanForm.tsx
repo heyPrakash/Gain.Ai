@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { getActionErrorMessage } from '@/lib/action-errors';
 import { Label } from '@/components/ui/label';
 
 interface BodyScanFormProps {
@@ -50,10 +51,14 @@ export default function BodyScanForm({ onAnalysisComplete, setIsLoading, setErro
       });
     },
     onError: (error) => {
-      setError(error.message || "An unexpected error occurred during analysis.");
+      const errorMessage = getActionErrorMessage(
+        error,
+        'Could not analyze the photo. Please try again.'
+      );
+      setError(errorMessage);
       toast({
         title: "Error Analyzing Photo",
-        description: error.message || "Could not analyze the photo. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     },
