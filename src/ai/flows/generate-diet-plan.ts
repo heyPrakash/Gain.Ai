@@ -60,21 +60,23 @@ const generateDietPlanFlow = ai.defineFlow(
       const response = await prompt(input);
       const output = response.output;
       const usage = response.usage;
+      const finishReason = response.finishReason;
+      const finishMessage = response.finishMessage;
 
       if (!output) {
         let errorMessage = 'AI model failed to generate a diet plan or the response was invalid.';
         if (usage) {
           console.error('Diet Plan Flow: LLM returned no output. Usage details:', JSON.stringify(usage, null, 2));
-          if (usage.finishReason && !['stop', 'length', 'unknown', 'unspecified'].includes(usage.finishReason.toLowerCase())) {
-            errorMessage = `Diet plan generation failed. Reason: ${usage.finishReason}.`;
-            if (usage.finishMessage) {
-              errorMessage += ` Message: ${usage.finishMessage}.`;
+          if (finishReason && !['stop', 'length', 'unknown', 'unspecified'].includes(finishReason.toLowerCase())) {
+            errorMessage = `Diet plan generation failed. Reason: ${finishReason}.`;
+            if (finishMessage) {
+              errorMessage += ` Message: ${finishMessage}.`;
             }
-            if (usage.finishReason.toLowerCase() === 'safety') {
+            if (finishReason.toLowerCase() === 'safety') {
                  errorMessage += ' This may be due to safety filters. Please review your input or adjust safety settings if possible.';
             }
-          } else if (usage.finishMessage) {
-             errorMessage = `Diet plan generation issue: ${usage.finishMessage}.`;
+          } else if (finishMessage) {
+             errorMessage = `Diet plan generation issue: ${finishMessage}.`;
           }
         } else {
             console.error('Diet Plan Flow: LLM returned no output, and no usage details were available.');
