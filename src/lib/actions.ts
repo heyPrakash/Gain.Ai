@@ -16,12 +16,12 @@ import { analyzeFoodImage } from '@/ai/flows/analyze-food-image';
 
 import type { AnalyzeBodyScanInput, AnalyzeBodyScanOutput } from '@/ai/flows/analyze-body-scan-types';
 import { analyzeBodyScan } from '@/ai/flows/analyze-body-scan';
+import { hasValidServerGoogleApiKey } from '@/lib/ai-config';
 
 function assertAiFeaturesConfigured(): void {
-  const googleApiKey = process.env.GOOGLE_API_KEY?.trim();
-  if (!googleApiKey || googleApiKey === 'YOUR_API_KEY_HERE') {
+  if (!hasValidServerGoogleApiKey()) {
     throw new Error(
-      'AI features are not configured. Please set a valid GOOGLE_API_KEY environment variable and try again.'
+      'AI features are not configured. Please set GOOGLE_API_KEY (or GEMINI_API_KEY) on the server and try again.'
     );
   }
 }
